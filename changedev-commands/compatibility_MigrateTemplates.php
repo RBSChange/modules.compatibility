@@ -8,6 +8,7 @@
  * change:id change:price change:select
  * change:image change:icon change:webappimage
  * change:date change:datetime 
+ * change:currentPageLink -> change:currentpagelink
  * 
  * //DELETED
  * change:edit change:docattr  change:create change:propattr 
