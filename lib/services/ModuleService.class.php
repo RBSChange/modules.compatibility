@@ -1,17 +1,17 @@
 <?php
 /**
- * @package modules.compatibility40.lib.services
+ * @package modules.compatibility.lib.services
  */
-class compatibility40_ModuleService extends ModuleBaseService
+class compatibility_ModuleService extends ModuleBaseService
 {
 	/**
 	 * Singleton
-	 * @var compatibility40_ModuleService
+	 * @var compatibility_ModuleService
 	 */
 	private static $instance = null;
 
 	/**
-	 * @return compatibility40_ModuleService
+	 * @return compatibility_ModuleService
 	 */
 	public static function getInstance()
 	{
@@ -22,12 +22,4 @@ class compatibility40_ModuleService extends ModuleBaseService
 		return self::$instance;
 	}
 	
-	/**
-	 * @param Integer $documentId
-	 * @return f_persistentdocument_PersistentTreeNode
-	 */
-//	public function getParentNodeForPermissions($documentId)
-//	{
-//		// Define this method to handle permissions on a virtual tree node. Example available in list module.
-//	}
 }

@@ -1,5 +1,5 @@
 <?php
-class compatibility40_PHPTAL_CHANGE
+class compatibility_PHPTAL_CHANGE
 {
 	/**
 	 * @param PHPTAL_Namespace_CHANGE $namespaceCHANGE

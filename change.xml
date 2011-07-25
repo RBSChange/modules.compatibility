@@ -2,7 +2,7 @@
 <change xmlns="http://www.rbs.fr/schema/change-component/1.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.rbs.fr/schema/change-component/1.0 http://www.rbschange.fr/static/schema/change-component/1.0.xsd">
-	<name>compatibility40</name>
+	<name>compatibility</name>
 	<type>change-module</type>
 	<version>4.0.0</version>
 	<description>Compatibility module for 3.5 based project</description>

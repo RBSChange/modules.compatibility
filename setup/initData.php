@@ -1,8 +1,8 @@
 <?php
 /**
- * @package modules.compatibility40.setup
+ * @package modules.compatibility.setup
  */
-class compatibility40_Setup extends object_InitDataSetup
+class compatibility_Setup extends object_InitDataSetup
 {
 	public function install()
 	{
