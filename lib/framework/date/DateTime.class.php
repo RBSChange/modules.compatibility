@@ -1,35 +1,16 @@
 <?php
 /**
- * A class that represents a datetime information.
- * This class is able to handle dates before 1970 as it does not use timestamps.
- *
- * @deprecated Use date_Calendar, date_Date and date_DateFormat instead.
- *
- * @date Thu May 31 11:15:31 CEST 2007
- * @author intbonjf
- * @see http://fr.wikipedia.org/wiki/Calendrier_perp%C3%A9tuel
- *
- * @example $date = new date_DateTime();
- * @example $date = new date_DateTime('2007-06-04');
- * @example $date = new date_DateTime('2007-06-04 11:07:12');
- * @example $date = date_DateTime::now();
- * @example $date = date_DateTime::yesterday();
- * @example $date = date_DateTime::tomorrow();
+ * @deprecated Use date_Calendar and date_Formatter
  */
 class date_DateTime
 {
-
 	/**
-	 * @var date_GregorianCalendar
+	 * @deprecated
 	 */
 	private $calendar;
 
 	/**
-	 * Builds a new date_DateTime instance initialized from the given date as a
-	 * string. Allowed format is the MySQL one: "Y-m-d H:i:s". Time information
-	 * is optionnal, so "Y-m-d" is a valid argument.
-	 *
-	 * @param string $dateString The date string.
+	 * @deprecated
 	 */
 	public function __construct($dateString = null)
 	{
@@ -37,37 +18,16 @@ class date_DateTime
 		$this->calendar->useSmartEndOfMonth(false);
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// Initialization methods                                                 //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Builds a new date_DateTime instance initialized from the given date as a
-	 * string. Allowed format is the MySQL one: "Y-m-d H:i:s". Time information
-	 * is optionnal, so "Y-m-d" is a valid argument.
-	 *
-	 * @param string $dateString
-	 *
-	 * @return date_DateTime
+	 * @deprecated
 	 */
 	public static function fromString($dateString)
 	{
 		return new date_DateTime($dateString);
 	}
 
-
 	/**
-	 * Returns a date_DateTime instance initialized with the current system date.
-	 * If $keepTimeInformation is set to true (default), the time information
-	 * will be kept. Otherwise, the time will be set to midnight.
-	 *
-	 * @param boolean $keepTimeInformation
-	 *
-	 * @return date_DateTime
+	 * @deprecated
 	 */
 	public static function now($keepTimeInformation = true)
 	{
@@ -80,15 +40,8 @@ class date_DateTime
 		return $instance;
 	}
 
-
 	/**
-	 * Returns a date_DateTime instance initialized with the date of yesterday.
-	 * If $keepTimeInformation is set to true (default), the time information
-	 * will be kept. Otherwise, the time will be set to midnight.
-	 *
-	 * @param boolean $keepTimeInformation
-	 *
-	 * @return date_DateTime
+	 * @deprecated
 	 */
 	public static function yesterday($keepTimeInformation = true)
 	{
@@ -97,16 +50,9 @@ class date_DateTime
 		$instance = new $className(date($format, time() - 60*60*24));
 		return $instance;
 	}
-
-
+	
 	/**
-	 * Returns a date_DateTime instance initialized with the date of tomorrow.
-	 * If $keepTimeInformation is set to true (default), the time information
-	 * will be kept. Otherwise, the time will be set to midnight.
-	 *
-	 * @param boolean $keepTimeInformation
-	 *
-	 * @return date_DateTime
+	 * @deprecated
 	 */
 	public static function tomorrow($keepTimeInformation = true)
 	{
@@ -116,11 +62,8 @@ class date_DateTime
 		return $instance;
 	}
 
-
 	/**
-	 * Sets the time of the current date_DateTime to midnight.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function toMidnight()
 	{
@@ -128,11 +71,8 @@ class date_DateTime
 		return $this;
 	}
 
-
 	/**
-	 * Sets the time of the current date_DateTime to midday.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function toMidday()
 	{
@@ -140,175 +80,134 @@ class date_DateTime
 		return $this;
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// Basic getters and setters                                              //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Returns the timestamp for the current date.
-	 * If the date is too far in the past (before 1901), this method returns false
-	 * because the timestamp does not exist for such a date.
-	 *
-	 * @return integer or false if the date could not be converted into a timestamp (dates before 1901).
+	 * @deprecated
 	 */
 	public function getTimestamp()
 	{
 		return $this->calendar->getTimestamp();
 	}
 
-
-    /**
-     * @param integer $second
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setSecond($second)
     {
     	$this->calendar->setSecond($second);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getSecond()
     {
     	return $this->calendar->getSecond();
     }
 
-    /**
-     * @param integer $minute
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setMinute($minute)
     {
     	$this->calendar->setMinute($minute);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getMinute()
     {
     	return $this->calendar->getMinute();
     }
 
-    /**
-     * @param integer $hour
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setHour($hour)
     {
     	$this->calendar->setHour($hour);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getHour()
     {
     	return $this->calendar->getHour();
     }
 
-    /**
-     * @param integer $day
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setDay($day)
     {
     	$this->calendar->setDay($day);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getDay()
     {
     	return $this->calendar->getDay();
     }
 
-    /**
-     * @param integer $month
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setMonth($month)
     {
     	$this->calendar->setMonth($month);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getMonth()
     {
     	return $this->calendar->getMonth();
     }
 
-    /**
-     * @param integer $year
-     *
-     * @return date_DateTime $this
-     */
+	/**
+	 * @deprecated
+	 */
     public function setYear($year)
     {
     	$this->calendar->setYear($year);
 		return $this;
     }
 
-    /**
-     * @return integer
-     */
+	/**
+	 * @deprecated
+	 */
     public function getYear()
     {
     	return $this->calendar->getYear();
     }
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// Advanced getters                                                       //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Returns the century of the current date.
-	 *
-	 * @return integer
+	 * @deprecated
 	 */
     public function getCentury()
     {
     	return $this->calendar->getCentury();
     }
 
-
 	/**
-	 * Returns the number of days in the the current date's month.
-	 *
-	 * @return integer
+	 * @deprecated
 	 */
 	public function getDaysInMonth()
 	{
 		return $this->calendar->getDaysInMonth();
 	}
 
-
 	/**
-	 * Returns true is the current date is in a leap year.
-	 *
-	 * @return boolean true if the year of the current date is a leap year, false otherwise.
+	 * @deprecated
 	 */
 	public function isLeapYear()
 	{
@@ -316,101 +215,48 @@ class date_DateTime
 		return $this->calendar->isLeapYear();
 	}
 
-
 	/**
-	 * Returns the day of the week as a number: 0=sunday, 6=saturday.
-	 *
-	 * @return integer
+	 * @deprecated
 	 */
 	public function getDayOfWeek()
 	{
 		return $this->calendar->getDayOfWeek();
 	}
 
-
 	/**
-	 * Returns the day of year, from 0 for January 1st to 364 (or 365) for December 31st.
-	 *
-	 * @return integer
+	 * @deprecated
 	 */
 	public function getDayOfYear()
 	{
 		return $this->calendar->getDayOfYear();
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// Formatting methods                                                     //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Builds and returns a string representation of the date_DateTime object.
-	 *
-	 * @return String
+	 * @deprecated
 	 */
 	public function toString()
 	{
 		return $this->calendar->toString();
 	}
 
-
 	/**
-	 * Builds and returns a string representation of the date_DateTime object.
-	 *
-	 * @see toString()
-	 *
-	 * @return String
+	 * @deprecated
 	 */
     public function __toString()
     {
     	return $this->toString();
     }
 
-
 	/**
-	 * Formats the date according to the given $format, using the same acronyms
-	 * as the PHP built-in date() ones.
-	 * Most of the options are handled except: e, I, O, P, T, Z, c, r, U, B.
-	 * Characters that don't need to be translated must be escaped, just as with
-	 * the PHP built-in date() function.
-	 *
-	 * This method does NOT use the PHP built-in date() function.
-	 *
-	 * Only the following acronyms need localization: D, l, F, M.
-	 *
-	 * @param String $format
-	 * @param String $lang
-	 *
-	 * @return String
-	 *
-	 * @example $date->format('d/m/Y');
-	 * @example $date->format('d/m/Y H:i:s');
-	 * @example $date->format('D M Y', 'en');
-	 *
-	 * @deprecated Use date_DateFormat::format($date, $format, $lang) instead.
+	 * @deprecated
 	 */
 	public function format($format, $lang = null)
 	{
 		return date_DateFormat::format($this->calendar, $format, $lang);
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// add*() methods                                                         //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Adds seconds to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of seconds to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addSeconds($amount)
 	{
@@ -419,11 +265,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds minutes to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of minutes to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addMinutes($amount)
 	{
@@ -432,11 +274,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds hours to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of hours to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addHours($amount)
 	{
@@ -445,11 +283,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds days to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of days to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addDays($amount)
 	{
@@ -458,11 +292,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds weeks to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of weeks to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addWeeks($amount)
 	{
@@ -471,11 +301,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds months to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of months to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addMonths($amount)
 	{
@@ -484,11 +310,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Adds years to the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of years to add.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function addYears($amount)
 	{
@@ -496,15 +318,8 @@ class date_DateTime
 		return $this;
 	}
 
-
 	/**
-	 * Adds a date_TimeSpan to the current date.
-	 *
-	 * @param date_TimeSpan $timeSpan
-	 * @param boolean $returnNewInstance If true, returns a new instance and
-	 *    does not modify the current one.
-	 *
-	 * @return date_DateTime $this or new instance
+	 * @deprecated
 	 */
 	public function addTimeSpan($timeSpan, $returnNewInstance = false)
 	{
@@ -521,8 +336,7 @@ class date_DateTime
 	}
 	
 	/**
-	 * @param date_DateTime $other
-	 * @return date_TimeSpan
+	 * @deprecated
 	 */
 	public function sub($other)
 	{
@@ -532,20 +346,8 @@ class date_DateTime
 		return $span;
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// sub*() methods                                                         //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-	 * Removes seconds from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of seconds to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subSeconds($amount)
 	{
@@ -554,11 +356,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes minutes from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of minutes to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subMinutes($amount)
 	{
@@ -567,11 +365,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes hours from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of hours to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subHours($amount)
 	{
@@ -580,11 +374,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes days from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of days to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subDays($amount)
 	{
@@ -593,11 +383,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes weeks from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of weeks to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subWeeks($amount)
 	{
@@ -606,11 +392,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes months from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of months to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subMonths($amount)
 	{
@@ -619,11 +401,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes years from the current date and updates it so that it is always correct.
-	 *
-	 * @param integer $amount Amount of years to remove.
-     *
-     * @return date_DateTime $this
+	 * @deprecated
 	 */
 	public function subYears($amount)
 	{
@@ -632,13 +410,7 @@ class date_DateTime
 	}
 
 	/**
-	 * Removes a date_TimeSpan from the current date.
-	 *
-	 * @param date_TimeSpan $timeSpan
-	 * @param boolean $returnNewInstance If true, returns a new instance and
-	 *    does not modify the current one.
-	 *
-	 * @return date_DateTime $this or new instance
+	 * @deprecated
 	 */
 	public function subTimeSpan($timeSpan, $returnNewInstance = false)
 	{
@@ -654,97 +426,57 @@ class date_DateTime
 		return $this;
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////
-	//                                                                        //
-	// Comparison methods                                                     //
-	//                                                                        //
-	////////////////////////////////////////////////////////////////////////////
-
-
 	/**
-     * Indicates whether the current date is before the given $dateTime or not.
-     *
-     * @param date_DateTime $dateTime
-     * @param boolean $strict If true (default), strict comparison is done.
-     *
-     * @return boolean
-     */
+	 * @deprecated
+	 */
     public function isBefore($dateTime, $strict = true)
     {
 		return $this->calendar->isBefore($dateTime->calendar, $strict);
     }
 
-
-    /**
-     * Indicates whether the current date is after the given $dateTime or not.
-     *
-     * @param date_DateTime $dateTime
-     * @param boolean $strict If true (default), strict comparison is done.
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function isAfter($dateTime, $strict = true)
     {
 		return $this->calendar->isAfter($dateTime->calendar, $strict);
     }
 
-
-    /**
-     * Indicates whether the current date is between $dt1 and $dt2 or not.
-     *
-     * @param date_DateTime $dt1
-     * @param date_DateTime $dt2
-     * @param boolean $strict If true (default), strict comparisons are done.
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function isBetween($dt1, $dt2, $strict = true)
     {
 		return $this->calendar->isBetween($dt1->calendar, $dt2->calendar, $strict);
     }
 
-
-    /**
-     * Indicates if the current date belongs to the past or not.
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function belongsToPast()
     {
     	return $this->calendar->belongsToPast();
     }
 
-
-    /**
-     * Indicates if the current date belongs to the future or not.
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function belongsToFuture()
     {
     	return $this->calendar->belongsToFuture();
     }
 
-
-    /**
-     * Indicates if the current date is today (time is not taken into consideration).
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function isToday()
     {
     	return $this->calendar->isToday();
     }
 
-
-    /**
-     * Indicates whether the current date equals the given $dateTime or not.
-     *
-     * @param date_DateTime $dateTime
-     *
-     * @return boolean
-     */
+	/**
+	 * @deprecated
+	 */
     public function equals($dateTime)
     {
     	return $this->calendar->equals($dateTime->calendar);
