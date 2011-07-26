@@ -4,10 +4,14 @@
  */
 class PHPTAL_Php_Attribute_CHANGE_Webappimage extends PHPTAL_Php_Attribute
 {
-	public function start()
-	{
-		$expressions = $this->tag->generator->splitExpression($this->expression);
-		$name = null;
+    /**
+     * Called before element printing.
+     */
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
+    {
+    	Framework::error('Deprecated change:webappimage TAL Attribute ' . TemplateObject::$lastTemplateFileName);
+		$expressions = $codewriter->splitExpression($this->expression);
+		$name = 'null';
 		$folder = 'front';
 		$urlattribute = 'src';
 
@@ -18,19 +22,22 @@ class PHPTAL_Php_Attribute_CHANGE_Webappimage extends PHPTAL_Php_Attribute
 			switch ($attribute)
 			{
 				case 'name':
-					$name = $this->evaluate($value, true);
+					$name = $codewriter->evaluateExpression($value);
 					break;
 				case 'document':
 					$folder = $value;
 					break;
 			}
 		}
-
-		$this->tag->attributes[$urlattribute] = '<?php echo PHPTAL_Php_Attribute_CHANGE_Webappimage::render('.$name.', \''.$folder.'\') ?>';
+		$this->phpelement->getOrCreateAttributeNode($urlattribute)
+			->setValueEscaped('<?php echo PHPTAL_Php_Attribute_CHANGE_Webappimage::render('.$name.', \''.$folder.'\') ?>');
 	}
 
-	public function end()
-	{
+	/**
+     * Called after element printing.
+     */
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
+    {
 	}
 
 	public static function render($name, $folder)
