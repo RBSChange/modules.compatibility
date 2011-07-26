@@ -19,6 +19,5 @@ class compatibility_PHPTAL_CHANGE
 		$namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeContent('translate', 8));
 		
         $namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeReplace('price', 10));
-        $namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeReplace('select', 10));
 	}
 }

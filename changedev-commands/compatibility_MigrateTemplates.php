@@ -271,16 +271,19 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		$result = false;
 		$matches = array();
 
-		if (preg_match_all('/change:select="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
+		if (preg_match_all('/\$\{escape:/', $line, $matches, PREG_SET_ORDER))
 		{
-			echo "\t\tDeprecated change:select line: ", $lineNumber, "\n";
+			$line = str_replace(array('${escape: ', '${escape:'), '${', $line);
 			$result = $line;
 		}
+		
 		if (preg_match_all('/change:price="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
 			echo "\t\tDeprecated change:price line: ", $lineNumber, "\n";
 			$result = $line;
 		}
+		
+		
 		if (preg_match_all('/change:id="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
 			echo "\t\tDeprecated change:id line: ", $lineNumber, "\n";
@@ -568,9 +571,12 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
         }
         return  implode(' ', $result);	
 	}
+	
+	
 	function convertI18nTranslate($match)
 	{
-		$parts = $this->splitExpression($match[1]);	
+		$expression = str_replace('&amp;', '&', $match[1]);
+		$parts = $this->splitExpression($expression);	
 		$baseTrans = $this->convertKey($parts[0]);
 		if (strpos($baseTrans, 'string' === 0))
 		{
