@@ -64,7 +64,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	{
 		$this->message("== MigrateTemplates ==");
 		$this->loadFramework();
-		
+		$this->getParent()->executeCommand('clear-template-cache');
 		$allPackages = ModuleService::getInstance()->getPackageNames();
 		
 		if ( f_util_ArrayUtils::isEmpty($params))
@@ -288,12 +288,18 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		}
 		if (preg_match_all('/change:date="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
-			echo "\t\tDeprecated change:date line: ", $lineNumber, "\n";
+			foreach ($matches as $match)
+			{
+				$line = str_replace($match[0], $this->convertDate($match), $line);
+			}
 			$result = $line;
 		}
 		if (preg_match_all('/change:datetime="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
-			echo "\t\tDeprecated change:datetime line: ", $lineNumber, "\n";
+			foreach ($matches as $match)
+			{
+				$line = str_replace($match[0], $this->convertDateTime($match), $line);
+			}
 			$result = $line;
 		}
 				
@@ -370,6 +376,64 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		}
 		
 		return $result;
+	}
+	
+	function convertDate($match)
+	{
+		$formats = array('from=gmt');
+		foreach ($this->splitExpression($match[1]) as $exp) 
+		{
+			list($n, $v) = $this->parseSetExpression($exp);
+			if ($v === null)
+			{
+				$value = $n;
+			}
+			else if ($n == 'date' || $n == 'value')
+			{
+				$value = $v;
+			}
+			else if ($n == 'format')
+			{
+				if (!in_array(strtolower($v), array("'classic'", "null", "")))
+				{
+					$formats[] = $v;
+				}
+			}
+			else if ($n == 'formatI18n')
+			{
+				$formats[] = $this->convertKey($v);	
+			}
+		}
+		return 'tal:replace="date:'. $value .',' . implode(',', $formats) . '"';
+	}
+	
+	function convertDateTime($match)
+	{
+		$formats = array('from=gmt');
+		foreach ($this->splitExpression($match[1]) as $exp) 
+		{
+			list($n, $v) = $this->parseSetExpression($exp);
+			if ($v === null)
+			{
+				$value = $n;
+			}
+			else if ($n == 'date' || $n == 'value')
+			{
+				$value = $v;
+			}
+			else if ($n == 'format')
+			{
+				if (!in_array(strtolower($v), array("'classic'", "null", "")))
+				{
+					$formats[] = $v;
+				}
+			}
+			else if ($n == 'formatI18n')
+			{
+				$formats[] = $this->convertKey($v);	
+			}
+		}
+		return 'tal:replace="datetime:'. $value .',' . implode(',', $formats) . '"';
 	}
 	
 	function convertWebappimage($match)
