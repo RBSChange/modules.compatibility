@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blocks>
+	<!-- Customer -->
+	<block type="modules_customer_ResendConfirmationEmail" icon="mail" label="&amp;modules.customer.bo.blocks.Resend-confirmation-email;" hidden="true" />
+	<block type="modules_customer_AccountPublication" icon="status-detail" label="&amp;modules.customer.bo.blocks.Account-publication;" hidden="true" />
+</blocks>
