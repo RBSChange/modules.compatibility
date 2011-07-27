@@ -536,7 +536,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	function convertI18nAttributes($match)
 	{
 		$result = array();
-		$expression = str_replace('&amp;', '&', $match[1]);
+		$expression = str_replace(array('&amp;', ';;'), array('&', ';'), $match[1]);
         $attributes = explode(' ', $expression);        
         $substitutions = array();
         for ($i = 0; isset($attributes[$i+1]); $i += 2)
@@ -575,7 +575,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	
 	function convertI18nTranslate($match)
 	{
-		$expression = str_replace('&amp;', '&', $match[1]);
+		$expression = str_replace(array('&amp;', ';;'), array('&', ';'), $match[1]);
 		$parts = $this->splitExpression($expression);	
 		$baseTrans = $this->convertKey($parts[0]);
 		if (strpos($baseTrans, 'string' === 0))
@@ -592,7 +592,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 				{
 					if ($value === 'true')
 					{
-						$trans = 'transui:';
+						$baseTrans = str_replace('trans:', 'transui:', $baseTrans);
 					}
 				}
 				else if ($value !== null)
@@ -611,10 +611,8 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	
 	private function convertKey($key)
 	{
-		$key = str_replace(array('&amp;', '&modules.', '&framework.', '&themes.', ';'), 
-				array('&', 'm.', 'f.', 't.', ''), $key);
-		$keyPart = explode('.', $key);
-		
+		$key = str_replace(array('&modules.', '&framework.', '&themes.', ';'), array('m.', 'f.', 't.', ''), $key);
+		$keyPart = explode('.', $key);	
 		if ($keyPart[0] === 'modules') 
 		{
 			$keyPart[0] = 'm';
@@ -633,28 +631,9 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		$last = end($keyPart);
 		if ($keyPartCount > 1 && in_array($first, array('m', 'f', 't')))
 		{
-			$trans = 'trans:';
-			$extends = array();
-			
-			if (preg_match('/^[A-Z][a-z-]+/', $last))
-			{
-				$extends[] = 'ucf';
-			}
-			if (preg_match('/[a-z0-9]+label$/i', $last))
-			{
-				$extends[] = 'lab';
-				$keyPart[$keyPartCount - 1] = substr($last, 0, strlen($last) - 5);
-			}
-			if (preg_match('/[a-z0-9]+ellipsis$/i', $last))
-			{
-				$extends[] = 'etc';
-				$keyPart[$keyPartCount - 1] = substr($last, 0, strlen($last) - 8);
-			}
-			if (preg_match('/^[A-Z][A-Z]+/', $last))
-			{
-				$extends[] = 'uc';
-			}
-			return $trans . strtolower(implode('.', $keyPart)) . (count($extends) ? ',' . implode(',', $extends) : '');
+			$cleanOldKey = implode('.', $keyPart);
+			$extends = LocaleService::getInstance()->getFormattersByCleanOldKey($cleanOldKey);
+			return 'trans:' . $cleanOldKey . (count($extends) ? ',' . implode(',', $extends) : '');
 		}
 		return 'string:' . $last;
 	}
