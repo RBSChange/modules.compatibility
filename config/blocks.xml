@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blocks>
+	<!-- Website -->
+	<block type="modules_website_Simplecontent" hidden="true" icon="">
+		<parameters>
+			<parameter name="view" type="String" />
+		</parameters>
+	</block>
+
 	<!-- Customer -->
 	<block type="modules_customer_ResendConfirmationEmail" icon="mail" label="&amp;modules.customer.bo.blocks.Resend-confirmation-email;" hidden="true" />
 	<block type="modules_customer_AccountPublication" icon="status-detail" label="&amp;modules.customer.bo.blocks.Account-publication;" hidden="true" />
