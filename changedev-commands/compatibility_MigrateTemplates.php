@@ -271,11 +271,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		$result = false;
 		$matches = array();
 
-		if (preg_match_all('/\$\{escape:/', $line, $matches, PREG_SET_ORDER))
-		{
-			$line = str_replace(array('${escape: ', '${escape:'), '${', $line);
-			$result = $line;
-		}
+
 		
 		if (preg_match_all('/change:price="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
@@ -289,6 +285,33 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 			echo "\t\tDeprecated change:id line: ", $lineNumber, "\n";
 			$result = $line;
 		}
+		
+		if (preg_match_all('/\$\{escape:/', $line, $matches, PREG_SET_ORDER))
+		{
+			$line = str_replace(array('${escape: ', '${escape:'), '${', $line);
+			$result = $line;
+		}	
+		
+		if (preg_match_all('/="([a-z0-9A-Z\/]+)AsHtml"/', $line, $matches, PREG_SET_ORDER))
+		{
+			foreach ($matches as $match)
+			{
+				$line = str_replace($match[0], '="structure '. $match[1].'AsHtml"', $line);
+			}
+			$result = $line;
+		}
+		
+		if (preg_match_all('/\$\{([a-z0-9A-Z\/]+)AsHtml\}/', $line, $matches, PREG_SET_ORDER))
+		{
+			foreach ($matches as $match)
+			{
+				$line = str_replace($match[0], '${structure '. $match[1].'AsHtml}', $line);
+			}
+			$result = $line;
+		}
+		
+		
+		
 		if (preg_match_all('/change:date="([^"]*)"/', $line, $matches, PREG_SET_ORDER))
 		{
 			foreach ($matches as $match)
