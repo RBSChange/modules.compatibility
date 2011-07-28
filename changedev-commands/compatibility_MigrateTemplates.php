@@ -20,7 +20,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	 */
 	public function getUsage()
 	{
-		return "[module1 module1 ... module1]";
+		return "[module1 module2 ... moduleN]";
 	}
 	
 	/**
