@@ -3,11 +3,15 @@
  * commands_compatibility_CleanConfigFiles
  * @package modules.compatibility.command
  * 
- * Blocks.xml:
+ * blocks.xml:
  *  - replace label attributes by labeli18n
  *  - remove display attribute
+ *  - remove editable attribute
  *  
- * Tags: 
+ * perspective.xml: 
+ *  - replace label attributes by labeli18n
+ *  
+ * *.tags.xml: 
  *  - replace label attributes by labeli18n
  */
 class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCommand
@@ -90,7 +94,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			$filePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config', 'blocks.xml');
 			if (file_exists($filePath))
 			{
-				$this->handleFile($filePath, $cleanedFilePath, 'migrateBlockLine');
+				$this->handleFile($filePath, 'migrateBlockLine');
 			}
 			else
 			{
@@ -101,7 +105,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			$filePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config', 'perspective.xml');
 			if (file_exists($filePath))
 			{
-				$this->handleFile($filePath, $cleanedFilePath, 'migratePerspectiveLine');
+				$this->handleFile($filePath, 'migratePerspectiveLine');
 			}
 			else
 			{
@@ -115,7 +119,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			{
 				foreach ($filePaths as $filePath)
 				{
-					$this->handleFile($filePath, $cleanedFilePath, 'migrateTagLine');
+					$this->handleFile($filePath, 'migrateTagLine');
 				}
 			}
 			else
@@ -215,7 +219,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 	 * @param string $cleanedFilePath
 	 * @param string $cleanLineMethod
 	 */
-	private function handleFile($filePath, $cleanedFilePath, $cleanLineMethod)
+	private function handleFile($filePath, $cleanLineMethod)
 	{
 		$cleanedFilePath = $filePath . '.clean';
 		if (file_exists($cleanedFilePath)) {unlink($cleanedFilePath);}
