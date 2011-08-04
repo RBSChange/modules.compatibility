@@ -10,6 +10,7 @@
  *  
  * perspective.xml: 
  *  - replace label attributes by labeli18n
+ *  - refactor column label attributes
  *  
  * *.tags.xml: 
  *  - replace label attributes by labeli18n
@@ -53,6 +54,11 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 	}
 
 	/**
+	 * @var string
+	 */
+	private $currentModule;
+	
+	/**
 	 * @param String[] $params
 	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
 	 * @see c_ChangescriptCommand::parseArgs($args)
@@ -88,6 +94,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			list (, $moduleName) = explode('_', $packageName);
 			echo 'START module ', $moduleName, "\n";
 			
+			$this->currentModule = $moduleName;
 			$this->errors = array();
 			
 			// Clean blocks.xml
@@ -211,6 +218,22 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			$line = str_replace($matches[0], 'labeli18n="'.$key.'"', $line);
 			$result = $line;
 		}
+		
+		if (strpos('<column ') !== false && preg_match('/name="([a-zA-Z0-9\-]+)"/', $line, $matches) && preg_match('/ label="([a-zA-Z0-9\-]+)"/', $line, $matches2) )
+		{
+			if (strtolower($matches[1]) == strtolower($matches2[1]))
+			{
+				$line = str_replace($matches2[0], '', $line);
+				$result = $line;
+			}
+			else
+			{
+				$key = 'm.' . $this->currentModule . '.bo.general.column.' . strtolower($matches2[1]);
+				$line = str_replace($matches2[0], ' labeli18n="'.$key.'"', $line);
+				$result = $line;
+			}
+		}
+		
 		return $result;
 	}
 	
