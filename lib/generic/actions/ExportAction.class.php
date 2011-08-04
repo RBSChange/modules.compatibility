@@ -2,7 +2,7 @@
 /**
  * @deprecated
  */
-class generic_ExportAction extends f_action_BaseAction
+class generic_ExportAction extends change_Action
 {
 	/**
 	 * @deprecated
@@ -66,7 +66,7 @@ class generic_ExportAction extends f_action_BaseAction
     		Framework::exception($e);
     	}
 
-		return View::NONE;
+		return change_View::NONE;
 	}
 
 	/**

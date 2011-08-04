@@ -36,7 +36,7 @@ class commands_compatibility_CleanEditors extends commands_AbstractChangeCommand
 	public function getParameters($completeParamCount, $params, $options, $current)
 	{
 		$components = array();
-		foreach (glob(WEBEDIT_HOME. "/modules/*/config", GLOB_ONLYDIR) as $path)
+		foreach (glob(PROJECT_HOME. "/modules/*/config", GLOB_ONLYDIR) as $path)
 		{
 			$module = dirname($path);
 			$components[] = basename($module);

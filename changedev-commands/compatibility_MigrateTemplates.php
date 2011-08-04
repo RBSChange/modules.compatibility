@@ -42,7 +42,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	public function getParameters($completeParamCount, $params, $options, $current)
 	{
 		$components = array();
-		foreach (glob(WEBEDIT_HOME. "/modules/*/templates", GLOB_ONLYDIR) as $path)
+		foreach (glob(PROJECT_HOME. "/modules/*/templates", GLOB_ONLYDIR) as $path)
 		{
 			$module = dirname($path);
 			$components[] = basename($module);
@@ -97,7 +97,8 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 				$registry->registerPrefix($prefix, array($class, $prefix));
 			}
 		}
-		$this->tempTalPath = PHPTAL_PHP_CODE_DESTINATION . 'xx';
+		$this->tempTalPath = f_util_FileUtils::buildChangeCachePath('template', 'xx');
+		
 		f_util_FileUtils::mkdir($this->tempTalPath);
 		$this->themes = $this->getThemes();
 		

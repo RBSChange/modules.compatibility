@@ -283,54 +283,10 @@ class ExtendedAgaviException extends AgaviException
 				echo '<!DOCTYPE html
 				      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 				      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-				      <html xmlns="http://www.w3.org/1999/xhtml"
-						    xml:lang="en" lang="en">
+				      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 				      <head>
-				      <meta http-equiv="Content-Type"
-						    content="text/html; charset=iso-8859-1"/>
-				      <title>Agavi Exception</title>
-				      <style type="text/css">
-
-				      #exception {
-						  background-color: #EEEEEE;
-						  border:           solid 1px #750000;
-						  font-family:      verdana, helvetica, sans-serif;
-						  font-size:        76%;
-						  font-style:       normal;
-						  font-weight:      normal;
-						  margin:           10px;
-				      }
-
-				      #help {
-						  color:     #750000;
-						  font-size: 0.9em;
-				      }
-
-				      .message {
-						  color:       #FF0000;
-						  font-weight: bold;
-				      }
-
-				      .title {
-						  font-size:   1.1em;
-						  font-weight: bold;
-				      }
-
-				      td {
-						  background-color: #EEEEEE;
-						  padding:          5px;
-				      }
-
-				      th {
-						  background-color: #750000;
-						  color:            #FFFFFF;
-						  font-size:        1.2em;
-						  font-weight:      bold;
-						  padding:          5px;
-						  text-align:       left;
-				      }
-
-				      </style>
+				      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+				      <title>Exception</title>
 				      </head>
 				      <body>
 
@@ -377,24 +333,7 @@ class ExtendedAgaviException extends AgaviException
 
 				}
 
-				echo     '<tr>
-						      <th colspan="2">Info</th>
-						  </tr>
-						  <tr>
-						      <td class="title">Agavi Version:</td>
-						      <td>' . AG_APP_VERSION . '</td>
-						  </tr>
-						  <tr>
-						      <td class="title">PHP Version:</td>
-						      <td>' . PHP_VERSION . '</td>
-						  </tr>
-						  <tr id="help">
-						      <td colspan="2">
-							  For help resolving this issue, please visit
-							  <a href="http://www.agavi.org">www.agavi.org</a>.
-						      </td>
-						  </tr>
-				      </table>
+				echo     '</table>
 
 				      </body>
 				      </html>';

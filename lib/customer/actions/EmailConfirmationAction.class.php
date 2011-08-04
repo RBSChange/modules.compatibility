@@ -2,7 +2,7 @@
 /**
  * @deprecated (will be removed in 4.0)
  */
-class customer_EmailConfirmationAction extends f_action_BaseAction
+class customer_EmailConfirmationAction extends change_Action
 {
 	/**
 	 * @deprecated (will be removed in 4.0)
@@ -18,7 +18,7 @@ class customer_EmailConfirmationAction extends f_action_BaseAction
 		// Redirect to the good page.
 		$url = $cs->getEmailConfirmationRedirectionUrl($confirmationStatus);
 		$context->getController()->redirectToUrl(str_replace('&amp;', '&', $url));
-		return View::NONE;
+		return change_View::NONE;
 	}
 	
 	/**
@@ -26,7 +26,7 @@ class customer_EmailConfirmationAction extends f_action_BaseAction
 	 */
 	public function getRequestMethods()
 	{
-		return Request::POST | Request::GET;
+		return change_Request::POST | change_Request::GET;
 	}
 	
 	/**
