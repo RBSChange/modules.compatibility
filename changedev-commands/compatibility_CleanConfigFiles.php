@@ -11,8 +11,8 @@
  *  - i18n/document/permission
  * 
  * modules.xml:
- * 	- remove usetopic attribute if set to false (default value)
- *  - 
+ * 	- remove usetopic tag if set to false (default value)
+ *  - remove enabled tag (not parsed any more always set to "true")
  * 
  * *blocks.xml:
  *  - replace label attributes by labeli18n
