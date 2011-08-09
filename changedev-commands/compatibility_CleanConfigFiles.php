@@ -3,17 +3,32 @@
  * commands_compatibility_CleanConfigFiles
  * @package modules.compatibility.command
  * 
- * blocks.xml:
+ * Delete unused files on modules not visible in BO: 
+ *  - config/actions.xml
+ *  - config/rights.xml
+ *  - config/perspective.xml
+ *  - templates/perspectives
+ *  - i18n/document/permission
+ * 
+ * modules.xml:
+ * 	- remove usetopic attribute if set to false (default value)
+ *  - 
+ * 
+ * *blocks.xml:
  *  - replace label attributes by labeli18n
  *  - remove display attribute
  *  - remove editable attribute
  *  
- * perspective.xml: 
+ * *perspective.xml: 
  *  - replace label attributes by labeli18n
  *  - refactor column label attributes
+ *  - remplace GetDialogTopicTree permission on actions by Update_rootfolder
  *  
  * *.tags.xml: 
  *  - replace label attributes by labeli18n
+ *  
+ * *rights.xml: 
+ *  - delete EditLocale and GetDialogTopicTree permissions 
  */
 class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCommand
 {
@@ -94,33 +109,78 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			list (, $moduleName) = explode('_', $packageName);
 			echo 'START module ', $moduleName, "\n";
 			
+			$basePath = f_util_FileUtils::buildModulesPath($moduleName, 'config');
 			$this->currentModule = $moduleName;
 			$this->errors = array();
 			
-			// Clean blocks.xml
-			$filePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config', 'blocks.xml');
+			// Delete unused files on modules not visible in BO.
+			if (!ModuleService::getInstance()->getModule($moduleName)->isVisible())
+			{
+				$files = array('actions.xml', 'perspective.xml', 'rights.xml');
+				foreach ($files as $file)
+				{
+					$path = f_util_FileUtils::buildModulesPath($moduleName, 'config', $file);
+					if (file_exists($path))
+					{
+						unlink($path);
+						echo ' - DELETE ', $path, "\n";
+					}
+				}
+				
+				$path = f_util_FileUtils::buildModulesPath($moduleName, 'templates', 'perspectives');
+				if (is_dir($path))
+				{
+					f_util_FileUtils::rmdir($path);
+					echo ' - DELETE ', $path, "\n";
+				}
+				
+				$path = f_util_FileUtils::buildModulesPath($moduleName, 'i18n', 'document', 'permission');
+				if (is_dir($path))
+				{
+					f_util_FileUtils::rmdir($path);
+					echo ' - DELETE ', $path, "\n";
+				}
+			}
+			
+			$filePath = f_util_FileUtils::buildModulesPath($moduleName, 'config', 'module.xml');
 			if (file_exists($filePath))
 			{
-				$this->handleFile($filePath, 'migrateBlockLine');
+				$this->handleFile($filePath, 'migrateModuleLine');
 			}
 			else
 			{
-				echo ' - No blocks.xml', "\n";
+				echo ' - No module.xml', "\n";
+			}
+			
+			// Clean blocks.xml
+			$filePaths = $this->scanDir($basePath, 'blocks.xml');
+			if (count($filePaths))
+			{
+				foreach ($filePaths as $filePath)
+				{
+					$this->handleFile($filePath, 'migrateBlockLine');
+				}
+			}
+			else
+			{
+				echo ' - No blocks.xml nor xxxblocks.xml', "\n";
 			}
 			
 			// Clean perspective.xml
-			$filePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config', 'perspective.xml');
-			if (file_exists($filePath))
+			$filePaths = $this->scanDir($basePath, 'perspective.xml');
+			if (count($filePaths))
 			{
-				$this->handleFile($filePath, 'migratePerspectiveLine');
+				foreach ($filePaths as $filePath)
+				{
+					$this->handleFile($filePath, 'migratePerspectiveLine');
+				}
 			}
 			else
 			{
-				echo ' - No perspective.xml', "\n";
+				echo ' - No perspective.xml nor xxxperspective.xml', "\n";
 			}
 			
 			// Clean *.tags.xml
-			$basePath = f_util_FileUtils::buildWebeditPath('modules', $moduleName, 'config');
 			$filePaths = $this->scanDir($basePath, '.tags.xml');
 			if (count($filePaths))
 			{
@@ -132,7 +192,21 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			else
 			{
 				echo ' - No xxx.tags.xml', "\n";
-			}			
+			}
+			
+			// Clean rights.xml
+			$filePaths = $this->scanDir($basePath, 'rights.xml');
+			if (count($filePaths))
+			{
+				foreach ($filePaths as $filePath)
+				{
+					$this->handleFile($filePath, 'migrateRightsLine');
+				}
+			}
+			else
+			{
+				echo ' - No rights.xml nor xxxrights.xml', "\n";
+			}	
 			
 			echo 'END module ', $moduleName, "\n";
 		}
@@ -219,7 +293,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			$result = $line;
 		}
 		
-		if (strpos('<column ') !== false && preg_match('/name="([a-zA-Z0-9\-]+)"/', $line, $matches) && preg_match('/ label="([a-zA-Z0-9\-]+)"/', $line, $matches2) )
+		if (strpos('<column ') !== false && preg_match('/name="([a-zA-Z0-9\-]+)"/', $line, $matches) && preg_match('/ label="([a-zA-Z0-9\-]+)"/', $line, $matches2))
 		{
 			if (strtolower($matches[1]) == strtolower($matches2[1]))
 			{
@@ -232,6 +306,62 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 				$line = str_replace($matches2[0], ' labeli18n="'.$key.'"', $line);
 				$result = $line;
 			}
+		}
+		
+		if (strpos('<action ') !== false && preg_match('/permission="GetDialogTopicTree"/', $line, $matches))
+		{
+			$line = str_replace($matches[0], 'permission="Update_rootfolder"', $line);
+			$result = $line;
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * @param string $line
+	 * @param integer $lineNumber
+	 */
+	private function migrateRightsLine($line, $lineNumber)
+	{
+		//echo 'Line:', $line, "\n";
+		$result = false;
+		$matches = array();
+		
+		if (preg_match('#(\s*)<permission(\s+)name="EditLocale"(\s*)/>(\s*)#', $line, $matches))
+		{
+			$line = str_replace($matches[0], '', $line);
+			$result = $line;
+		}
+		if (preg_match('#(\s*)<permission(\s+)name="GetDialogTopicTree"(\s*)/>(\s*)#', $line, $matches))
+		{
+			$line = str_replace($matches[0], '', $line);
+			$result = $line;
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * @param string $line
+	 * @param integer $lineNumber
+	 */
+	private function migrateModuleLine($line, $lineNumber)
+	{
+		//echo 'Line:', $line, "\n";
+		$result = false;
+		$matches = array();
+		
+		if (preg_match('#(\s*)<usetopic>([^<>]*)</usetopic>(\s*)#', $line, $matches) && $matches[2] != 'true')
+		{
+			echo $matches[1], "\n";
+			$line = str_replace($matches[0], '', $line);
+			$result = $line;
+		}
+		
+		if (preg_match('#(\s*)<enabled>[^<>]*</enabled>(\s*)#', $line, $matches))
+		{
+			$line = str_replace($matches[0], '', $line);
+			$result = $line;
 		}
 		
 		return $result;
