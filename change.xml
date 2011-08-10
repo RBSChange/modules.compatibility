@@ -15,5 +15,38 @@
 				<version>4.0.0</version>
 			</versions>
 		</dependency>
+		<dependency>
+			<name>pear/Mail</name>
+			<versions>	
+				<version>1.2.0</version>
+			</versions>
+		</dependency>
+		
+		<dependency>
+			<name>pear/Mail_Mime</name>
+			<versions>	
+				<version>1.8.1</version>
+			</versions>
+		</dependency>
+				
+		<dependency>
+			<name>pear/Net_SMTP</name>
+			<versions>
+				<version>1.4.2</version>
+			</versions>
+			<description>
+			Used by MailService 
+			</description>
+		</dependency>
+		
+		<dependency>
+			<name>pear/Auth_SASL</name>
+			<versions>
+				<version>1.0.4</version>
+			</versions>
+			<description>
+			Used by MailService 
+			</description>
+		</dependency>
 	</dependencies>
 </change>
