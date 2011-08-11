@@ -1,11 +1,26 @@
 <?php
-/**
- * Auto-generated doc comment
- * @package framework.mail
- */
-
 class MailerMail extends Mailer
 {
+
+	private $params = array();
+	
+	private function getParam($name)
+	{
+		if (is_array($this->params) && isset($this->params[$name]))
+		{
+			return $this->params[$name];
+		}
+		return null;
+	}
+	
+	/**
+	 * @see Mailer::__construct()
+	 */
+	public function __construct($params)
+	{
+		$this->params = $params;
+		
+	}
 
 	public function sendMail($body = null, $hdrs = null)
 	{
@@ -14,14 +29,10 @@ class MailerMail extends Mailer
 			Framework::debug("Mailer to : ".$this->getParam('receiver'));
 		}
 
-		if ($this->requiresMime())
-		{
-            $body = $this->getMimeObject()->get();
-            $hdrs = $this->getMimeObject()->headers($this->getHeaders());
-		}
-
-		$mailObject =& Mail::factory($this->mailDriver);
-
+		$body = $this->getMimeObject()->get();
+        $hdrs = $this->getMimeObject()->headers($this->getHeaders());
+        
+		$mailObject = Mail::factory($this->mailDriver);
 		if (empty($hdrs))
 		{
 			return $mailObject->send($this->getParam('receiver'), $this->getHeaders(), $body);
@@ -32,6 +43,5 @@ class MailerMail extends Mailer
 		}
 	}
 
+	
 }
-
-?>

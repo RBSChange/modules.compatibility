@@ -78,14 +78,14 @@ class MassMailer
 	{
 		$errors = array();
 		$pathsToProcess = $this->getMessagesToSend();
-		$scriptRelativePath = 'framework/bin/massMailerSend.php';
+		$scriptRelativePath = 'modules/compatibility/lib/framework/bin/massMailerSend.php';
 		foreach (array_chunk($pathsToProcess, 500) as $messagePathArray)
 		{
 			if ($plannedTask instanceof task_persistentdocument_plannedtask)
 			{
 				$plannedTask->ping();
 			}
-			$result = f_util_System::execHTTPScript($scriptRelativePath, $messagePathArray);
+			$result = f_util_System::execScript($scriptRelativePath, $messagePathArray);
 			// Log fatal errors...
 			if ($result != 'OK')
 			{

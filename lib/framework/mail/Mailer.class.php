@@ -60,8 +60,7 @@ abstract class Mailer
 	 * getMimeObject returns the PEAR Mail_Mime object
 	 * needed for HTML mail formating.
 	 *
-	 * @return Object Mail_Mime object
-	 *
+	 * @return Mail_mime
 	 */
 	public function getMimeObject()
 	{
