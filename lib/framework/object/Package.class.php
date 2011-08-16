@@ -110,7 +110,6 @@ class Package
 	public function callClassMethod($className, $methodName)
 	{
 		try {
-			//Framework::log($className, Logger::DEBUG);
 			if (!is_callable(array($this->getClassName($className), $methodName))) {
 				$error = sprintf('Unknown method "%s" for class "%s" in package "%s"', $methodName, $className, $this->classPath);
 				throw new Exception($error);
@@ -120,7 +119,7 @@ class Package
 		}
 		catch (Exception $e) {
 
-			$e = new AgaviException($e->getMessage(), null,$e);
+			$e = new Exception($e->getMessage(), null,$e);
 			$e->printStackTrace();
 		}
 		return $result;
