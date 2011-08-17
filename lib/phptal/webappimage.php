@@ -46,13 +46,13 @@ class PHPTAL_Php_Attribute_CHANGE_Webappimage extends PHPTAL_Php_Attribute
 		switch ($folder)
 		{
 			case 'front':
-				$result = MediaHelper::getFrontofficeStaticUrl($imgname, K::XML);
+				$result = MediaHelper::getFrontofficeStaticUrl($imgname, 'xml');
 				break;
 			case 'back':
-				$result = MediaHelper::getBackofficeStaticUrl($imgname, K::XML);
+				$result = MediaHelper::getBackofficeStaticUrl($imgname, 'xml');
 				break;
 			default:
-				$result = MediaHelper::getStaticUrl($imgname, K::XML);
+				$result = MediaHelper::getStaticUrl($imgname, 'xml');
 				break;
 		}
 		return $result;

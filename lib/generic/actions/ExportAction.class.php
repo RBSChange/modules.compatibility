@@ -24,10 +24,10 @@ class generic_ExportAction extends change_Action
 	 */
 	protected function getDocumentIdArrayFromRequest($request)
 	{
-		$ids = $request->getParameter(K::COMPONENT_ID_ACCESSOR, array());
+		$ids = $request->getParameter(change_Request::DOCUMENT_ID, array());
 		if (is_string($ids))
 		{
-			return explode(',', $request->getParameter(K::COMPONENT_ID_ACCESSOR));
+			return explode(',', $request->getParameter(change_Request::DOCUMENT_ID));
 		}
 		return $ids;
 	}
@@ -86,7 +86,7 @@ class generic_ExportAction extends change_Action
 					{
 						$columnsHeader .= "\"".utf8_decode($value)."\"".$this->separator;
 					}
-					echo $columnsHeader .= K::CRLF;
+					echo $columnsHeader .= PHP_EOL;
 
 				}
 
@@ -95,7 +95,7 @@ class generic_ExportAction extends change_Action
 				{
 					$string .= "\"".utf8_decode(str_replace(array("\n", "\r"), "", f_util_StringUtils::htmlToText($value, false)))."\"".$this->separator;
 				}
-				echo $string .= K::CRLF;
+				echo $string .= PHP_EOL;
 			}
 			flush();
 		}

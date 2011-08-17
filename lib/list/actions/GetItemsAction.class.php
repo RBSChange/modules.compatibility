@@ -10,7 +10,7 @@ class list_GetItemsAction extends change_Action
 	public function _execute($context, $request)
 	{
 		// Retrieve request data
-		$listName = $request->getParameter(K::COMPONENT_ID_ACCESSOR);
+		$listName = $request->getParameter(change_Request::DOCUMENT_ID);
 		$rc = RequestContext::getInstance();
 		try 
 		{

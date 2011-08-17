@@ -212,7 +212,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 			$phptal = new PHPTAL($fullpath);
 			$phptal->setPhpCodeDestination($this->tempTalPath);
 			$ext = end(explode('.', $fullpath));
-			if ($ext === K::XUL || $ext === K::XML)
+			if ($ext === 'xul' || $ext === 'xml')
 			{
 				$phptal->set('HOST', Framework::getUIBaseUrl());
 				$phptal->setOutputMode(PHPTAL::XML);

@@ -10,7 +10,7 @@ class list_GetItemsErrorView extends change_View
 	public function _execute($context, $request)
 	{
 		$this->sendHttpHeaders();
-		$this->setTemplateName('Generic-Response', K::XML);
+		$this->setTemplateName('Generic-Response', 'xml');
 		$this->setStatus(self::STATUS_ERROR);
 		
 		if ($request->hasAttribute('message'))

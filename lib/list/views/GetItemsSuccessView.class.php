@@ -10,7 +10,7 @@ class list_GetItemsSuccessView extends change_View
 	public function _execute($context, $request)
 	{
 		$this->sendHttpHeaders();
-		$this->setTemplateName('Generic-Response', K::XML);
+		$this->setTemplateName('Generic-Response', 'xml');
 		$this->setStatus(self::STATUS_OK);
 		$lang = RequestContext::getInstance()->getUILang();
 		$rc = RequestContext::getInstance();
@@ -52,6 +52,6 @@ class list_GetItemsSuccessView extends change_View
 		}
 		$this->setAttribute('id', $request->getAttribute('listid'));
 		$this->setAttribute('lang', $lang);
-		$this->setAttribute('contents', join(K::CRLF, $contents));
+		$this->setAttribute('contents', join(PHP_EOL, $contents));
 	}
 }

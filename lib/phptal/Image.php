@@ -18,11 +18,11 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 		{
 			case 'img':
 			case 'input':
-				$contentType = K::HTML;
+				$contentType = 'html';
 				break;
 
 			default:
-				$contentType = K::XUL;
+				$contentType = 'xul';
 				break;
 		}
 
@@ -47,9 +47,9 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 				{
 					$args[] = trim($properties[$i]);
 
-					if (strtoupper(trim($properties[$i])) == K::XML)
+					if (strtoupper(trim($properties[$i])) == 'xml')
 					{
-						$contentType = K::XUL;
+						$contentType = 'xul';
 					}
 				}
 			}
@@ -67,9 +67,9 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 			{
 				for ($i = 1; $i < count($properties); $i++)
 				{
-					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == K::XML))
+					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == 'xml'))
 					{
-						$contentType = K::XUL;
+						$contentType = 'xul';
 						break;
 					}
 				}
@@ -90,9 +90,9 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 			{
 				for ($i = 1; $i < count($properties); $i++)
 				{
-					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == K::XML))
+					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == 'xml'))
 					{
-						$contentType = K::XUL;
+						$contentType = 'xul';
 						break;
 					}
 				}
@@ -112,9 +112,9 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 			{
 				for ($i = 1; $i < count($properties); $i++)
 				{
-					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == K::XML))
+					if (isset($properties[$i]) && (strtoupper(trim($properties[$i])) == 'xml'))
 					{
-						$contentType = K::XUL;
+						$contentType = 'xul';
 						break;
 					}
 				}
