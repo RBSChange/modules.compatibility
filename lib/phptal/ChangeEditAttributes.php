@@ -77,7 +77,7 @@ class PHPTAL_Php_Attribute_CHANGE_Edit extends ChangeTalAttribute
 			//Update
 			$editPermission = "modules_".$documentModel->getModuleName().".Update.".$documentModel->getDocumentName();
 			$user = users_UserService::getInstance()->getCurrentBackEndUser();
-			$permissionService = f_permission_PermissionService::getInstance();
+			$permissionService = change_PermissionService::getInstance();
 			if ($permissionService->hasPermission($user, $editPermission, $document->getId()))
 			{
 				$html = "";
@@ -191,7 +191,7 @@ class PHPTAL_Php_Attribute_CHANGE_Edit extends ChangeTalAttribute
 
 		$title = f_Locale::translate("&modules.website.frontoffice.".$actionName."-document;", array("label" => $document->getLabel()));
 		$permission = "modules_".$documentModel->getModuleName().".$permActionName.".$documentModel->getDocumentName();
-		$permissionService = f_permission_PermissionService::getInstance();
+		$permissionService = change_PermissionService::getInstance();
 		if ($actionName == "edit" || $permissionService->hasPermission($user, $permission, $document->getId()))
 		{
 			$linkParams = array("block" => "website_edit",
@@ -288,7 +288,7 @@ echo PHPTAL_Php_Attribute_CHANGE_create::renderPendingDocumentList('.$this->para
 			throw new Exception("change:create needs model parameter");
 		}
 
-		$permissionService = f_permission_PermissionService::getInstance();
+		$permissionService = change_PermissionService::getInstance();
 		$modelName = "modules_".$params["model"];
 		$documentModel = f_persistentdocument_PersistentDocumentModel::getInstanceFromDocumentModelName($modelName);
 		$createPermission = "modules_".$documentModel->getModuleName().".Insert.".$documentModel->getDocumentName();

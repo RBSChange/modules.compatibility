@@ -19,7 +19,7 @@ class MailService extends BaseService
 	{
 		if (self::$instance === null)
 		{
-			$finalClass = Injection::getFinalClassName(get_class());
+			$finalClass = get_class();
 			if (defined("FAKE_EMAIL") && $finalClass == "MailService")
 			{
 				$finalClass = "FakeMailService"; 

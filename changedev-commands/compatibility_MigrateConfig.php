@@ -138,6 +138,44 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		$this->quitOk("Command successfully executed");
 	}
 	
+	private function migrateInjection($xmlDocument)
+	{
+		$files = f_util_FileUtils::find('project.*.xml', f_util_FileUtils::buildProjectPath('config'));
+		$files[] = f_util_FileUtils::buildProjectPath('config', 'project.xml');
+		foreach ($files as $path)
+		{
+			$process = true;
+			$xmlDoc = f_util_DOMUtils::fromPath($path);
+			$injectElement = $xmlDoc->findUnique('//injection');
+			$classElement = $xmlDoc->createElement('class');
+			$children = $injectElement->childNodes;
+			$childrenCount = $children->length;
+			while ($injectElement->childNodes->length)
+			{
+				$node = $injectElement->firstChild;
+				if ($node->nodeName != 'class')
+				{
+					$injectElement->removeChild($node);
+					$classElement->appendChild($node);
+				}	
+				else
+				{
+					$process = false;
+					break;
+				}
+			}
+			if ($process)
+			{
+				$injectElement->appendChild($classElement);
+				f_util_FileUtils::write($path, $xmlDoc->saveXML(), f_util_FileUtils::OVERRIDE);
+			}
+			else
+			{
+				$this->logWarning("It looks like " . $path . " injection section has already been migrated!");
+			}
+		}
+	}
+	
 	/**
 	 * @param DOMDocument $xmlDocument
 	 * @param string[] $projectProperties
@@ -210,6 +248,33 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		foreach ($toDelete as $defineElem)
 		{
 			$defineElem->parentNode->removeChild($defineElem);
+		}
+		
+		$process = false;
+		$injections = $xmlDocument->getElementsByTagName('injection');
+		foreach ($injections as $injectElement) 
+		{
+			$classElement = $xmlDocument->createElement('class');
+			$children = $injectElement->childNodes;
+			$childrenCount = $children->length;
+			while ($injectElement->childNodes->length)
+			{
+				$node = $injectElement->firstChild;
+				if ($node->nodeName != 'class')
+				{
+					$process = true;
+					$injectElement->removeChild($node);
+					$classElement->appendChild($node);
+				}	
+				else
+				{
+					break;
+				}
+			}
+			if ($process)
+			{
+				$injectElement->appendChild($classElement);
+			}
 		}
 	}
 	
