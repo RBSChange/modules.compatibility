@@ -23,41 +23,7 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		return "Migrate project xml config file";
 	}
 	
-	/**
-	 * This method is used to handle auto-completion for this command.
-	 * @param Integer $completeParamCount the parameters that are already complete in the command line
-	 * @param String[] $params
-	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
-	 * @return String[] or null
-	 */
-	//	public function getParameters($completeParamCount, $params, $options, $current)
-	//	{
-	//		$components = array();
-	//		
-	//		// Generate options in $components.		
-	//		
-	//		return $components;
-	//	}
 	
-
-	/**
-	 * @param String[] $params
-	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
-	 * @return boolean
-	 */
-	//	protected function validateArgs($params, $options)
-	//	{
-	//	}
-	
-
-	/**
-	 * @return String[]
-	 */
-	//	public function getOptions()
-	//	{
-	//	}
-	
-
 	/**
 	 * @param String[] $params
 	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
@@ -76,6 +42,7 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		{
 			$this->quitError('file : ' . $path . ' not found');
 		}
+		
 		$projectProperties = file($path);
 		$this->updateProjectProperties('PROJECT_HOME', PROJECT_HOME, $projectProperties);
 		if (! $this->hasProjectProperty('TMP_PATH', $projectProperties))
@@ -95,7 +62,7 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 					PROJECT_HOME . '/libs/zfminimal/library', $projectProperties);
 		}
 		
-		if ($profile !== 'project')
+		if ($profile !== 'project' && is_dir(PROJECT_HOME . '/build/' . $profile))
 		{
 			$pathToDelete = PROJECT_HOME . '/build/' . $profile;
 			$this->message("Delete folder: " . $pathToDelete);
@@ -117,7 +84,10 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		}
 		$this->log('Check: ' . $projectConfig);
 		$projectDoc = new DOMDocument('1.0', 'UTF-8');
+		$projectDoc->formatOutput = true;
+		$projectDoc->preserveWhiteSpace = false;
 		$projectDoc->load($projectConfig);
+		$projectDoc->formatOutput = true;
 		$this->migrateXmlConfig($projectDoc, $projectProperties);
 		$projectDoc->save($projectConfig);
 		
@@ -128,7 +98,11 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		}
 		$this->log('Check: ' . $profileConfig);
 		$profileDoc = new DOMDocument('1.0', 'UTF-8');
+		$profileDoc->formatOutput = true;
+		$profileDoc->preserveWhiteSpace = false;
 		$profileDoc->load($profileConfig);
+		$profileDoc->formatOutput = true;
+		
 		$this->migrateXmlConfig($profileDoc, $projectProperties);
 		$profileDoc->save($profileConfig);
 		
@@ -242,6 +216,39 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 					$toDelete[] = $defineElem;
 					$this->addProjetcName($xmlDocument, $v);
 					break;
+					
+				case 'SOLR_INDEXER_CLIENT' :
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/clientId', $v);
+					$toDelete[] = $defineElem;
+					break;					
+				case 'SOLR_INDEXER_URL' :
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/url', $v);
+					$serviceName = (strpos($v, 'mysqlindexer') !== false) ? 'mysqlindexer_IndexService' : 'indexer_SolrIndexService';
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/injection/class/indexer_IndexService', $serviceName);
+					$toDelete[] = $defineElem;
+					break;						
+				case 'SOLR_INDEXER_DISABLE_BATCH_MODE':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/batch_mode', $v);
+					$toDelete[] = $defineElem;
+					break;						
+				case 'SOLR_USE_POST_QUERIES':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/request_method', $v);
+					$toDelete[] = $defineElem;
+					break;						
+				case 'SOLR_INDEXER_DISABLE_COMMIT':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/disable_commit', $v);
+					$toDelete[] = $defineElem;
+					break;						
+				case 'SOLR_INDEXER_DISABLE_DOCUMENTCACHE':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/disable_document_cache', $v);
+					$toDelete[] = $defineElem;
+					break;	
 			}
 		}
 		
@@ -407,5 +414,91 @@ class commands_compatibility_MigrateConfig extends commands_AbstractChangeComman
 		{
 			unlink($filePath);
 		}
+	}
+	
+	/**
+	 * @param string $path
+	 * @param string $value
+	 * @return string old value
+	 */
+	private function addProjectConfigurationEntry($dom, $path, $value)
+	{
+		if ($dom->documentElement == null)
+		{
+			return false;
+		}
+		if ($value !== null && !is_string($value))
+		{
+			return false;
+		}
+		foreach (explode('/', $path) as $name) 
+		{
+			if (trim($name) != '') {$sections[] = trim($name);}
+		}
+				
+		if (count($sections) < 3) 
+		{
+			return false;
+		}
+				
+		$entryName = array_pop($sections);
+		$oldValue = null;
+		$sectionNode = $dom->documentElement;	
+		foreach ($sections as $sectionName) 
+		{
+			$childSectionNode = null;
+			foreach ($sectionNode->childNodes as $entryNode) 
+			{
+				if ($entryNode->nodeType === XML_ELEMENT_NODE && $entryNode->nodeName === $sectionName) 
+				{
+					$childSectionNode = $entryNode;
+					break;
+				}
+			}
+			if ($childSectionNode === null)
+			{
+				$childSectionNode = $sectionNode->appendChild($dom->createElement($sectionName));
+			}
+			$sectionNode = $childSectionNode;
+		}
+		
+		foreach ($sectionNode->childNodes as $entryNode) 
+		{
+			if ($entryNode->nodeType === XML_ELEMENT_NODE && $entryNode->getAttribute('name') === $entryName) 
+			{
+				$oldValue = $entryNode->textContent;
+				break;
+			}
+		}
+		
+		if ($oldValue !== $value)
+		{
+			if ($value === null)
+			{
+				$sectionNode->removeChild($entryNode);
+				
+				while (!$sectionNode->hasChildNodes() && $sectionNode->nodeName !== 'config')
+				{
+					$pnode = $sectionNode->parentNode;
+					$pnode->removeChild($sectionNode);
+					$sectionNode = $pnode;
+				}
+			}
+			elseif ($oldValue === null)
+			{
+				$entryNode = $sectionNode->appendChild($dom->createElement('entry'));
+				$entryNode->setAttribute('name', $entryName);
+				$entryNode->appendChild($dom->createTextNode($value));
+			}
+			else
+			{
+				while ($entryNode->hasChildNodes())
+				{
+					$entryNode->removeChild($entryNode->firstChild);
+				}
+				$entryNode->appendChild($dom->createTextNode($value));
+			}
+		}
+		return $oldValue;
 	}
 }
