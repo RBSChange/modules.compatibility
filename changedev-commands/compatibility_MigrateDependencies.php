@@ -90,10 +90,10 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 	
 	private function loadDependencies()
 	{
-		$packages = array();
-		
+		$packages = array();	
 		//Framework
 		$path = PROJECT_HOME. '/framework/install.xml';
+		$addLocaly = $this->copyInProject(dirname($path), false);
 		$doc = $this->getNewDomDocument();
 		$doc->load($path);
 		$name = $doc->documentElement->getAttribute('name');
@@ -107,9 +107,18 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		$paths = glob(PROJECT_HOME. '/libs/*/install.xml');
 		foreach ($paths as $path) 
 		{
+			$copied = $this->copyInProject(dirname($path));
+			
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
 			$name = $doc->documentElement->getAttribute('name');
+			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			{
+				$this->log('Mark ' . $name . ' as local lib');
+				$doc->documentElement->setAttribute('downloadURL', 'none');
+				$doc->save($path);
+			}
+			
 			$packages['libs'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
 			if ($doc->documentElement->hasAttribute('hotfix'))
 			{
@@ -121,9 +130,16 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		$paths = glob(PROJECT_HOME. '/modules/*/install.xml');
 		foreach ($paths as $path) 
 		{
+			$copied = $this->copyInProject(dirname($path));
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
 			$name = $doc->documentElement->getAttribute('name');
+			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			{
+				$this->log('Mark ' . $name . ' as local module');
+				$doc->documentElement->setAttribute('downloadURL', 'none');
+				$doc->save($path);
+			}
 			$packages['modules'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
 			if ($doc->documentElement->hasAttribute('hotfix'))
 			{
@@ -135,9 +151,17 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		$paths = glob(PROJECT_HOME. '/themes/*/install.xml');
 		foreach ($paths as $path) 
 		{
+			$copied = $this->copyInProject(dirname($path));
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
 			$name = $doc->documentElement->getAttribute('name');
+			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			{
+				$this->log('Mark ' . $name . ' as local theme');
+				$doc->documentElement->setAttribute('downloadURL', 'none');
+				$doc->save($path);
+			}
+			
 			$packages['themes'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
 			if ($doc->documentElement->hasAttribute('hotfix'))
 			{
@@ -145,6 +169,11 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 			}
 		}
 		
+		if ($addLocaly)
+		{
+			$this->log('Update autoload ...');
+			$this->getParent()->executeCommand('update-autoload');
+		}
 		return $packages;
 	}
 	
@@ -318,5 +347,22 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 			}
 		}
 		return $oldValue;
+	}
+	
+	/**
+	 * @param string $packagePath
+	 * @return boolean
+	 */
+	protected function copyInProject($packagePath)
+	{
+		if (is_link($packagePath))
+		{
+			$src = realpath(readlink($packagePath));
+			$this->log("Copy $src in $packagePath");
+			unlink($packagePath);
+			f_util_FileUtils::cp($src, $packagePath);
+			return true;
+		}
+		return false;
 	}
 }
