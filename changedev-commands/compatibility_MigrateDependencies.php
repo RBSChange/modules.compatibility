@@ -64,27 +64,22 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		$install->loadXML('<?xml version="1.0" encoding="UTF-8"?><install></install>');
 		$install->documentElement->setAttribute('version', $release);
 		$installNode = $install->documentElement;
-		foreach ($packages as $type => $element) 
+		$lastType = null;
+		foreach ($packages as $p) 
 		{
-			$installNode->appendChild($install->createComment('Packages : ' . $type));
-			foreach ($element as $name => $versionInfo) 
+			/* @var $p c_Package */
+			$type = $p->getType() ? $p->getType() : $p->getName();
+			
+			if ($type !== $lastType)
 			{
-				$package = $installNode->appendChild($install->createElement('package'));
-				if ($type !== 'framework')
-				{
-					$package->setAttribute('type', $type);
-				}
-				$package->setAttribute('name', $name);
-				$package->setAttribute('version', $versionInfo['version']);
-				if (isset($versionInfo['hotfix']))
-				{
-					$package->setAttribute('hotfix', $versionInfo['hotfix']);
-				}
-			}		
+				$lastType = $type;
+				$installNode->appendChild($install->createComment('Packages : ' . $lastType));
+			}
+			$package = $installNode->appendChild($install->createElement('package'));
+			$p->populateNode($package);		
 		}
 		
 		$install->save(PROJECT_HOME. '/install.xml');
-		
 		$this->quitOk("Command successfully executed");
 	}
 	
@@ -94,35 +89,28 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		//Framework
 		$path = PROJECT_HOME. '/framework/install.xml';
 		$addLocaly = $this->copyInProject(dirname($path), false);
+		
 		$doc = $this->getNewDomDocument();
 		$doc->load($path);
-		$name = $doc->documentElement->getAttribute('name');
-		$packages['framework'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
-		if ($doc->documentElement->hasAttribute('hotfix'))
-		{
-			$packages['framework'][$name]['hotfix'] = $doc->documentElement->getAttribute('hotfix');
-		}
-		
+		$p = c_Package::getInstanceFromPackageElement($doc->documentElement, PROJECT_HOME);
+		$packages[] = $p;
+
 		//Libs
 		$paths = glob(PROJECT_HOME. '/libs/*/install.xml');
 		foreach ($paths as $path) 
 		{
 			$copied = $this->copyInProject(dirname($path));
-			
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
-			$name = $doc->documentElement->getAttribute('name');
-			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			$p = c_Package::getInstanceFromPackageElement($doc->documentElement, PROJECT_HOME);		
+			$packages[] = $p;
+			
+			if ($addLocaly && !$copied && !$p->getDownloadURL())
 			{
-				$this->log('Mark ' . $name . ' as local lib');
+				$this->log('Mark ' . $p->getName() . ' as local lib');
+				$p->setDownloadURL('none');
 				$doc->documentElement->setAttribute('downloadURL', 'none');
 				$doc->save($path);
-			}
-			
-			$packages['libs'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
-			if ($doc->documentElement->hasAttribute('hotfix'))
-			{
-				$packages['libs'][$name]['hotfix'] = $doc->documentElement->getAttribute('hotfix');
 			}
 		}
 		
@@ -133,17 +121,15 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 			$copied = $this->copyInProject(dirname($path));
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
-			$name = $doc->documentElement->getAttribute('name');
-			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			$p = c_Package::getInstanceFromPackageElement($doc->documentElement, PROJECT_HOME);		
+			$packages[] = $p;
+			
+			if ($addLocaly && !$copied && !$p->getDownloadURL())
 			{
-				$this->log('Mark ' . $name . ' as local module');
+				$this->log('Mark ' . $p->getName() . ' as local module');
+				$p->setDownloadURL('none');
 				$doc->documentElement->setAttribute('downloadURL', 'none');
 				$doc->save($path);
-			}
-			$packages['modules'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
-			if ($doc->documentElement->hasAttribute('hotfix'))
-			{
-				$packages['libs'][$name]['hotfix'] = $doc->documentElement->getAttribute('hotfix');
 			}
 		}
 		
@@ -154,18 +140,15 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 			$copied = $this->copyInProject(dirname($path));
 			$doc = $this->getNewDomDocument();
 			$doc->load($path);
-			$name = $doc->documentElement->getAttribute('name');
-			if ($addLocaly && !$copied && !$doc->documentElement->hasAttribute('downloadURL'))
+			$p = c_Package::getInstanceFromPackageElement($doc->documentElement, PROJECT_HOME);		
+			$packages[] = $p;
+			
+			if ($addLocaly && !$copied && !$p->getDownloadURL())
 			{
-				$this->log('Mark ' . $name . ' as local theme');
+				$this->log('Mark ' . $p->getName() . ' as local theme');
+				$p->setDownloadURL('none');
 				$doc->documentElement->setAttribute('downloadURL', 'none');
 				$doc->save($path);
-			}
-			
-			$packages['themes'][$name] = array('version' => $doc->documentElement->getAttribute('version'));
-			if ($doc->documentElement->hasAttribute('hotfix'))
-			{
-				$packages['themes'][$name]['hotfix'] = $doc->documentElement->getAttribute('hotfix');
 			}
 		}
 		
