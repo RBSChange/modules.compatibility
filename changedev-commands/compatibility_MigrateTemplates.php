@@ -73,6 +73,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 		}
 		else
 		{
+			$packages = array();
 			foreach ($params as $moduleName) 
 			{
 				if (in_array('modules_' .$moduleName, $allPackages))

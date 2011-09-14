@@ -134,11 +134,14 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 					echo ' - DELETE ', $path, "\n";
 				}
 				
-				$path = f_util_FileUtils::buildModulesPath($moduleName, 'i18n', 'document', 'permission');
-				if (is_dir($path))
+				if ($moduleName !== 'generic')
 				{
-					f_util_FileUtils::rmdir($path);
-					echo ' - DELETE ', $path, "\n";
+					$path = f_util_FileUtils::buildModulesPath($moduleName, 'i18n', 'document', 'permission');
+					if (is_dir($path))
+					{
+						f_util_FileUtils::rmdir($path);
+						echo ' - DELETE ', $path, "\n";
+					}
 				}
 			}
 			
@@ -293,7 +296,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			$result = $line;
 		}
 		
-		if (strpos('<column ') !== false && preg_match('/name="([a-zA-Z0-9\-]+)"/', $line, $matches) && preg_match('/ label="([a-zA-Z0-9\-]+)"/', $line, $matches2))
+		if (strpos('<column ', $line) !== false && preg_match('/name="([a-zA-Z0-9\-]+)"/', $line, $matches) && preg_match('/ label="([a-zA-Z0-9\-]+)"/', $line, $matches2))
 		{
 			if (strtolower($matches[1]) == strtolower($matches2[1]))
 			{
@@ -308,7 +311,7 @@ class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCom
 			}
 		}
 		
-		if (strpos('<action ') !== false && preg_match('/permission="GetDialogTopicTree"/', $line, $matches))
+		if (strpos('<action ', $line) !== false && preg_match('/permission="GetDialogTopicTree"/', $line, $matches))
 		{
 			$line = str_replace($matches[0], 'permission="Update_rootfolder"', $line);
 			$result = $line;

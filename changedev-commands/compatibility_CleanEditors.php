@@ -218,7 +218,8 @@ class commands_compatibility_CleanEditors extends commands_AbstractChangeCommand
 				$key = $matches[1];
 				if(strpos($key, '.') > 2)
 				{
-					$key = $this->convertKey($key);
+					$formaters = array();
+					$key = $this->convertKey($key, $formaters);
 					$line = str_replace($matches[0], $attrName.'="'.$key.'"', $line);
 					$result = $line;
 				}
