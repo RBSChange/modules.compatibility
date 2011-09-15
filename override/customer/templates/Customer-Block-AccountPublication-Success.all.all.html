@@ -1,0 +1,17 @@
+<p class="success" tal:condition="successMessage">${successMessage}</p>
+<p class="error" tal:condition="errorMessage">${errorMessage}</p>
+<tal:block tal:condition="message">
+	<p tal:content="trans:m.customer.frontoffice.unpublished-general-message,ucf" class="normal"></p>
+	<p class="normal">${message}</p>
+	<ul class="normal">
+		<li tal:condition="display/resendLink">
+			<a change:link="tag ctx_customer_resend-confirmation-email" tal:content="trans:m.customer.frontoffice.resend-email-link,ucf"></a>
+		</li>
+		<li tal:condition="display/completeFormLink">
+			<a change:link="tag ctx_customer_my-account-info" tal:content="trans:m.customer.frontoffice.complete-information-link,ucf"></a>
+		</li>
+		<li tal:condition="display/contactLink">
+			<a change:link="tag ctx_customer_contact-form" tal:content="trans:m.customer.frontoffice.contact-us-link,ucf"></a>
+		</li>
+	</ul>
+</tal:block>

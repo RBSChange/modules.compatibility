@@ -10,4 +10,21 @@
 	<!-- Customer -->
 	<block type="modules_customer_ResendConfirmationEmail" icon="mail" labeli18n="m.customer.bo.blocks.resend-confirmation-email" hidden="true" />
 	<block type="modules_customer_AccountPublication" icon="status-detail" labeli18n="m.customer.bo.blocks.account-publication" hidden="true" />
+	
+	<!-- Forums -->
+	<block type="modules_forums_post" icon="post" hidden="true">
+		<parameters>
+			<parameter name="nbitemperpage" type="Integer" default-value="1" hidden="true" />
+			<parameter name="showGravatars" type="Boolean" default-value="true" />
+			<parameter name="avatarsSize" type="Integer" default-value="64" />
+			<parameter name="showSignatures" type="Boolean" default-value="true" />
+			<parameter name="showActions" type="Boolean" default-value="true" hidden="true" />
+		</parameters>
+		<metas>
+			<meta name="forumname" allow="title,description" />
+			<meta name="threadname" allow="title,description" />
+			<meta name="postauthor" allow="title,description" />
+			<meta name="postshortdesc" allow="title,description" />
+		</metas>
+	</block>
 </blocks>
