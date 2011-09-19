@@ -3,7 +3,7 @@
  * commands_compatibility_MigrateDependencies
  * @package modules.compatibility.command
  */
-class commands_compatibility_MigrateDependencies extends commands_AbstractChangeCommand
+class commands_compatibility_MigrateDependencies extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -155,7 +155,7 @@ class commands_compatibility_MigrateDependencies extends commands_AbstractChange
 		if ($addLocaly)
 		{
 			$this->log('Update autoload ...');
-			$this->getParent()->executeCommand('update-autoload');
+			$this->executeCommand('update-autoload');
 		}
 		return $packages;
 	}

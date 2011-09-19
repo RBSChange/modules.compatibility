@@ -3,7 +3,7 @@
  * commands_compatibility_MigrateConfig
  * @package modules.compatibility.command
  */
-class commands_compatibility_MigrateConfig extends commands_AbstractChangeCommand
+class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

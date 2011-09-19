@@ -2,7 +2,7 @@
 /**
  * @deprecated use update-dependencies instead
  */
-class commands_InitGenericModules extends commands_AbstractChangeCommand
+class commands_InitGenericModules extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

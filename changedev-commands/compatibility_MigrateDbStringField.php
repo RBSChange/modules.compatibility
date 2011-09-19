@@ -3,7 +3,7 @@
  * commands_compatibility_MigrateDbStringField
  * @package modules.compatibility.command
  */
-class commands_compatibility_MigrateDbStringField extends commands_AbstractChangeCommand
+class commands_compatibility_MigrateDbStringField extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

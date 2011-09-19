@@ -1,5 +1,5 @@
 <?php
-class commands_CompileAop extends commands_AbstractChangeCommand
+class commands_CompileAop extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -20,6 +20,22 @@ class commands_CompileAop extends commands_AbstractChangeCommand
 	function getDescription()
 	{
 		return "compile AOP files";
+	}
+	
+	/**
+	 * @see c_ChangescriptCommand::getEvents()
+	 */
+	public function getEvents()
+	{
+		return array(
+			array('target' => 'compile-config'),
+			array('target' => 'update-autoload'),
+		);
+	}	
+	
+	function isHidden()
+	{
+		return true;
 	}
 
 	/**

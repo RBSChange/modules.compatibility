@@ -6,7 +6,7 @@
  * resume.xml
  *  - clean keys in labeli18n and actiontexti18n attributes
  */
-class commands_compatibility_CleanEditors extends commands_AbstractChangeCommand
+class commands_compatibility_CleanEditors extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

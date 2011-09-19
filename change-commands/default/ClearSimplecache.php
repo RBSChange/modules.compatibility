@@ -2,7 +2,7 @@
 /**
  * @deprecated use clear-datacache instead
  */
-class commands_ClearSimplecache extends commands_AbstractChangeCommand
+class commands_ClearSimplecache extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -44,8 +44,8 @@ class commands_ClearSimplecache extends commands_AbstractChangeCommand
 		{
 			f_util_FileUtils::cleanDir($simpleCachePath);
 		}
-		$parent = $this->getParent();
-		$parent->executeCommand("clearDatacache");
+
+		$this->executeCommand("clear-datacache");
 		
 		$this->quitOk("Simple cache directory cleared");
 	}

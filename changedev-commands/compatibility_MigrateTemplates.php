@@ -13,7 +13,7 @@
  * //DELETED
  * change:edit change:docattr  change:create change:propattr 
  */
-class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCommand
+class commands_compatibility_MigrateTemplates extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -64,7 +64,7 @@ class commands_compatibility_MigrateTemplates extends commands_AbstractChangeCom
 	{
 		$this->message("== MigrateTemplates ==");
 		$this->loadFramework();
-		$this->getParent()->executeCommand('clear-template-cache');
+		$this->executeCommand('clear-template-cache');
 		$allPackages = ModuleService::getInstance()->getPackageNames();
 		
 		if ( f_util_ArrayUtils::isEmpty($params))

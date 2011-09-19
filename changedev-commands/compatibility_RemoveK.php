@@ -3,7 +3,7 @@
  * commands_compatibility_RemoveK
  * @package modules.compatibility.command
  */
-class commands_compatibility_RemoveK extends commands_AbstractChangeCommand
+class commands_compatibility_RemoveK extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

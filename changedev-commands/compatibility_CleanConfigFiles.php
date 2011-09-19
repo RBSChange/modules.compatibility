@@ -30,7 +30,7 @@
  * *rights.xml: 
  *  - delete EditLocale and GetDialogTopicTree permissions 
  */
-class commands_compatibility_CleanConfigFiles extends commands_AbstractChangeCommand
+class commands_compatibility_CleanConfigFiles extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
