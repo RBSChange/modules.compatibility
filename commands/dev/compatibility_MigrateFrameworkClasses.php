@@ -5,6 +5,15 @@
  */
 class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptCommand
 {
+	private $classes = array(
+		'f_web_CSSDeclaration' => 'website_CSSDeclaration',
+		'f_web_CSSRule' => 'website_CSSRule',
+		'f_web_CSSStylesheet' => 'website_CSSStylesheet',
+		'f_web_CSSVariables' => 'website_CSSVariables',
+		'f_permission_RoleService' => 'change_RoleService',
+		'f_permission_PermissionService' => 'change_PermissionService',
+	);
+	
 	/**
 	 * @return String
 	 */
@@ -41,7 +50,7 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 		
 		return $components;
 	}
-			
+	
 	/**
 	 * @param String[] $params
 	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
@@ -148,11 +157,6 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 			file_put_contents($fullpath, $content);
 		}
 	}
-	
-	private $classes = array(
-		'f_permission_RoleService' => 'change_RoleService',
-		'f_permission_PermissionService' => 'change_PermissionService',
-	);
 	
 	function replaceClasses($tokens, $classes, $inString = false)
 	{
