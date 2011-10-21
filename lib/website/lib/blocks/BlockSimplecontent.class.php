@@ -26,7 +26,7 @@ class website_BlockSimplecontentAction extends website_BlockAction
 		}
 		$templateName = ucfirst($module) .'-Block-Simplecontent-' . $viewName;
 
-		$website = website_WebsiteModuleService::getInstance()->getCurrentWebsite();
+		$website = website_WebsiteService::getInstance()->getCurrentWebsite();
 		$request->setAttribute("website", $website);
 
 		return $this->getTemplateByFullName("modules_".$module, $templateName);

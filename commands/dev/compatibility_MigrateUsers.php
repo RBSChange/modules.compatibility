@@ -1,9 +1,9 @@
 <?php
 /**
- * commands_compatibility_MigrateController
+ * commands_compatibility_MigrateUsers
  * @package modules.compatibility.command
  */
-class commands_compatibility_MigrateController extends c_ChangescriptCommand
+class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 {
 	/**
 	 * @return String
@@ -31,15 +31,21 @@ class commands_compatibility_MigrateController extends c_ChangescriptCommand
 	 */
 	public function getParameters($completeParamCount, $params, $options, $current)
 	{
-		$components = array('framework');
-		
-		foreach (glob(PROJECT_HOME. "/modules/*/templates", GLOB_ONLYDIR) as $path)
+		$parameters = array();
+		foreach ($this->getBootStrap()->getProjectDependencies() as $cPackage) 
 		{
-			$module = dirname($path);
-			$components[] = basename($module);
-		}	
+			/* @var $cPackage c_Package */
+			if ($cPackage->isFramework() || $cPackage->isModule())
+			{
+				$name = $cPackage->getName();
+				if ($name != 'compatibility')
+				{
+					$parameters[] = $name;
+				}
+			}
+		}
 		
-		return $components;
+		return $parameters;
 	}
 	
 	/**
@@ -54,79 +60,62 @@ class commands_compatibility_MigrateController extends c_ChangescriptCommand
 	 */
 	public function _execute($params, $options)
 	{
-		$this->message("== Migrate Controller ==");
+		$this->message("== Migrate Users ==");
 		$this->loadFramework();
 		
 		$this->classReplacer = new compatibility_ClassReplacer(array(
-			'controller_ChangeController' => 'change_Controller',
-			'controller_XulController' => 'change_XulController',
-			'Controller' => 'change_Controller',
-			'HttpController' => 'change_Controller',
-			'WebController' => 'change_Controller',
-			'Context' => 'change_Context',
-			'Storage' => 'change_Storage',
-			'SessionStorage' => 'change_Storage',
-			'ChangeSessionStorage' => 'change_Storage',
-			'User' => 'change_User',
-			'FrameworkSecurityUser' => 'change_User',
-			'SecurityUser' => 'change_User',
-			'Action' => 'change_Action',
-			'f_action_BaseAction' => 'change_Action',
-			'f_action_BaseJSONAction' => 'change_JSONAction',	
-			'Request' => 'change_Request',
-			'WebRequest' => 'change_Request',
-			'ChangeRequest' => 'change_Request',
-			'View' => 'change_View',
-			'f_view_BaseView' => 'change_View',
-			'WebRequest' => 'change_Request',
+			'users_FrontendgroupService' => 'users_GroupService',
+			'users_WebsitefrontendgroupService' => 'users_GroupService',
+			'users_DynamicfrontendgroupService' => 'users_DynamicgroupService',
+			'users_BackenduserService' => 'users_UserService',
+			'users_FrontenduserService' => 'users_UserService',
+			'users_WebsitefrontenduserService' => 'users_UserService',
+		
+			'users_persistentdocument_backenduser' => 'users_persistentdocument_user',
+			'users_persistentdocument_frontenduser' => 'users_persistentdocument_user',
+			'users_persistentdocument_websitefrontenduser' => 'users_persistentdocument_user',
+	
+		
+			'users_persistentdocument_dynamicfrontendgroup' => 'users_persistentdocument_dynamicgroup',	
+			'users_persistentdocument_frontendgroup' => 'users_persistentdocument_group',
+			'users_persistentdocument_websitefrontendgroup' => 'users_persistentdocument_group',
+		
+			'users_FrontendgroupFeederBaseService' => 'users_GroupFeederBaseService',
 		), true);
-		
-		$migrateFramework = false;
-		$allPackages = ModuleService::getInstance()->getPackageNames();
-		
-		if ( f_util_ArrayUtils::isEmpty($params))
+		if (f_util_ArrayUtils::isEmpty($params))
 		{
-			$packages = $allPackages;
+			$packages = $this->getBootStrap()->getProjectDependencies();
 		}
 		else
 		{
+			$packages = array();
 			foreach ($params as $moduleName) 
 			{
-				if (in_array('modules_' .$moduleName, $allPackages))
-				{
-					$packages[] = 'modules_' .$moduleName;
-				}
-				elseif (in_array($moduleName, $allPackages))
-				{
-					$packages[] = $moduleName;
-				}
-				elseif ($moduleName === 'framework')
-				{
-					$migrateFramework = true;
-				}
-			}
-		}
-		if ($migrateFramework)
-		{
-			$paths = $this->scanDir(f_util_FileUtils::buildFrameworkPath());
-			foreach ($paths as $fullpath)
-			{
-				$this->classReplacer->migrateFile($fullpath);
+				$package = $this->getPackageByName($moduleName);
+				$packages[$package->getKey()] = $package;
 			}
 		}
 		
-		
-		foreach ($packages as $packageName)
+		foreach ($packages  as $cPackage) 
 		{
-			list (, $moduleName) = explode('_', $packageName);
-			$paths = $this->scanModule($moduleName);
-			$this->errors = array();
-			foreach ($paths as $fullpath)
+			/* @var $cPackage c_Package */
+			if ($cPackage->isFramework())
 			{
-				$this->classReplacer->migrateFile($fullpath);
+				$paths = $this->scanDir($cPackage->getPath());
+				foreach ($paths as $fullpath)
+				{
+					$this->classReplacer->migrateFile($fullpath, true);
+				}
+			}
+			elseif ($cPackage->isModule() && $cPackage->getName() != 'compatibility')
+			{
+				$paths = $this->scanModule($cPackage->getName());
+				foreach ($paths as $fullpath)
+				{
+					$this->classReplacer->migrateFile($fullpath, true);
+				}
 			}
 		}
-
 		$this->quitOk("Command successfully executed");
 	}
 	

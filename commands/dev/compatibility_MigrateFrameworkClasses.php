@@ -5,14 +5,6 @@
  */
 class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptCommand
 {
-	private $classes = array(
-		'f_web_CSSDeclaration' => 'website_CSSDeclaration',
-		'f_web_CSSRule' => 'website_CSSRule',
-		'f_web_CSSStylesheet' => 'website_CSSStylesheet',
-		'f_web_CSSVariables' => 'website_CSSVariables',
-		'f_permission_RoleService' => 'change_RoleService',
-		'f_permission_PermissionService' => 'change_PermissionService',
-	);
 	
 	/**
 	 * @return String
@@ -52,6 +44,11 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 	}
 	
 	/**
+	 * @var compatibility_ClassReplacer
+	 */
+	private $classReplacer;
+	
+	/**
 	 * @param String[] $params
 	 * @param array<String, String> $options where the option array key is the option name, the potential option value or true
 	 * @see c_ChangescriptCommand::parseArgs($args)
@@ -59,6 +56,15 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 	public function _execute($params, $options)
 	{
 		$this->message("== Migrate Framework Classes ==");
+		
+		$this->classReplacer = new compatibility_ClassReplacer(array(
+			'f_web_CSSDeclaration' => 'website_CSSDeclaration',
+			'f_web_CSSRule' => 'website_CSSRule',
+			'f_web_CSSStylesheet' => 'website_CSSStylesheet',
+			'f_web_CSSVariables' => 'website_CSSVariables',
+			'f_permission_RoleService' => 'change_RoleService',
+			'f_permission_PermissionService' => 'change_PermissionService',
+		), true);
 		$this->loadFramework();
 		$migrateFramework = false;
 		$allPackages = ModuleService::getInstance()->getPackageNames();
@@ -91,7 +97,7 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 			$paths = $this->scanDir(f_util_FileUtils::buildFrameworkPath());
 			foreach ($paths as $fullpath)
 			{
-				$this->migrateFile($fullpath);
+				$this->classReplacer->migrateFile($fullpath);
 			}
 		}
 		
@@ -103,7 +109,7 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 			$this->errors = array();
 			foreach ($paths as $fullpath)
 			{
-				$this->migrateFile($fullpath);
+				$this->classReplacer->migrateFile($fullpath);
 			}
 		}
 
@@ -145,159 +151,6 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 			}
 		}
 		return $paths;
-	}
-	
-	function migrateFile($fullpath)
-	{
-		$tokens = token_get_all(file_get_contents($fullpath));
-		$content = $this->replaceClasses($tokens, $this->classes, false);
-		if ($content !== null)
-		{
-			echo 'Fix : ', $fullpath, "\n";
-			file_put_contents($fullpath, $content);
-		}
-	}
-	
-	function replaceClasses($tokens, $classes, $inString = false)
-	{
-		$content = array();
-		$updated = false;
-		$commentCheck = array();
-		$commentReplace = array();
-		$stringSearch = array();
-		$stringReplace = array();
-			
-		foreach ($classes as $old => $new) 
-		{
-			$commentCheck[] = '* @param '.$old.' ';
-			$commentCheck[] = '* @return '.$old;
-			$commentCheck[] = '* @var '.$old;
-			
-			$commentReplace[] =  '* @param '.$new.' ';
-			$commentReplace[] =  '* @return '.$new;	
-			$commentReplace[] =  '* @var '.$new;
-			if ($inString)
-			{
-				$stringSearch[] = '"'.$old.'"';
-				$stringSearch[] = '\''.$old.'\'';			
-				$stringReplace[] = '\''.$new.'\'';
-				$stringReplace[] = '\''.$new.'\'';
-			}
-		}
-		
-		foreach ($tokens as $tn => $tv)
-		{
-			if (is_array($tv))
-			{
-				switch ($tv[0])
-				{
-					case T_STRING :
-						if (isset($classes[$tv[1]]))
-						{
-							if ($this->isTokenClass($tn, $tokens))
-							{
-								$content[] = $classes[$tv[1]];
-								$updated = true;
-								continue;
-							}
-						}
-						$content[] = $tv[1];
-						break;
-					case T_CONSTANT_ENCAPSED_STRING :
-						if ($inString)
-						{
-							$str = str_replace($stringSearch, $stringReplace, $tv[1]);
-							if ($str !== $tv[1])
-							{
-								$updated = true;
-							}
-							$content[] = $str;
-						}
-						else
-						{
-							$content[] = $tv[1];
-						}
-						break;
-					case T_DOC_COMMENT :
-						$str = str_replace($commentCheck, $commentReplace, $tv[1]);
-						if ($str !== $tv[1])
-						{
-							$updated = true;
-						}
-						$content[] = $str;
-						
-						break;
-					default :
-						$content[] = $tv[1];
-						break;
-				}
-			}
-			else
-			{
-				$content[] = $tv;
-			}
-		}	
-		return ($updated) ? implode('', $content) : null;
-	}
-	
-	function isTokenClass($tn, $tokens)
-	{
-		$i = $tn + 1;
-		while ($i < count($tokens))
-		{
-			$tv = $tokens[$i];
-			if (! is_array($tv))
-			{
-				break;
-			}
-			if ($tv[0] === T_WHITESPACE)
-			{
-				$i ++;
-				continue;
-			}
-			if ($tv[0] === T_DOUBLE_COLON || $tv[0] === T_VARIABLE)
-			{
-				return true;
-			}
-			break;
-		}
-		
-		$i = $tn - 1;
-		$virg = false;
-		while ($i >= 0)
-		{
-			$tv = $tokens[$i];
-			if (! is_array($tv))
-			{
-				if ($tv === ',')
-				{
-					$virg = true;
-					$i --;
-					continue;
-				}
-				return false;
-			}
-			switch ($tv[0])
-			{
-				case T_CLASS :
-				case T_INSTANCEOF :
-				case T_EXTENDS :
-				case T_NEW :
-				case T_IMPLEMENTS :
-				case T_INTERFACE:
-					return true;
-				
-				case T_STRING :
-					if (! $virg)
-					{
-						return false;
-					}
-				case T_WHITESPACE :
-					$i --;
-					break;
-				default :
-					return false;
-			}
-		}
-	}
+	}	
 }
+	
