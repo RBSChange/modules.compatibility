@@ -47,11 +47,6 @@ class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 		
 		return $parameters;
 	}
-	
-	/**
-	 * @var compatibility_ClassReplacer
-	 */
-	private $classReplacer;
 			
 	/**
 	 * @param String[] $params
@@ -63,7 +58,7 @@ class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 		$this->message("== Migrate Users ==");
 		$this->loadFramework();
 		
-		$this->classReplacer = new compatibility_ClassReplacer(array(
+		$classReplacer = new compatibility_ClassReplacer(array(
 			'users_FrontendgroupService' => 'users_GroupService',
 			'users_WebsitefrontendgroupService' => 'users_GroupService',
 			'users_DynamicfrontendgroupService' => 'users_DynamicgroupService',
@@ -104,7 +99,7 @@ class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 				$paths = $this->scanDir($cPackage->getPath());
 				foreach ($paths as $fullpath)
 				{
-					$this->classReplacer->migrateFile($fullpath, true);
+					$classReplacer->migrateFile($fullpath, true);
 				}
 			}
 			elseif ($cPackage->isModule() && $cPackage->getName() != 'compatibility')
@@ -112,27 +107,56 @@ class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 				$paths = $this->scanModule($cPackage->getName());
 				foreach ($paths as $fullpath)
 				{
-					$this->classReplacer->migrateFile($fullpath, true);
+					$classReplacer->migrateFile($fullpath, true);
 				}
 			}
 		}
+		
+		$modelReplacer = new compatibility_ClassReplacer(array(
+			'modules_users/frontendgroup' => 'modules_users/group',
+			'modules_users/dynamicfrontendgroup' => 'modules_users/dynamicgroup',	
+			'modules_users/websitefrontendgroup' => 'modules_users/group',
+			'modules_users/backenduser' => 'modules_users/user',
+			'modules_users/frontenduser' => 'modules_users/user',
+			'modules_users/websitefrontenduser' => 'modules_users/user',
+
+			'modules_users_frontendgroup' => 'modules_users_group',
+			'modules_users_dynamicfrontendgroup' => 'modules_users_dynamicgroup',	
+			'modules_users_websitefrontendgroup' => 'modules_users_group',
+			'modules_users_backenduser' => 'modules_users_user',
+			'modules_users_frontenduser' => 'modules_users_user',
+			'modules_users_websitefrontenduser' => 'modules_users_user',
+		), true);
+	
+		foreach ($packages  as $cPackage) 
+		{
+			/* @var $cPackage c_Package */
+			if ($cPackage->isModule() && $cPackage->getName() != 'compatibility')
+			{
+				$paths = $this->scanModule($cPackage->getName(), 'xml');
+				foreach ($paths as $fullpath)
+				{
+					$modelReplacer->replaceFile($fullpath);
+				}
+			}
+		}	
+		
 		$this->quitOk("Command successfully executed");
 	}
 	
 	
-	private function scanModule($moduleName)
+	private function scanModule($moduleName, $scanExt = 'php')
 	{
 		$baseTemplatePath = f_util_FileUtils::buildModulesPath($moduleName);
-		$paths = $this->scanDir($baseTemplatePath);
+		$paths = $this->scanDir($baseTemplatePath, $scanExt);
 		
 		$baseTemplatePath = f_util_FileUtils::buildOverridePath('modules', $moduleName);
-		$paths = array_merge($paths, $this->scanDir($baseTemplatePath));
+		$paths = array_merge($paths, $this->scanDir($baseTemplatePath, $scanExt));
 				
 		return $paths;
 	}
 	
-	
-	private function scanDir($basePath)
+	private function scanDir($basePath, $scanExt = 'php')
 	{
 		$paths = array();
 		if (! is_dir($basePath) || ! is_readable($basePath))
@@ -147,7 +171,7 @@ class commands_compatibility_MigrateUsers extends c_ChangescriptCommand
 			if (! $splFileInfo->isDir())
 			{
 				$ext = end(explode('.', $splFileInfo->getBasename()));
-				if ($ext === 'php')
+				if ($ext === $scanExt)
 				{
 					$paths[] = $splFileInfo->getPathname();
 				}
