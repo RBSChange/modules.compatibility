@@ -21,5 +21,7 @@ class compatibility_PHPTAL_CHANGE
         $namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeReplace('price', 10));
         
 		$namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeSurround('currentlink', 30));
+		
+		$namespaceCHANGE->addAttribute(new PHPTAL_NamespaceAttributeContent('memberdate', 30));
 	}
 }
