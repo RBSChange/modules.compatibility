@@ -64,6 +64,7 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 			'f_web_CSSVariables' => 'website_CSSVariables',
 			'f_permission_RoleService' => 'change_RoleService',
 			'f_permission_PermissionService' => 'change_PermissionService',
+			'f_persistentdocument_PersistentDocumentImpl' => 'f_persistentdocument_PersistentDocument'
 		), true);
 		$this->loadFramework();
 		$migrateFramework = false;
@@ -105,6 +106,7 @@ class commands_compatibility_MigrateFrameworkClasses extends c_ChangescriptComma
 		foreach ($packages as $packageName)
 		{
 			list (, $moduleName) = explode('_', $packageName);
+			if ($moduleName === 'compatibility') {continue;}
 			$paths = $this->scanModule($moduleName);
 			$this->errors = array();
 			foreach ($paths as $fullpath)
