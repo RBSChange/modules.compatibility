@@ -87,10 +87,11 @@ class commands_compatibility_MigrateTemplates extends c_ChangescriptCommand
 			}
 		}
 		
-		if (! PHPTAL_Dom_Defs::getInstance()->isHandledNamespace(
-				PHPTAL_Namespace_CHANGE::NAMESPACE_URI))
+		$PHPTALClassPath = f_util_FileUtils::buildWebeditPath('libs', 'phptal', 'PHPTAL.php');
+		require_once($PHPTALClassPath);
+		
+		if (!PHPTAL_Dom_Defs::getInstance()->isHandledNamespace(PHPTAL_Namespace_CHANGE::NAMESPACE_URI))
 		{
-			spl_autoload_unregister(array('PHPTAL', 'autoload'));
 			PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_CHANGE());
 			$registry = PHPTAL_TalesRegistry::getInstance();
 			foreach (Framework::getConfigurationValue('tal/prefix') as $prefix => $class)
@@ -133,12 +134,8 @@ class commands_compatibility_MigrateTemplates extends c_ChangescriptCommand
 			}
 		}
 		
-		// Put your code here!
-		
-
 		$this->quitOk("Command successfully executed");
 	}
-	
 	
 	private function getThemes()
 	{
