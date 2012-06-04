@@ -155,7 +155,7 @@ class commands_compatibility_MigrateDependencies extends c_ChangescriptCommand
 		if ($addLocaly)
 		{
 			$this->log('Update autoload ...');
-			$this->executeCommand('update-autoload');
+			$this->executeCommand('compile-autoload');
 		}
 		return $packages;
 	}

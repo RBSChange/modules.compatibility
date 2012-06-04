@@ -93,7 +93,7 @@ class generic_ExportAction extends change_Action
 				$this->currentRow += 1;
 				foreach (array_values($array) as $value)
 				{
-					$string .= "\"".utf8_decode(str_replace(array("\n", "\r"), "", f_util_StringUtils::htmlToText($value, false)))."\"".$this->separator;
+					$string .= "\"".utf8_decode(str_replace(array("\n", "\r"), "", f_util_HtmlUtils::htmlToText($value, false)))."\"".$this->separator;
 				}
 				echo $string .= PHP_EOL;
 			}

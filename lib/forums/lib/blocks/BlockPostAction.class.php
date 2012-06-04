@@ -13,7 +13,7 @@ class forums_BlockPostAction extends forums_BlockPostListBaseAction
 		if ($doc instanceof forums_persistentdocument_post)
 		{
 			$thread = $doc->getThread();
-			$description = f_util_StringUtils::shortenString(f_util_StringUtils::htmlToText($doc->getTextAsHtml()), 100);
+			$description = f_util_StringUtils::shortenString(f_util_HtmlUtils::htmlToText($doc->getTextAsHtml()), 100);
 			$author = ($doc->getPostauthor() !== null) ? $doc->getPostauthor()->getLabel() : '';
 			return array('threadname' => $thread->getLabel(), 'forumname' => $thread->getForum()->getLabel(), 'postauthor' => $author, 'postshortdesc' => $description);
 		}

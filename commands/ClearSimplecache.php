@@ -12,11 +12,6 @@ class commands_ClearSimplecache extends c_ChangescriptCommand
 		return "";
 	}
 	
-	function getAlias()
-	{
-		return "csc";
-	}
-
 	/**
 	 * @return String
 	 */
@@ -39,14 +34,7 @@ class commands_ClearSimplecache extends c_ChangescriptCommand
 	{
 		$this->message("== Clear simple cache ==");
 		$this->loadFramework();
-		$simpleCachePath = f_util_FileUtils::buildCachePath("simplecache");
-		if (is_dir($simpleCachePath) && !(f_DataCacheService::getInstance() instanceof f_DataCacheFileService))
-		{
-			f_util_FileUtils::cleanDir($simpleCachePath);
-		}
-
-		$this->executeCommand("clear-datacache");
-		
-		$this->quitOk("Simple cache directory cleared");
+		$this->errorMessage($this->getDescription());
+		$this->quitOk(".");
 	}
 }

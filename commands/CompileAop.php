@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated use compile-injection instead
+ */
 class commands_CompileAop extends c_ChangescriptCommand
 {
 	/**
@@ -9,17 +12,12 @@ class commands_CompileAop extends c_ChangescriptCommand
 		return "";
 	}
 	
-	function getAlias()
-	{
-		return "caop";
-	}
-
 	/**
 	 * @return String
 	 */
 	function getDescription()
 	{
-		return "compile AOP files";
+		return "Deprecated. configure and use compile-injection.";
 	}
 	
 	/**
@@ -27,10 +25,12 @@ class commands_CompileAop extends c_ChangescriptCommand
 	 */
 	public function getEvents()
 	{
+		/*
 		return array(
+			array('target' => 'compile-autoload'),
 			array('target' => 'compile-config'),
-			array('target' => 'update-autoload'),
 		);
+		*/
 	}	
 	
 	function isHidden()
@@ -47,9 +47,7 @@ class commands_CompileAop extends c_ChangescriptCommand
 	{
 		$this->message("== Compile AOP ==");
 		$this->loadFramework();
-		
-		//ClassResolver::getInstance()->compileAOP();
-		
-		$this->quitOk("AOP compiled");
+		$this->errorMessage($this->getDescription());	
+		$this->quitOk(".");
 	}
 }

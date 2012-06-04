@@ -12,17 +12,12 @@ class commands_InitGenericModules extends c_ChangescriptCommand
 		return "";
 	}
 
-	function getAlias()
-	{
-		return "igm";
-	}
-
 	/**
 	 * @return String
 	 */
 	function getDescription()
 	{
-		return "init generic modules";
+		return "Deprecated use use update-dependencies";
 	}
 
 	function isHidden()
@@ -38,6 +33,7 @@ class commands_InitGenericModules extends c_ChangescriptCommand
 	function _execute($params, $options)
 	{
 		$this->message("== Deprecated Init generic modules ==");
-		$this->quitOk("Please use update-dependencies");
+		$this->errorMessage($this->getDescription());
+		$this->quitOk(".");
 	}
 }

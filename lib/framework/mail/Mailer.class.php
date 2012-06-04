@@ -103,7 +103,7 @@ abstract class Mailer
 		$this->getMimeObject()->setHtmlBody($htmlBody);
 		if (is_null($textBody))
 		{
-		    $textBody = f_util_StringUtils::htmlToText($htmlBody);
+		    $textBody = f_util_HtmlUtils::htmlToText($htmlBody);
 		}
 		$this->getMimeObject()->setTxtBody($textBody);
 	}
