@@ -52,14 +52,12 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 		
 		if (! $this->hasProjectProperty('CHANGE_COMMAND', $projectProperties))
 		{
-			$this->updateProjectProperties('CHANGE_COMMAND', 'framework/bin/change.php', 
-					$projectProperties);
+			$this->updateProjectProperties('CHANGE_COMMAND', 'framework/bin/change.php', $projectProperties);
 		}
 		
 		if (! $this->hasProjectProperty('ZEND_FRAMEWORK_PATH', $projectProperties))
 		{
-			$this->updateProjectProperties('ZEND_FRAMEWORK_PATH', 
-					PROJECT_HOME . '/libs/zfminimal/library', $projectProperties);
+			$this->updateProjectProperties('ZEND_FRAMEWORK_PATH', PROJECT_HOME . '/libs/zfminimal/library', $projectProperties);
 		}
 		
 		if ($profile !== 'project' && is_dir(PROJECT_HOME . '/build/' . $profile))
@@ -69,6 +67,10 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 			$this->rm($pathToDelete);
 			
 			$pathToDelete = PROJECT_HOME . '/cache/' . $profile;
+			$this->message("Delete folder: " . $pathToDelete);
+			$this->rm($pathToDelete);
+			
+			$pathToDelete = PROJECT_HOME . '/cache/autoload';
 			$this->message("Delete folder: " . $pathToDelete);
 			$this->rm($pathToDelete);
 			
@@ -248,7 +250,18 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 					$this->log(' -> ' . $n . ': ' . $v);
 					$this->addProjectConfigurationEntry($xmlDocument, 'config/solr/disable_document_cache', $v);
 					$toDelete[] = $defineElem;
-					break;	
+					break;
+				case 'MOD_NOTIFICATION_SENDER_HOST':
+				case 'DEFAULT_SENDER_HOST':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$toDelete[] = $defineElem;
+					break;
+				case 'MOD_NOTIFICATION_SENDER':
+				case 'NOREPLY_DEFAULT_EMAIL':
+					$this->log(' -> ' . $n . ': ' . $v);
+					$toDelete[] = $defineElem;
+					$this->addProjectConfigurationEntry($xmlDocument, 'config/modules/notification/noreplySender', $v);
+					break;
 			}
 		}
 		
@@ -396,16 +409,18 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 	{
 		if (is_dir($filePath))
 		{
-			$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($filePath), RecursiveIteratorIterator::CHILD_FIRST);
+			$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($filePath, FilesystemIterator::SKIP_DOTS), 
+					RecursiveIteratorIterator::CHILD_FIRST);
 			foreach ($iterator as $path)
 			{
+				/* @var $path DirectoryIterator */
 				if ($path->isDir())
 				{
-					rmdir($path->__toString());
+					rmdir($path->getPathname());
 				}
 				else
 				{
-					unlink($path->__toString());
+					unlink($path->getPathname());
 				}
 			}
 			rmdir($filePath);
