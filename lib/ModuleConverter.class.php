@@ -466,8 +466,7 @@ class compatibility_ModuleConverter
 					}
 				}
 			}
-			$content = str_replace(array('  ', '"/>'), array("\t", '" />'), $doc->saveXML());
-			$content = preg_replace('/\s+$/m', '', $content);
+			$content = $this->formattedXMLString($doc->saveXML());
 			
 			$content = preg_replace_callback('/&(modules|framework|themes|m|f|t)(\.[a-zA-Z0-9]+)+;/', array($this, 'panelsMatchesKey'), $content);
 			$content = str_replace('${transui:', '${trans:', $content);
@@ -829,9 +828,19 @@ class compatibility_ModuleConverter
 	 */
 	private function saveFormattedXMLDocument($doc, $filePath)
 	{
-		$content = str_replace(array('  ', '"/>'), array("\t", '" />'), $doc->saveXML());
-		$content = preg_replace('/\s+$/m', '', $content);
+		$content = $this->formattedXMLString($doc->saveXML());
 		file_put_contents($filePath, $content);
+	}
+	
+	/**
+	 * @param string $xmlString
+	 * @return string
+	 */
+	private function formattedXMLString($xmlString)
+	{
+		$xmlString = str_replace(array('  ', '"/>'), array("\t", '" />'), $xmlString);
+		$xmlString = preg_replace('/\s+$/D', '', $xmlString);
+		return $xmlString;
 	}
 	
 	/**
