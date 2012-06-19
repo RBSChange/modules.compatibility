@@ -47,6 +47,25 @@ class commands_compatibility_MigrateModule extends c_ChangescriptCommand
 					}
 				}
 			}
+			
+			if ($this->inReleaseDevelopement())
+			{
+				$directory = PROJECT_HOME. '/modules';
+				if (is_dir($directory))
+				{
+					$iterator = new DirectoryIterator($directory);
+					foreach ($iterator as $fileinfo)
+					{
+						/* @var $fileinfo SplFileInfo */
+						if ($fileinfo->isDir())
+						{
+							$name = $fileinfo->getBasename();
+							if ($name[0] != '.' && $name !== 'compatibility') {$package[] = $name;}
+						}
+					}
+				}
+			}
+			
 		}
 		return array_diff($package, $params);
 	}
@@ -68,6 +87,18 @@ class commands_compatibility_MigrateModule extends c_ChangescriptCommand
 					return true;
 				}
 			}
+			
+			if ($this->inReleaseDevelopement())
+			{
+				$directory = PROJECT_HOME. '/modules/' . $params[0];
+				if (is_dir($directory))
+				{
+					if (file_exists($directory.'/change.xml') || file_exists($directory.'/install.xml'))
+					{
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}
@@ -83,6 +114,10 @@ class commands_compatibility_MigrateModule extends c_ChangescriptCommand
 		$this->message("== Migrate Module " .$params[0]. " ==");
 		$this->loadFramework();
 		$directory = PROJECT_HOME. '/oldmodules/' . $moduleName;
+		if (!is_dir($directory)) 
+		{
+			$directory = PROJECT_HOME. '/modules/' . $moduleName;
+		}
 		
 		$converter = new compatibility_ModuleConverter($moduleName, $directory, $this);	
 		$converter->convert();

@@ -42,6 +42,47 @@ class compatibility_ClassReplacer
 		$this->verbose = $verbose;
 	}
 	
+	public function convertPHPService($fullpath)
+	{
+		$this->logPrefix = 'Fix Service: ';
+		$this->setClasses(array(
+'$this->pp' => '$this->getPersistentProvider()', '$this->tm' => '$this->getTransactionManager()',
+'	private static $instance' => '	//private static $instance',
+'	public static function getInstance()
+	{
+		if (self::$instance === null)
+		{
+			self::$instance = self::getServiceClassInstance(get_class());
+		}
+		return self::$instance;
+	}' =>
+'//	public static function getInstance()
+//	{
+//		if (self::$instance === null)
+//		{
+//			self::$instance = self::getServiceClassInstance(get_class());
+//		}
+//		return self::$instance;
+//	}',
+'	public static function getInstance()
+	{
+		if (is_null(self::$instance))
+		{
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}' =>
+'//	public static function getInstance()
+//	{
+//		if (is_null(self::$instance))
+//		{
+//			self::$instance = new self();
+//		}
+//		return self::$instance;
+//	}'));
+		$this->replaceFile($fullpath);
+	}
+	
 	public function convertPHPFile($fullpath)
 	{
 		//Migrate Controller

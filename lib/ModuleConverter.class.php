@@ -92,6 +92,7 @@ class compatibility_ModuleConverter
 		// convert: lib/blocks
 		
 		// convert: lib/services
+		$this->convertServices();
 		
 		// convert: lib/phptal
 		
@@ -779,6 +780,18 @@ class compatibility_ModuleConverter
 		/**
 		 * @todo THEMES TEMPLATE
 		 */
+	}
+	
+	protected function convertServices()
+	{
+		$directory = $this->srcDirectory . '/lib/services';
+		$phpFiles = $this->scanDir($directory, '.php');
+		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+		foreach ($phpFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$classReplacer->convertPHPService($splFileInfo->getPathname());
+		}
 	}
 	
 	
