@@ -818,6 +818,7 @@ class compatibility_ModuleConverter
 		if ($filePath !== null)
 		{
 			$doc->load($filePath);
+			$doc->encoding = 'UTF-8';
 		}
 		return $doc;
 	}

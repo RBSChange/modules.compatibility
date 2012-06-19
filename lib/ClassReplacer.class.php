@@ -50,6 +50,22 @@ class compatibility_ClassReplacer
 '	private static $instance' => '	//private static $instance',
 '	public static function getInstance()
 	{
+		if (is_null(self::$instance))
+		{
+			self::$instance = self::getServiceClassInstance(get_class());
+		}
+		return self::$instance;
+	}' =>
+'//	public static function getInstance()
+//	{
+//		if (is_null(self::$instance))
+//		{
+//			self::$instance = self::getServiceClassInstance(get_class());
+//		}
+//		return self::$instance;
+//	}',
+'	public static function getInstance()
+	{
 		if (self::$instance === null)
 		{
 			self::$instance = self::getServiceClassInstance(get_class());
@@ -61,22 +77,6 @@ class compatibility_ClassReplacer
 //		if (self::$instance === null)
 //		{
 //			self::$instance = self::getServiceClassInstance(get_class());
-//		}
-//		return self::$instance;
-//	}',
-'	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}' =>
-'//	public static function getInstance()
-//	{
-//		if (is_null(self::$instance))
-//		{
-//			self::$instance = new self();
 //		}
 //		return self::$instance;
 //	}'));
@@ -386,6 +386,7 @@ class compatibility_ClassReplacer
 						}
 						$content[] = $tv[1];
 						break;
+						
 					case T_CONSTANT_ENCAPSED_STRING :
 						if ($inString)
 						{
@@ -401,15 +402,26 @@ class compatibility_ClassReplacer
 							$content[] = $tv[1];
 						}
 						break;
+						
 					case T_DOC_COMMENT :
 						$str = str_replace($commentCheck, $commentReplace, $tv[1]);
+						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $str);
 						if ($str !== $tv[1])
 						{
 							$updated = true;
 						}
 						$content[] = $str;
-						
 						break;
+						
+					case T_WHITESPACE :
+						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $tv[1]);
+						if ($str !== $tv[1])
+						{
+							$updated = true;
+						}
+						$content[] = $str;
+						break;
+						
 					default :
 						$content[] = $tv[1];
 						break;
