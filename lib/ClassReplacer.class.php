@@ -195,6 +195,7 @@ class compatibility_ClassReplacer
 		$this->removeConstants($fullpath);
 		
 		$renameArray = array(
+			'isPublicated' => array('isPublished', false),
 			'transFO' => array('trans', false),
 			'transBO' => array('trans', false),
 			'strip_accents' => array('stripAccents', 'f_util_StringUtils'),
