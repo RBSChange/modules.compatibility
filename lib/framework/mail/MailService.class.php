@@ -1,37 +1,26 @@
 <?php
 /**
- * @package framework.mail
+ * @deprecated
  */
 class MailService extends change_BaseService
 {
 
-	const CHANGE_SOURCE_ID_HEADER = 'X-Change-Source-Id';
 	/**
-	 * the singleton instance
-	 * @var MailService
+	 * @deprecated
 	 */
-	private static $instance = null;
-
+	const CHANGE_SOURCE_ID_HEADER = 'X-Change-Source-Id';
+	
 	/**
-	 * @return MailService
+	 * @deprecated
 	 */
 	public static function getInstance()
 	{
-		if (self::$instance === null)
-		{
-			$finalClass = get_class();
-			if (defined("FAKE_EMAIL") && $finalClass == "MailService")
-			{
-				$finalClass = "FakeMailService"; 
-			}
-			self::$instance = new $finalClass();
-		}
-		return self::$instance;
+		$finalClass = (defined("FAKE_EMAIL")) ? 'FakeMailService' : 'MailService';
+		return self::getInstanceByClassName($finalClass);
 	}
 
 	/**
-	 * Get a new mail message.
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function getNewMailMessage()
 	{
@@ -39,10 +28,7 @@ class MailService extends change_BaseService
 	}
 
 	/**
-	 * Send the mail and return true if ok or and PearError
-	 *
-	 * @param MailMessage $mailMessage
-	 * @return mixed boolean or PearError
+	 * @deprecated
 	 */
 	public function send($mailMessage)
 	{
@@ -51,24 +37,21 @@ class MailService extends change_BaseService
 	}
 
 	/**
-	 * Send the mail to the given receiver and return true if ok or and PearError
-	 *
-	 * @param MailMessage $mailMessage
-	 * @param String $receiver
-	 * @return mixed boolean or PearError
+	 * @deprecated
 	 */
 	public function sendTo($mailMessage, $receiver)
 	{
 		$mailMessage->setReceiver($receiver);
 		return $this->send($mailMessage);
 	}
+	
 	/**
 	 * @var Mailer
 	 */
 	private $mailer;
 
 	/**
-	 * @return Mailer
+	 * @deprecated
 	 */
 	public function getMailer()
 	{
@@ -89,8 +72,7 @@ class MailService extends change_BaseService
 	}
 	
 	/**
-	 * @param MailMessage $mailMessage
-	 * @return Mailer
+	 * @deprecated
 	 */
 	protected function buildMailer($mailMessage)
 	{
@@ -119,5 +101,4 @@ class MailService extends change_BaseService
 		}
 		return $mailer;
 	}
-	
 }

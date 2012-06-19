@@ -122,6 +122,10 @@ class users_FrontendLogoutAction extends users_LogoutAction
  */
 abstract class user_UserHelper
 {
+
+	/**
+	 * @deprecated
+	 */
 	const DEFAULT_BACKEND_REPLACEMENTS = 'login, password, accesslink, fullname, title';
 }
 
@@ -130,6 +134,10 @@ abstract class user_UserHelper
  */
 class users_UserConverterHelper
 {
+
+	/**
+	 * @deprecated
+	 */
 	public static function convertFrontEndUserToWebsiteFronEndUser($frontUserId, $websiteId = null)
 	{
 		throw new Exception('Deprecated'); 

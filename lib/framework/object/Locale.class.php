@@ -1,41 +1,82 @@
 <?php
 /**
- * @deprecated (will be removed in 4.0)
+ * @deprecated
  */
 class f_Locale
 {
 	private static $cache = array();
 	private static $prefixes = array('modules', 'framework', 'themes');
 
+	/**
+	 * @deprecated
+	 */
 	const LOCALE_KEY_REGEXP = '&([a-zA-Z_-]+\.[a-zA-Z0-9_.-]*);';
+
+	/**
+	 * @deprecated
+	 */
 	const LOOSE_LOCALE_KEY_REGEXP = '&?([a-zA-Z_-]+\.[a-zA-Z0-9_.-]*);?';
+
+	/**
+	 * @deprecated
+	 */
 	const CLEAN_KEY_REGEXP = '&([^;]*);';
 
+	/**
+	 * @deprecated
+	 */
 	const LOCALE_MANDATORY_MARKER = ' <em>*</em>';
 
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_NONE = 0;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_UCFIRST = 1;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_UCALL = 2;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_LABEL = 4;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_SPACED = 8;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_ELLIPSIS = 16;
+
+	/**
+	 * @deprecated
+	 */
 	const MODIFIER_MANDATORY = 32;
 
 	private function __construct()
 	{
 		// empty
 	}
-	
+
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	public static function getPrefixes()
 	{
 		return self::$prefixes;	
 	}
-	
+
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	public static function isLocaleKey($key)
 	{
@@ -43,7 +84,7 @@ class f_Locale
 	}
 
 	/**
-	 * @deprecated (will be removed in 4.0) use LocaleService::getInstance()->trans()
+	 * @deprecated
 	 */
 	public static function translateUI($key, $substitution = null)
 	{
@@ -51,7 +92,7 @@ class f_Locale
 	}
 
 	/**
-	 * @deprecated (will be removed in 4.0) use LocaleService::getInstance()->trans()
+	 * @deprecated
 	 */
 	public static function translate($key, $substitution = null, $lang = null, $makeDefaultTranslation = true)
 	{

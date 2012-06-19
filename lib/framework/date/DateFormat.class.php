@@ -4,9 +4,22 @@
  */
 class date_DateFormat
 {
+	/**
+	 * @deprecated
+	 */
 	const SQL_DATE_FORMAT = "Y-m-d H:i:s";
+
+	/**
+	 * @deprecated
+	 */	
     const FORMAT_WITHOUT_TIME            = 1;
+	/**
+	 * @deprecated
+	 */
     const FORMAT_SHORT_NAMES             = 2;
+	/**
+	 * @deprecated
+	 */
     const FORMAT_LONG_NAMES_ON_FULL_DATE = 4;
 	
 	/**

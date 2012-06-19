@@ -1,6 +1,6 @@
 <?php
 /**
- * @package framework.mail
+ * @deprecated
  */
 abstract class Mailer
 {
@@ -52,31 +52,37 @@ abstract class Mailer
 	 */
 	private $bounceBackAddress;
 	
-	public abstract function __construct($params);
-	public abstract function sendMail();
-
 	/**
-	 *
-	 * getMimeObject returns the PEAR Mail_Mime object
-	 * needed for HTML mail formating.
-	 *
-	 * @return Mail_mime
+	 * @deprecated
+	 */
+	public abstract function __construct($params);
+	
+	/**
+	 * @deprecated
+	 */
+	public abstract function sendMail();
+	
+	/**
+	 * @deprecated
 	 */
 	public function getMimeObject()
 	{
 		if (is_null($this->mimeObject))
 		{
-		    $this->mimeObject = new Mail_mime("\n");
+			if (class_exists('Mail_mime'))
+			{
+				$this->mimeObject = new Mail_mime("\n");
+			}
+		    else
+		    {
+		    	throw new Exception("Class Mail_mime not found");
+		    }
 		}
 		return $this->mimeObject;
 	}
 
 	/**
-	 *
-	 * setEncoding set the encoding charset for the mail.
-	 *
-	 * @param String encoding The encoding charset
-	 *
+	 * @deprecated
 	 */
 	public function setEncoding($encoding)
 	{
@@ -85,18 +91,9 @@ abstract class Mailer
         $this->getMimeObject()->_build_params['head_charset'] = $encoding;
 	}
 
+
 	/**
-	 *
-	 * setHtmlAndTextBody set the HTML and Text body for the mail.
-	 *
-	 * THIS FEATURE REQUIRES THE USE OF THE MAIL_MIME OBJECT.
-	 *
-	 * THE BODY AND HEADERS GIVEN TO THE sendMail() METHOD WILL BE OVERRIDDEN.
-	 *
-	 * @param String htmlBody The HTML body
-	 * @param String textBody The Text body (if null, the text content
-	 * is built from the HTML content)
-	 *
+	 * @deprecated
 	 */
 	public function setHtmlAndTextBody($htmlBody, $textBody = null)
 	{
@@ -107,9 +104,9 @@ abstract class Mailer
 		}
 		$this->getMimeObject()->setTxtBody($textBody);
 	}
-
+	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getMessage()
 	{
@@ -117,23 +114,15 @@ abstract class Mailer
 	}
 	
 	/**
-	 *
-	 * addAttachment adds an attachment to the mail.
-	 *
-	 * @param String attachment File path
-	 *
+	 * @deprecated
 	 */
 	public function addAttachment($attachment)
 	{
 		$this->getMimeObject()->addAttachment($attachment);
 	}
-
+	
 	/**
-	 *
-	 * GetHeaders is a function to get a header of an email
-	 *
-	 * @return Array A header who will send to sendMail function
-	 *
+	 * @deprecated
 	 */
 	public function getHeaders()
 	{
@@ -141,7 +130,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getBcc()
 	{
@@ -149,7 +138,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $bcc
+	 * @deprecated
 	 */
 	public function setBcc($bcc)
 	{
@@ -158,7 +147,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getBounceBackAddress()
 	{
@@ -166,7 +155,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $bounceBackAddress
+	 * @deprecated
 	 */
 	public function setBounceBackAddress($bounceBackAddress)
 	{
@@ -175,7 +164,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getCc()
 	{
@@ -183,7 +172,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $cc
+	 * @deprecated
 	 */
 	public function setCc($cc)
 	{
@@ -192,7 +181,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getReceiver()
 	{
@@ -200,7 +189,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $receiver
+	 * @deprecated
 	 */
 	public function setReceiver($receiver)
 	{
@@ -209,7 +198,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getReplyTo()
 	{
@@ -217,7 +206,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $replyTo
+	 * @deprecated
 	 */
 	public function setReplyTo($replyTo)
 	{
@@ -226,7 +215,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSender()
 	{
@@ -234,8 +223,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $sender
-	 * @example $myMail->setSender($string) where $string = "myemail1@rbs.fr" or "myemail1@rbs.fr,myemail2@rbs.fr" or "my name <myemail1@rbs.fr>"
+	 * @deprecated
 	 */
 	public function setSender($sender)
 	{
@@ -244,7 +232,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSubject()
 	{
@@ -252,7 +240,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * @param String $subject
+	 * @deprecated
 	 */
 	public function setSubject($subject)
 	{
@@ -261,9 +249,7 @@ abstract class Mailer
 	}
 	
 	/**
-	 * Get all emails address that are used to send the email, primary receiver and cc and bcc receiver.
-	 * The header is only used to display informations in mail reader
-	 * @return string
+	 * @deprecated
 	 */
 	protected function getAllRecipientEmail()
 	{

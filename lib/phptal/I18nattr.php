@@ -1,16 +1,13 @@
 <?php
-
 /**
- * @example change:i18nattr="title[count] newCount; title &modules.forums.frontoffice.Has-n-new-posts;"
- * @package phptal.php.attribute.change
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_I18nattr extends PHPTAL_Php_Attribute
 {
-	
+
 	/**
-     * Called before element printing.
-     * Default implementation is for backwards compatibility only. Please always override both before() and after().
-     */
+	 * @deprecated
+	 */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
     	Framework::error('Deprecated change:i18nattr TAL Attribute ' . TemplateObject::$lastTemplateFileName);
@@ -57,8 +54,8 @@ class PHPTAL_Php_Attribute_CHANGE_I18nattr extends PHPTAL_Php_Attribute
     }
 
 	/**
-     * Called after element printing.
-     */
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }

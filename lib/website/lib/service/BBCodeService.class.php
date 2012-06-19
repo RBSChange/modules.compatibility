@@ -1,6 +1,7 @@
 <?php
 /**
  * @deprecated use website_BBCodeParser
+ * @method website_BBCodeService getInstance()
  */
 class website_BBCodeService extends change_BaseService
 {
@@ -8,23 +9,6 @@ class website_BBCodeService extends change_BaseService
 	 * @deprecated
 	 */
 	const URL_STRING_REGEXP = '(?:http\:\/\/|https\:\/\/|ftp\:\/\/)[a-zA-Z0-9,;\:\/\-\+\?%\&\.\=\_\~\#\\\'\[\]\{\}]+';
-
-	/**
-	 * @deprecated
-	 */
-	protected static $instance;
-	
-	/**
-	 * @deprecated
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
 	
 	/**
 	 * @deprecated

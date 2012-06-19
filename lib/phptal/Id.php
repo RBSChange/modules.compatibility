@@ -1,21 +1,21 @@
 <?php
 /**
- * @package phptal.php.attribute.change
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_Id extends PHPTAL_Php_Attribute
 {
 	/**
-     * Called before element printing.
-     */
+	 * @deprecated
+	 */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
     	//convert namespace PHPTAL_Namespace_CHANGE::NAMESPACE_URI => ''
         $this->phpelement->setAttributeNS('', 'change:id', $this->expression);
     }
 
-    /**
-     * Called after element printing.
-     */
+	/**
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }

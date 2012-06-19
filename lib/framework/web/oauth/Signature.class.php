@@ -4,18 +4,26 @@
  */
 interface f_web_oauth_Signature
 {
+	
+	/**
+	 * @deprecated
+	 */
 	public function getName();
 	
+	/**
+	 * @deprecated
+	 */
 	public function buildSignatureFromRequest($request);
 }
 
+/**
+ * @deprecated
+ */
 class f_web_oauth_SignatureHmacSha1 implements f_web_oauth_Signature
 {
 	
 	/**
-	 * @see f_web_oauth_Signature::buildSignatureFromRequest()
-	 *
-	 * @param f_web_oauth_Request $request
+	 * @deprecated
 	 */
 	public function buildSignatureFromRequest($request)
 	{
@@ -25,7 +33,7 @@ class f_web_oauth_SignatureHmacSha1 implements f_web_oauth_Signature
 	}
 	
 	/**
-	 * @see f_web_oauth_Signature::getName()
+	 * @deprecated
 	 */
 	public function getName()
 	{
@@ -33,13 +41,14 @@ class f_web_oauth_SignatureHmacSha1 implements f_web_oauth_Signature
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_web_oauth_SignatureRsaSha1 implements f_web_oauth_Signature
 {
 	
 	/**
-	 * @see f_web_oauth_Signature::buildSignatureFromRequest()
-	 *
-	 * @param f_web_oauth_Request $request
+	 * @deprecated
 	 */
 	public function buildSignatureFromRequest($request)
 	{
@@ -47,7 +56,7 @@ class f_web_oauth_SignatureRsaSha1 implements f_web_oauth_Signature
 	}
 	
 	/**
-	 * @see f_web_oauth_Signature::getName()
+	 * @deprecated
 	 */
 	public function getName()
 	{
@@ -55,13 +64,14 @@ class f_web_oauth_SignatureRsaSha1 implements f_web_oauth_Signature
 	}
 }
 
-
+/**
+ * @deprecated
+ */
 class f_web_oauth_SignaturePlaintext implements f_web_oauth_Signature
 {
+	
 	/**
-	 * @see f_web_oauth_Signature::buildSignatureFromRequest()
-	 *
-	 * @param f_web_oauth_Request $request
+	 * @deprecated
 	 */
 	public function buildSignatureFromRequest($request)
 	{
@@ -69,7 +79,7 @@ class f_web_oauth_SignaturePlaintext implements f_web_oauth_Signature
 	}
 	
 	/**
-	 * @see f_web_oauth_Signature::getName()
+	 * @deprecated
 	 */
 	public function getName()
 	{

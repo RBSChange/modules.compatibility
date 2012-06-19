@@ -1,8 +1,11 @@
 <?php
+/**
+ * @deprecated
+ */
 class compatibility_PHPTAL_CHANGE
 {
 	/**
-	 * @param PHPTAL_Namespace_CHANGE $namespaceCHANGE
+	 * @deprecated
 	 */
 	public static function addAttributes($namespaceCHANGE)
 	{		

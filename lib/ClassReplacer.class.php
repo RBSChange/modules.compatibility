@@ -1,21 +1,10 @@
 <?php
-
 /**
  * @todo 
  * ClassResolver::getInstance()->appendToAutoloadFile($class, realpath($file));
  *  -> AutoloadBuilder::getInstance()->appendFile($file); 
  *  
- * 
-	private static $instance;
-
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = self::getServiceClassInstance(get_class());
-		}
-		return self::$instance;
-	}
+ * DocumentService::generateUrl
  */
 class compatibility_ClassReplacer
 {

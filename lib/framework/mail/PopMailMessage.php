@@ -1,28 +1,32 @@
 <?php
-
+/**
+ * @deprecated
+ */
 class f_mail_MIMEObject
 {
 	
 	private $headerArray = array();
 	private $content;
-	
+
+
+	/**
+	 * @deprecated
+	 */	
 	public function __construct($contentString)
 	{
 		$this->headerArray = $this->extractHeaders(trim($contentString));
 	}
-	
+
 	/**
-	 * @param String $headerName
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public function hasHeader($headerName)
 	{
 		return isset($this->headerArray[strtolower($headerName)]);
 	}
-	
+
 	/**
-	 * @param String $headerName
-	 * @return String
+	 * @deprecated
 	 */
 	public function getHeader($headerName)
 	{
@@ -63,9 +67,9 @@ class f_mail_MIMEObject
 		$this->content = trim(substr($textContent, $lastHeaderEndOffset));
 		return $parsedHeaders;
 	}
-	
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getContent()
 	{
@@ -81,6 +85,9 @@ class f_mail_MIMEObject
 	}
 }
 
+/**
+ * @deprecated
+ */
 class PopMailMessage extends f_mail_MIMEObject
 {
 	/**
@@ -111,11 +118,10 @@ class PopMailMessage extends f_mail_MIMEObject
 	private $errorRegularExpression;
 	
 	private $errorMatches = array();
-	
-	
+
+
 	/**
-	 * @param String $body
-	 * @param String $header
+	 * @deprecated
 	 */
 	public function __construct($body, $header)
 	{
@@ -174,25 +180,25 @@ class PopMailMessage extends f_mail_MIMEObject
 			$this->messageParts[] = new f_mail_MIMEObject($mimePartContent);
 		}
 	}
-	
+
 	/**
-	 * @return unknown
+	 * @deprecated
 	 */
 	public function getErrorMatches()
 	{
 		return $this->errorMatches;
 	}
-	
+
 	/**
-	 * @return unknown
+	 * @deprecated
 	 */
 	public function getErrorRegularExpression()
 	{
 		return $this->errorRegularExpression;
 	}
-	
+
 	/**
-	 * @param String $errorRegularExpression
+	 * @deprecated
 	 */
 	public function setErrorRegularExpression($errorRegularExpression)
 	{
@@ -217,15 +223,15 @@ class PopMailMessage extends f_mail_MIMEObject
 			$subMessage->setErrorRegularExpression($this->errorRegularExpression);
 			return $subMessage->isError();
 		}
-		else if ($contentType = "text/plain" || $contentType = "text/html")
+		else if ($contentType == "text/plain" || $contentType == "text/html")
 		{
 			return preg_match($this->errorRegularExpression, $mimeObject->getContent(), $this->errorMatches) !== 0;
 		}
 		return false;
 	}
-	
+
 	/**
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public function isError()
 	{

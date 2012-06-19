@@ -4,6 +4,10 @@
  */
 class PHPTAL_Php_Attribute_CHANGE_Currentlink extends PHPTAL_Php_Attribute
 {
+
+	/**
+	 * @deprecated
+	 */
 	public function start()
 	{
 		Framework::error('Deprecated change:currentlink TAL Attribute ' . TemplateObject::$lastTemplateFileName);
@@ -34,10 +38,16 @@ class PHPTAL_Php_Attribute_CHANGE_Currentlink extends PHPTAL_Php_Attribute
 		$this->tag->attributes['class'] = 'link';
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function end()
 	{
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getHrefCode($extraAttributes)
 	{
 		return '<?php echo LinkHelper::getCurrentUrl('. $extraAttributes .'); ?>';

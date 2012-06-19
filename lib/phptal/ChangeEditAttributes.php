@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated
+ */
 abstract class website_phptal_EditAttribute extends PHPTAL_Php_Attribute
 {
 	/**
@@ -7,7 +10,7 @@ abstract class website_phptal_EditAttribute extends PHPTAL_Php_Attribute
 	private static $isActive;
 
 	/**
-	 * @see PHPTAL_Php_Attribute::start
+	 * @deprecated
 	 */
 	public function start()
 	{
@@ -19,15 +22,21 @@ abstract class website_phptal_EditAttribute extends PHPTAL_Php_Attribute
 	}
 
 	/**
-	 * @see PHPTAL_Php_Attribute::end
+	 * @deprecated
 	 */
 	public function end()
 	{
 		// empty
 	}
 
+	/**
+	 * @deprecated
+	 */
 	abstract protected function startTag();
-	
+
+	/**
+	 * @deprecated
+	 */
 	static function isActive()
 	{
 		if (self::$isActive === null)
@@ -39,6 +48,9 @@ abstract class website_phptal_EditAttribute extends PHPTAL_Php_Attribute
 	}
 }
 
+/**
+ * @deprecated
+ */
 class PHPTAL_Php_Attribute_CHANGE_Docattr extends website_phptal_EditAttribute
 {
 	protected function startTag()
@@ -47,6 +59,9 @@ class PHPTAL_Php_Attribute_CHANGE_Docattr extends website_phptal_EditAttribute
 	}
 }
 
+/**
+ * @deprecated
+ */
 class PHPTAL_Php_Attribute_CHANGE_Propattr extends website_phptal_EditAttribute
 {
 	protected function startTag()
@@ -56,15 +71,15 @@ class PHPTAL_Php_Attribute_CHANGE_Propattr extends website_phptal_EditAttribute
 }
 
 /**
- * <a change:edit="document item" />
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_Edit extends ChangeTalAttribute
 {
 
 	private static $called = false;
+
 	/**
-	 * @param array $params
-	 * @return String
+	 * @deprecated
 	 */
 	public static function renderEdit($params)
 	{
@@ -222,16 +237,15 @@ class PHPTAL_Php_Attribute_CHANGE_Edit extends ChangeTalAttribute
 }
 
 /**
- * <p change:create="" model="myModule/myDocumentName" parentId="${parent/getId}">
- *   Create a new documentName in ${parent/getLabel}
- * </p>
- * <p change:create="" model="myModule/myDocumentName" parent="${parent}">
- *   Create a new documentName in ${parent/getLabel}
- * </p>
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_create extends ChangeTalAttribute
 {
 	private $parametersString;
+
+	/**
+	 * @deprecated
+	 */
 	public function start()
 	{
 		$this->tag->headFootDisabled = true;
@@ -242,7 +256,7 @@ class PHPTAL_Php_Attribute_CHANGE_create extends ChangeTalAttribute
 	}
 
 	/**
-	 * @see ChangeTalAttribute::end()
+	 * @deprecated
 	 */
 	public function end()
 	{
@@ -255,9 +269,7 @@ echo PHPTAL_Php_Attribute_CHANGE_create::renderPendingDocumentList('.$this->para
 	}
 
 	/**
-	 * @param array<String, mixed> $params
-	 * @param PHPTAL_Context $ctx
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public static function checkPerm($params, $ctx)
 	{
@@ -298,8 +310,7 @@ echo PHPTAL_Php_Attribute_CHANGE_create::renderPendingDocumentList('.$this->para
 	}
 
 	/**
-	 * @param array $params
-	 * @return String
+	 * @deprecated
 	 */
 	public static function renderCreate($params)
 	{
@@ -327,8 +338,7 @@ echo PHPTAL_Php_Attribute_CHANGE_create::renderPendingDocumentList('.$this->para
 	}
 
 	/**
-	 * @param array $params
-	 * @return String
+	 * @deprecated
 	 */
 	public static function renderPendingDocumentList($params)
 	{

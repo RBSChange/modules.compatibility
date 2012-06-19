@@ -4,9 +4,21 @@
  */
 class f_web_oauth_Token
 {
+	/**
+	 * @deprecated
+	 */
 	const TOKEN_NOT_AUTHORIZED = 0;
+	
+	/**
+	 * @deprecated
+	 */
 	const TOKEN_AUTHORIZED = 1;
+	
+	/**
+	 * @deprecated
+	 */
 	const TOKEN_ACCESS = 2;
+	
 	/**
 	 * @var String
 	 */
@@ -32,9 +44,8 @@ class f_web_oauth_Token
 	 */
 	private $callback;
 	
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getVerificationCode()
 	{
@@ -42,20 +53,24 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @param String $verificationCode
+	 * @deprecated
 	 */
 	public function setVerificationCode($verificationCode)
 	{
 		$this->verificationCode = $verificationCode;
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function __construct($key = null, $secret = null)
 	{
 		$this->setSecret($secret);
 		$this->setKey($key);
 	}
+	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getKey()
 	{
@@ -63,7 +78,7 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @param String $key
+	 * @deprecated
 	 */
 	public function setKey($key)
 	{
@@ -71,7 +86,7 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSecret()
 	{
@@ -79,14 +94,15 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @param String $secret
+	 * @deprecated
 	 */
 	public function setSecret($secret)
 	{
 		$this->secret = $secret;
 	}
+	
 	/**
-	 * @return Int
+	 * @deprecated
 	 */
 	public function getStatus()
 	{
@@ -94,7 +110,7 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @param Int $status
+	 * @deprecated
 	 */
 	public function setStatus($status)
 	{
@@ -102,7 +118,7 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getCallback()
 	{
@@ -110,7 +126,7 @@ class f_web_oauth_Token
 	}
 	
 	/**
-	 * @param String $callback
+	 * @deprecated
 	 */
 	public function setCallback($callback)
 	{

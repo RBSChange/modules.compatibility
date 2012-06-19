@@ -1,6 +1,6 @@
 <?php
 /**
- * @package framework.mail
+ * @deprecated
  */
 class MailMessage
 {
@@ -69,8 +69,7 @@ class MailMessage
 	private $notificationTo;
 
 	/**
-	 * @param string $sender
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setSender($sender)
 	{
@@ -78,19 +77,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSender()
 	{
 		return $this->sender;
 	}
 
-
 	/**
-	 * @param string $replyTo
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setReplyTo($replyTo)
 	{
@@ -98,19 +94,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getReplyTo()
 	{
 		return $this->replyTo;
 	}
 
-
 	/**
-	 * @param string $bcc
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setBcc($bcc)
 	{
@@ -118,19 +111,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getBcc()
 	{
 		return $this->bcc;
 	}
 
-
 	/**
-	 * @param string $cc
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setCc($cc)
 	{
@@ -138,19 +128,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getCc()
 	{
 		return $this->cc;
 	}
 
-
 	/**
-	 * @param string $subject
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setSubject($subject)
 	{
@@ -158,19 +145,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSubject()
 	{
 		return $this->subject;
 	}
 
-
 	/**
-	 * @param string $receiver
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setReceiver($receiver)
 	{
@@ -178,19 +162,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getReceiver()
 	{
 		return $this->receiver;
 	}
 
-
 	/**
-	 * @param string $attachment
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function addAttachment($attachment)
 	{
@@ -198,19 +179,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return array
+	 * @deprecated
 	 */
 	public function getAttachment()
 	{
 		return $this->attachment;
 	}
 
-
 	/**
-	 * @param string $encoding
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setEncoding($encoding)
 	{
@@ -218,19 +196,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getEncoding()
 	{
 		return $this->encoding;
 	}
 
-
 	/**
-	 * @param string $receiver
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setModuleName($moduleName)
 	{
@@ -238,20 +213,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getModuleName()
 	{
 		return $this->moduleName;
 	}
 
-
 	/**
-	 * @param string $htmlBody
-	 * @param string $textBody
-	 * @return MailMessage
+	 * @deprecated
 	 */
 	public function setHtmlAndTextBody($htmlBody, $textBody = null)
 	{
@@ -260,18 +231,16 @@ class MailMessage
 		return $this;
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getHtmlContent()
 	{
 		return f_util_StringUtils::addCrLfToHtml($this->html);
 	}
 
-
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getTextContent()
 	{
@@ -279,20 +248,25 @@ class MailMessage
 	}
 	
 	private $bounceBackAddress;
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function setBounceBackAddress($address)
 	{
 		$this->bounceBackAddress = $address;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getBounceBackAddress()
 	{
 		return $this->bounceBackAddress;
 	}
 
 	/**
-	 * Send the mail and return true if ok or and PearError
-	 * @return mixed boolean or PearError
+	 * @deprecated
 	 */
 	public function send()
 	{
@@ -300,9 +274,7 @@ class MailMessage
 	}
 
 	/**
-	 * @param mail_MessageRecipients $recipients
-	 *
-	 * @throws IllegalArgumentException If $recipients is not a mail_MessageRecipients instance.
+	 * @deprecated
 	 */
 	public function setRecipients($recipients)
 	{
@@ -319,50 +291,52 @@ class MailMessage
 			$this->setBcc(implode(',', $recipients->getBCC()));
 		}
 	}
-	
+
 	/**
-	 * @return MailSource
+	 * @deprecated
 	 */
 	public function getSource()
 	{
 		return $this->source;
 	}
-	
+
 	/**
-	 * @param MailSource $source
+	 * @deprecated
 	 */
 	public function setSource($source)
 	{
 		$this->source = $source;
 	}
-	
+
 	/**
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public function hasSource()
 	{
 		return $this->source !== null;
 	}
-	
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getNotificationTo()
 	{
 		return $this->notificationTo;
 	}
-	
+
 	/**
-	 * @param String $notificationTo
+	 * @deprecated
 	 */
 	public function setNotificationTo($notificationTo)
 	{
 		$this->notificationTo = $notificationTo;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function hasNotificationTo()
 	{
 		return $this->notificationTo !== null;
 	}
-
 }

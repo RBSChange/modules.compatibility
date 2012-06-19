@@ -18,53 +18,58 @@ class f_web_oauth_Consumer
 	 * @var String
 	 */
 	private $callback;
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function __construct($key, $secret = null)
 	{
 		$this->setSecret($secret);
 		$this->setKey($key);
 	}
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getKey()
 	{
 		return $this->key;
 	}
-	
+
 	/**
-	 * @param String $key
+	 * @deprecated
 	 */
 	public function setKey($key)
 	{
 		$this->key = $key;
 	}
-	
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getSecret()
 	{
 		return $this->secret;
 	}
-	
+
 	/**
-	 * @param String $secret
+	 * @deprecated
 	 */
 	public function setSecret($secret)
 	{
 		$this->secret = $secret;
 	}
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getCallback()
 	{
 		return $this->callback;
 	}
-	
+
 	/**
-	 * @param String $callback
+	 * @deprecated
 	 */
 	public function setCallback($callback)
 	{

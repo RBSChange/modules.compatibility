@@ -1,11 +1,4 @@
 <?php
-// change:date
-//
-// format par défaut :
-//   <span change:date="page/getStartpublicationdate" />
-// spécification du format :
-//   <span change:date="format \l\e d \d\u \m\o\i\s \d\e F, \a\n\n\é\e Y; value page/getStartpublicationdate" />
-
 /**
  * @deprecated use date and datetime prefixes
  */
@@ -20,27 +13,26 @@ class PHPTAL_Php_Attribute_CHANGE_Date extends ChangeTalAttribute
 	{
 		return 'date';
 	}
-		
+
 	/**
-	 * @see ChangeTalAttribute::getDefaultValues()
-	 *
-	 * @return unknown
+	 * @deprecated
 	 */
 	public function getDefaultValues()
 	{
 		return array('format' => 'names');
 	}
-	
+
 	/**
-	 * @see ChangeTalAttribute::getEvaluatedParameters()
-	 *
-	 * @return array
+	 * @deprecated
 	 */
 	public function getEvaluatedParameters()
 	{
 		return array('format', 'date', 'value');
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function renderDate($params, $dropTimeInfo = true)
 	{
 		$dateValue = self::getDateFromParams($params);
@@ -108,21 +100,15 @@ class PHPTAL_Php_Attribute_CHANGE_Date extends ChangeTalAttribute
 	}
 }
 
-// change:datetime
-//
-// format par défaut :
-//   <span change:datetime="page/getStartpublicationdate" />
-// spécification du format :
-//   <span change:datetime="format \l\e d \d\u \m\o\i\s \d\e F, \a\n\n\é\e Y \à H\h i\m\i\n \e\t s\s\e\c.; value page/getStartpublicationdate" />
-
 /**
- * @package phptal.php.attribute
- * @author INTbonjF
- * 2007-04-19
+ * @deprecated
  */
-
 class PHPTAL_Php_Attribute_CHANGE_Datetime extends PHPTAL_Php_Attribute_CHANGE_date
-{		
+{
+
+	/**
+	 * @deprecated
+	 */		
 	public static function renderDateTime($params)
 	{
 		return self::renderDate($params, false);

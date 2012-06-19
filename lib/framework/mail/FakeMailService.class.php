@@ -1,15 +1,12 @@
 <?php
 /**
- * Auto-generated doc comment
- * @package framework.mail
+ * @deprecated
  */
 
 class FakeMailService extends MailService
-{
-    
+{ 
 	/**
-	 * @param MailMessage $mailMessage
-	 * @return Mailer
+	 * @deprecated
 	 */
 	protected function buildMailer($mailMessage)
 	{

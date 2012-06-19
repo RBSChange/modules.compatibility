@@ -1,9 +1,11 @@
 <?php
+/**
+ * @deprecated
+ */
 class generic_ConvertPdfAction extends change_Action
 {
 	/**
-	 * @param change_Context $context
-	 * @param change_Request $request
+	 * @deprecated
 	 */
 	public function _execute($context, $request)
 	{

@@ -13,8 +13,9 @@ class f_web_oauth_HTTPClient
 	 * 	@var f_web_oauth_Request
 	 */
 	private $mOauthRequest;
-	
+
 	/**
+	 * @deprecated
 	 */
 	public function __construct(f_web_oauth_Request $request)
 	{
@@ -22,9 +23,9 @@ class f_web_oauth_HTTPClient
 		$this->mBackend = HTTPClientService::getNewHTTPClient();
 		$this->mBackend->setTimeOut(5);
 	}
-	
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function execute($headers = true)
 	{
@@ -40,18 +41,17 @@ class f_web_oauth_HTTPClient
 		
 		return $this->mBackend->get($this->mOauthRequest->getUrl());
 	}
-	
+
 	/**
-	 * @return Integer
+	 * @deprecated
 	 */
 	public function getHTTPReturnCode()
 	{
 		return $this->mBackend->getHTTPReturnCode();
 	}
-	
-	
+
 	/**
-	 * @return HTTPClient
+	 * @deprecated
 	 */
 	public function getBackendClientInstance()
 	{

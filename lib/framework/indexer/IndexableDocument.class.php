@@ -1,18 +1,18 @@
 <?php
 /**
- * @package framework.indexer
+ * @deprecated
  */
 interface indexer_IndexableDocument
 {
 	/**
-	 * Get the indexable document
-	 *
-	 * @return indexer_IndexedDocument
+	 * @deprecated
 	 */
 	public function getIndexedDocument();
 }
 
-
+/**
+ * @deprecated
+ */
 class indexer_BackofficeIndexedDocument extends indexer_IndexedDocument
 {
 

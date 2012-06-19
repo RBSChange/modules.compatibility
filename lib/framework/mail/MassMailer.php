@@ -1,6 +1,12 @@
 <?php
+/**
+ * @deprecated
+ */
 class MassMailer
 {
+	/**
+	 * @deprecated
+	 */
 	const FILE_LOCK_EXTENSION = '.lock';
 	
 	/**
@@ -9,7 +15,7 @@ class MassMailer
 	private static $instance;
 	
 	/**
-	 * @return MassMailer
+	 * @deprecated
 	 */
 	public static function getInstance()
 	{
@@ -21,7 +27,7 @@ class MassMailer
 	}
 	
 	/**
-	 * @param MailMessage $mailMessage
+	 * @deprecated
 	 */
 	public function send($mailMessage)
 	{
@@ -55,13 +61,16 @@ class MassMailer
 	}
 	
 	/**
-	 * @param Mixed $source
+	 * @deprecated
 	 */
 	public function cancelForSource($source)
 	{
 		$this->cleanForSource($source);
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function cleanForSource($source)
 	{
 		if (!is_dir($this->getOutboxPathForSource($source)))
@@ -72,7 +81,7 @@ class MassMailer
 	}
 	
 	/**
-	 * @param task_persistentdocument_plannedtask $plannedTask
+	 * @deprecated
 	 */
 	public function batchSend($plannedTask = null)
 	{
@@ -106,8 +115,7 @@ class MassMailer
 	}
 	
 	/**
-	 * @param array $messagePaths
-	 * @param string $batchPath
+	 * @deprecated
 	 */
 	public function sendMessagePaths($messagePaths)
 	{

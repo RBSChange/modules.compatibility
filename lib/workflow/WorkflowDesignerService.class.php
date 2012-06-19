@@ -1,25 +1,10 @@
 <?php
 /**
  * @deprecated
+ * @method workflow_WorkflowDesignerService getInstance()
  */
 class workflow_WorkflowDesignerService extends change_BaseService
 {
-	/**
-	 * @deprecated
-	 */
-	private static $instance;
-
-	/**
-	 * @deprecated
-	 */
-	public static function getInstance()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
 
 	/**
 	 * @deprecated use workflow_WorkflowService::getInstance()->getNewDocumentInstance()

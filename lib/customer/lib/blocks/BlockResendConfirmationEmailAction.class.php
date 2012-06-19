@@ -1,11 +1,11 @@
 <?php
 /**
- * @deprecated (will be removed in 4.0)
+ * @deprecated
  */
 class customer_BlockResendConfirmationEmailAction extends website_BlockAction
 {
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	function execute($request, $response)
 	{

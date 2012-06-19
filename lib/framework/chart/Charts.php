@@ -1,13 +1,18 @@
 <?php
+/**
+ * @deprecated
+ */
 interface f_chart_DataTableProducer
 {
 	/**
-	 * @param array<String, mixed> $params
-	 * @return f_chart_DataTable
+	 * @deprecated
 	 */
 	function getDataTable($params = null);
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_Axis
 {
 	/**
@@ -20,9 +25,7 @@ class f_chart_Axis
 	private $style;
 
 	/**
-	 * @param f_chart_Range $range
-	 * @param f_chart_AxisStyle $style
-	 * @return unknown_type
+	 * @deprecated
 	 */
 	function __construct($range, $style = null)
 	{
@@ -31,7 +34,7 @@ class f_chart_Axis
 	}
 
 	/**
-	 * @return f_chart_Range
+	 * @deprecated
 	 */
 	function getRange()
 	{
@@ -39,7 +42,7 @@ class f_chart_Axis
 	}
 
 	/**
-	 * @return f_chart_AxisStyle
+	 * @deprecated
 	 */
 	function getStyle()
 	{
@@ -49,14 +52,34 @@ class f_chart_Axis
 
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_AxisStyle
 {
+	/**
+	 * @deprecated
+	 */
 	const ALIGN_LEFT = -1;
+	/**
+	 * @deprecated
+	 */
 	const ALIGN_CENTERED = 0;
+	/**
+	 * @deprecated
+	 */
 	const ALIGN_RIGHT = 1;
-
+	/**
+	 * @deprecated
+	 */
 	const DRAW_LINES = "l";
+	/**
+	 * @deprecated
+	 */
 	const DRAW_TICK_MARKS = "t";
+	/**
+	 * @deprecated
+	 */
 	const DRAW_LINES_AND_TICK_MARKS = "lt";
 
 	private $color;
@@ -66,11 +89,7 @@ class f_chart_AxisStyle
 	private $tickMarkColor;
 
 	/**
-	 * @param String $color
-	 * @param Integer $size
-	 * @param Integer $alignement {ALIGN_LEFT, ALIGN_CENTERED, ALIGN_RIGHT}
-	 * @param String $drawControl {DRAW_LINES, DRAW_TICK_MARKS, DRAW_LINES_AND_TICK_MARKS}
-	 * @param String $tickMarkColor
+	 * @deprecated
 	 */
 	function __construct($color, $size = null, $alignement = null, $drawControl = null, $tickMarkColor = null)
 	{
@@ -82,35 +101,39 @@ class f_chart_AxisStyle
 	}
 
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	function getColor()
 	{
 		return $this->color;
 	}
+	
 	/**
-	 * @return Integer
+	 * @deprecated
 	 */
 	function getSize()
 	{
 		return $this->size;
 	}
+	
 	/**
-	 * @return Integer {ALIGN_LEFT, ALIGN_CENTERED, ALIGN_RIGHT}
+	 * @deprecated
 	 */
 	function getAlignement()
 	{
 		return $this->alignement;
 	}
+	
 	/**
-	 * @return String {DRAW_LINES, DRAW_TICK_MARKS, DRAW_LINES_AND_TICK_MARKS}
+	 * @deprecated
 	 */
 	function getDrawControl()
 	{
 		return $this->drawControl;
 	}
+	
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	function getTickMarkColor()
 	{
@@ -118,6 +141,9 @@ class f_chart_AxisStyle
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_Range
 {
 	/**
@@ -134,9 +160,7 @@ class f_chart_Range
 	private $interval;
 
 	/**
-	 * @param Float $start
-	 * @param Float $end
-	 * @param Float $interval
+	 * @deprecated
 	 */
 	function __construct($start, $end, $interval = null)
 	{
@@ -146,27 +170,29 @@ class f_chart_Range
 	}
 
 	/**
-	 * @return Float
+	 * @deprecated
 	 */
 	function getStart()
 	{
 		return $this->start;
 	}
 	/**
-	 * @return Float
+	 * @deprecated
 	 */
 	function getEnd()
 	{
 		return $this->end;
 	}
 	/**
-	 * @return Float
+	 * @deprecated
 	 */
 	function getInterval()
 	{
 		return $this->interval;
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getQueryString($index)
 	{
 		$q =  $index.",".$this->start.",".$this->end;
@@ -177,10 +203,18 @@ class f_chart_Range
 		return $q;
 	}
 }
-
+/**
+ * @deprecated
+ */
 class f_chart_DataTable
 {
+	/**
+	 * @deprecated
+	 */
 	const STRING_TYPE = 0;
+	/**
+	 * @deprecated
+	 */
 	const NUMBER_TYPE = 1;
 
 	/**
@@ -191,9 +225,7 @@ class f_chart_DataTable
 	private $values;
 
 	/**
-	 * @param Integer $type f_chart_DataTable::[STRING|NUMBER]_TYPE
-	 * @param String $label
-	 * @return void
+	 * @deprecated
 	 */
 	function addColumn($label, $type = self::NUMBER_TYPE, $color = null)
 	{
@@ -201,8 +233,7 @@ class f_chart_DataTable
 	}
 
 	/**
-	 * @param Integer $rowCount
-	 * @return void
+	 * @deprecated
 	 */
 	function addRows($rowCount)
 	{
@@ -214,10 +245,7 @@ class f_chart_DataTable
 	}
 
 	/**
-	 * @param Integer $row
-	 * @param Integer $col
-	 * @param mixed $value String or Float depending on the column type
-	 * @return void
+	 * @deprecated
 	 */
 	function setValue($row, $col, $value)
 	{
@@ -225,9 +253,7 @@ class f_chart_DataTable
 	}
 
 	/**
-	 * @param $row
-	 * @param $values
-	 * @return void
+	 * @deprecated
 	 */
 	function setRowValues($row, $values)
 	{
@@ -235,9 +261,7 @@ class f_chart_DataTable
 	}
 
 	/**
-	 * @param $row
-	 * @param $values
-	 * @return unknown_type
+	 * @deprecated
 	 */
 	function setColValues($col, $values, $type = self::NUMBER_TYPE, $label = null, $color = null)
 	{
@@ -247,19 +271,23 @@ class f_chart_DataTable
 			$this->values[$col][$row+1] = $values;
 		}
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getValues()
 	{
 		return $this->values;
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getColumns()
 	{
 		return $this->columns;
 	}
 
 	/**
-	 * @return Integer
+	 * @deprecated
 	 */
 	function getRowCount()
 	{
@@ -267,19 +295,24 @@ class f_chart_DataTable
 	}
 
 	/**
-	 * @return Integer
+	 * @deprecated
 	 */
 	function getColCount()
 	{
 		return count($this->columns);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function asString()
 	{
 		return serialize($this->columns).serialize($this->values);
 	}
 }
 
+/**
+ * @deprecated
+ */
 abstract class f_chart_Visualization
 {
 	/**
@@ -293,8 +326,7 @@ abstract class f_chart_Visualization
 	protected $data;
 
 	/**
-	 * @param f_chart_DataTable $data
-	 * @param array<String, mixed> $options
+	 * @deprecated
 	 */
 	function __construct($data, $options = null)
 	{
@@ -312,11 +344,17 @@ abstract class f_chart_Visualization
 	// protected methods
 	abstract static protected function getDefaultOptions();
 
+	/**
+	 * @deprecated
+	 */
 	public function setOption($name, $value)
 	{
 		$this->options[$name] = $value;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getOption($name, $defaultValue = null)
 	{
 		if (isset($this->options[$name]))
@@ -327,8 +365,7 @@ abstract class f_chart_Visualization
 	}
 
 	/**
-	 * @param String $name
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public function hasOption($name)
 	{
@@ -336,7 +373,7 @@ abstract class f_chart_Visualization
 	}
 
 	/**
-	 * @return f_chart_DataTable
+	 * @deprecated
 	 */
 	function getDataTable()
 	{
@@ -344,13 +381,15 @@ abstract class f_chart_Visualization
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_Table extends f_chart_Visualization
 {
 	private static $defaultOptions;
 
 	/**
-	 * @param f_chart_DataTable $data
-	 * @param array<String, mixed> $options
+	 * @deprecated
 	 */
 	function __construct($data, $options = null)
 	{
@@ -364,17 +403,23 @@ class f_chart_Table extends f_chart_Visualization
 			$this->options = self::getDefaultOptions();
 		}
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setTitle($title)
 	{
 		$this->setOption("title", $title);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getTitle()
 	{
 		return $this->getOption("title");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getHTML()
 	{
 		$columns = $this->data->getColumns();
@@ -437,6 +482,9 @@ class f_chart_Table extends f_chart_Visualization
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_Grid
 {
 	private $xAxisStepSize;
@@ -447,8 +495,7 @@ class f_chart_Grid
 	private $yOffset = 0;
 
 	/**
-	 * @param Float $xAxisStepSize
-	 * @param Float $yAxisStepSize
+	 * @deprecated
 	 */
 	function __construct($xAxisStepSize = 20, $yAxisStepSize = 20)
 	{
@@ -457,8 +504,7 @@ class f_chart_Grid
 	}
 
 	/**
-	 * @param Float $length
-	 * @return f_chart_Grid
+	 * @deprecated
 	 */
 	function setLineSegmentLength($length)
 	{
@@ -467,8 +513,7 @@ class f_chart_Grid
 	}
 
 	/**
-	 * @param Float $length
-	 * @return f_chart_Grid
+	 * @deprecated
 	 */
 	function setBlankSegmentLength($length)
 	{
@@ -476,8 +521,7 @@ class f_chart_Grid
 		return $this;
 	}
 	/**
-	 * @param Float $offset
-	 * @return f_chart_Grid
+	 * @deprecated
 	 */
 	function setXOffset($offset)
 	{
@@ -485,8 +529,7 @@ class f_chart_Grid
 		return $this;
 	}
 	/**
-	 * @param Float $offset
-	 * @return f_chart_Grid
+	 * @deprecated
 	 */
 	function setYOffset($offset)
 	{
@@ -494,7 +537,7 @@ class f_chart_Grid
 		return $this;
 	}
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	function getQueryString()
 	{
@@ -504,129 +547,192 @@ class f_chart_Grid
 	}
 }
 
+/**
+ * @deprecated
+ */
 abstract class f_chart_Chart extends f_chart_Visualization
 {
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_RIGHT = 'right';
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_LEFT = 'left';
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_TOP = 'top';
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_BOTTOM = 'bottom';
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_NONE = 'none';
 
 	const LEGEND_ORIENT_VERTICAL = 'vertical';
+	/**
+	 * @deprecated
+	 */
 	const LEGEND_ORIENT_HORIZONTAL = 'horizontal';
 
 	private static $defaultOptions;
 
 	private static $googleChartProvider;
-
+	/**
+	 * @deprecated
+	 */
 	function setWidth($width)
 	{
 		$this->setOption("width", $width);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getWidth()
 	{
 		return $this->getOption("width");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setHeight($height)
 	{
 		$this->setOption("height", $height);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getHeight()
 	{
 		return $this->getOptions("height");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setLegendOrient($legendOrient)
 	{
 		$this->setOption("legendOrient", $legendOrient);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getLegendOrient()
 	{
 		return $this->getOption("legendOrient");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setLegendPosition($legendPosition)
 	{
 		$this->setOption("legendPosition", $legendPosition);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getLegendPosition()
 	{
 		return $this->getOption("legendPosition");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setTitle($title)
 	{
 		$this->setOption("title", $title);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getTitle()
 	{
 		return $this->getOption("title");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setTitleColor($color)
 	{
 		$this->setOption("titleColor", $color);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getTitleColor()
 	{
 		return $this->getOption("titleColor");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setTitleSize($size)
 	{
 		$this->setOption("titleSize", $size);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getTitleSize()
 	{
 		$this->getOption("titleSize");
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setLeftMargin($margin)
 	{
 		$this->setOption("leftMargin", $margin);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setRightMargin($margin)
 	{
 		$this->setOption("rightMargin", $margin);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setTopMargin($margin)
 	{
 		$this->setOption("topMargin", $margin);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setBottomMargin($margin)
 	{
 		$this->setOption("bottomMargin", $margin);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setLegendWidth($width)
 	{
 		$this->setOption("legendWidth", $width);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setLegendHeight($height)
 	{
 		$this->setOption("legendHeight", $height);
 	}
 
 	/**
-	 * @param f_chart_Grid $grid
+	 * @deprecated
 	 */
 	function setGrid($grid)
 	{
 		$this->setOption("grid", $grid);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function getQueryString()
 	{
 		$q = "";
@@ -722,7 +828,10 @@ abstract class f_chart_Chart extends f_chart_Visualization
 		}
 		return self::$googleChartProvider;
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	function getUrl()
 	{
 		$md5 = md5(self::getGoogleChartProvider().$this->data->asString().serialize($this->options));
@@ -746,7 +855,10 @@ abstract class f_chart_Chart extends f_chart_Visualization
 		}
 		return LinkHelper::getRessourceLink("/cache/www/charts/".$key)->getUrl();
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	function getDirectUrl()
 	{
 		return self::getGoogleChartProvider()."?".$this->getQueryString();
@@ -766,7 +878,7 @@ abstract class f_chart_Chart extends f_chart_Visualization
 }
 
 /**
- * OK, this class has not really sense... just created for code mutualization
+ * @deprecated
  */
 abstract class f_chart_2AxisChart extends f_chart_Chart
 {
@@ -774,8 +886,7 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	protected $rotated = false;
 
 	/**
-	 * @param f_chart_DataTable $data
-	 * @param array<String, mixed> $options
+	 * @deprecated
 	 */
 	function __construct($data, $options = null)
 	{
@@ -791,8 +902,7 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	}
 
 	/**
-	 * @param f_chart_Axis $axis
-	 * @return unknown_type
+	 * @deprecated
 	 */
 	function setBottomAxis($axis)
 	{
@@ -800,7 +910,7 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	}
 
 	/**
-	 * @return f_chart_Axis
+	 * @deprecated
 	 */
 	function getBottomAxis()
 	{
@@ -808,8 +918,7 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	}
 
 	/**
-	 * @param f_chart_Axis $axis
-	 * @return unknown_type
+	 * @deprecated
 	 */
 	function setLeftAxis($axis)
 	{
@@ -817,7 +926,7 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	}
 
 	/**
-	 * @return f_chart_Axis
+	 * @deprecated
 	 */
 	function getLeftAxis()
 	{
@@ -874,7 +983,10 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 			}
 		}
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	function getQueryString()
 	{
 		$q = parent::getQueryString();
@@ -982,8 +1094,14 @@ abstract class f_chart_2AxisChart extends f_chart_Chart
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_chart_LineChart extends f_chart_2AxisChart
 {
+	/**
+	 * @deprecated
+	 */
 	function getQueryString()
 	{
 		$q = parent::getQueryString();
@@ -992,14 +1110,15 @@ class f_chart_LineChart extends f_chart_2AxisChart
 		return $q;
 	}
 }
-
+/**
+ * @deprecated
+ */
 class f_chart_PieChart extends f_chart_Chart
 {
 	private static $defaultOptions;
 
 	/**
-	 * @param f_chart_DataTable $data
-	 * @param array<String, mixed> $options
+	 * @deprecated
 	 */
 	function __construct($data, $options = null)
 	{
@@ -1013,27 +1132,38 @@ class f_chart_PieChart extends f_chart_Chart
 			$this->options = self::getDefaultOptions();
 		}
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function set3d()
 	{
 		$this->setOption("3d", true);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setOrientation($angleInRadian)
 	{
-		$this->setOption("orientation", $angleInRadion);
+		$this->setOption("orientation", $angleInRadian);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setMasterColor($color)
 	{
 		$this->setOption("masterColor", $color);
 	}
-
+	/**
+	 * @deprecated
+	 */
 	function setColors($colors)
 	{
 		$this->setOption("colors", $colors);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function getQueryString()
 	{
 		$q = parent::getQueryString();
@@ -1094,20 +1224,34 @@ class f_chart_PieChart extends f_chart_Chart
 		return self::$defaultOptions;
 	}
 }
-
+/**
+ * @deprecated
+ */
 class f_chart_BarChart extends f_chart_2AxisChart
 {
+	/**
+	 * @deprecated
+	 */
 	const ORIENTATION_VERTICAL = 1;
+	/**
+	 * @deprecated
+	 */
 	const ORIENTATION_HORIZONTAL = 2;
 
+	/**
+	 * @deprecated
+	 */
 	const BAR_WIDTH_AUTO = "a";
+	/**
+	 * @deprecated
+	 */
 	const BAR_WIDTH_RELATIVE = "r";
 
 	private static $defaultOptions;
 
+
 	/**
-	 * @param f_chart_DataTable $data
-	 * @param array<String, mixed> $options
+	 * @deprecated
 	 */
 	function __construct($data, $options = null)
 	{
@@ -1122,11 +1266,17 @@ class f_chart_BarChart extends f_chart_2AxisChart
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function setStacked()
 	{
 		$this->setOption("stacked", true);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function setOrientation($orientation)
 	{
 		$this->setOption("orientation", $orientation);
@@ -1134,24 +1284,32 @@ class f_chart_BarChart extends f_chart_2AxisChart
 	}
 
 	/**
-	 * @param $width
-	 * @return unknown_type
+	 * @deprecated
 	 */
 	function setBarWidth($width)
 	{
 		$this->setOption("barWidth", $width);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function setBarSpace($space)
 	{
-		$this->setOption("barSpace", $width);
+		$this->setOption("barSpace", $space);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function setGroupSpace($space)
 	{
-		$this->setOption("groupSpace", $width);
+		$this->setOption("groupSpace", $space);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function getQueryString()
 	{
 		$q = parent::getQueryString();
@@ -1181,7 +1339,7 @@ class f_chart_BarChart extends f_chart_2AxisChart
 	}
 
 	/**
-	 * @return f_chart_Axis
+	 * @deprecated
 	 */
 	function getLeftAxis()
 	{

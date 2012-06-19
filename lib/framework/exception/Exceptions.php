@@ -157,14 +157,13 @@ class UnimplementedMethodException extends Exception
 /**
  * @deprecated
  */
-class ExtendedAgaviException extends AgaviException
+class ExtendedAgaviException
 {
 
 	private	$id = null;
 
 	public function __construct ($message = null, $code = 0)
 	{
-
 		parent::__construct($message, $code);
 
 		$this->setName('ExtendedAgaviException');
@@ -179,215 +178,21 @@ class ExtendedAgaviException extends AgaviException
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Print the stack trace for this exception.
-	 *
-	 * @param string The format you wish to use for printing. Options
-	 *               include:
-	 *               - html
-	 *               - plain
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @author Bob Zoller (bob@agavi.org)
-	 * @since  0.9.0
+	 * @deprecated
 	 */
 	public function printStackTrace ($format = 'html')
 	{
-		if (function_exists('__agavi_printStackTrace')) {
-			__agavi_printStackTrace($this, $format);
-		}
-
-		// exception related properties
-		$class     = ($this->getFile() != null)
-				     ? Toolkit::extractClassName($this->getFile()) : 'N/A';
-
-		$class     = ($class != '')
-				     ? $class : 'N/A';
-
-		$code      = ($this->getCode() > 0)
-				     ? $this->getCode() : 'N/A';
-
-		$file      = ($this->getFile() != null)
-				     ? $this->getFile() : 'N/A';
-
-		$line      = ($this->getLine() != null)
-				     ? $this->getLine() : 'N/A';
-
-		$message   = ($this->getMessage() != null)
-				     ? $this->getMessage() : 'N/A';
-
-		$name      = $this->getName();
-
-		$traceData = $this->getTrace();
-		$trace     = array();
-
-		// lower-case the format to avoid sensitivity issues
-		$format = strtolower($format);
-
-		if ($trace !== null && count($traceData) > 0)
-		{
-
-			// format the stack trace
-			for ($i = 0, $z = count($traceData); $i < $z; $i++)
-			{
-
-				if (!isset($traceData[$i]['file']))
-				{
-
-				    // no file key exists, skip this index
-				    continue;
-
-				}
-
-				// grab the class name from the file
-				// (this only works with properly named classes)
-				$tClass = Toolkit::extractClassName($traceData[$i]['file']);
-
-				$tFile      = $traceData[$i]['file'];
-				$tFunction  = $traceData[$i]['function'];
-				$tLine      = $traceData[$i]['line'];
-
-				if ($tClass != null)
-				{
-
-				    $tFunction = $tClass . '::' . $tFunction . '()';
-
-				} else
-				{
-
-				    $tFunction = $tFunction . '()';
-
-				}
-
-				if ($format == 'html')
-				{
-
-				    $tFunction = '<strong>' . $tFunction . '</strong>';
-
-				}
-
-				$data = 'at %s in [%s:%s]';
-				$data = sprintf($data, $tFunction, $tFile, $tLine);
-
-				$trace[] = $data;
-
-			}
-
-		}
-
-		switch ($format)
-		{
-
-			case 'html':
-
-				// print the exception info
-				echo '<!DOCTYPE html
-				      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-				      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-				      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-				      <head>
-				      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-				      <title>Exception</title>
-				      </head>
-				      <body>
-
-				      <table id="exception" cellpadding="0" cellspacing="0">
-						  <tr>
-						      <th colspan="2">' . $name . '</th>
-						  </tr>
-						  <tr>
-						      <td class="title">Message:</td>
-						      <td class="message">' . $message . '</td>
-						  </tr>
-						  <tr>
-						      <td class="title">Code:</td>
-						      <td>' . $code . '</td>
-						  </tr>
-						  <tr>
-						      <td class="title">Class:</td>
-						      <td>' . $class . '</td>
-						  </tr>
-						  <tr>
-						      <td class="title">File:</td>
-						      <td>' . $file . '</td>
-						  </tr>
-						  <tr>
-						      <td class="title">Line:</td>
-						      <td>' . $line . '</td>
-						  </tr>';
-
-				if (count($trace) > 0)
-				{
-
-				    echo '<tr>
-						      <th colspan="2">Stack Trace</th>
-						  </tr>';
-
-				    foreach ($trace as $line)
-				    {
-
-						echo '<tr>
-							  <td colspan="2">' . $line . '</td>
-						      </tr>';
-
-				    }
-
-				}
-
-				echo     '</table>
-
-				      </body>
-				      </html>';
-
-				break;
-			case 'xml':
-				$xml = array();
-				$xml[] = '<exception>';
-				$xml[] = '<status>EXCEPTION</status>';
-				$xml[] = '<name>' . $name . '</name>';
-				$xml[] = '<message>' . $message . '</message>';
-				$xml[] = '<type>' . get_class($this) . '</type>';
-				$xml[] = '<code>' . $code . '</code>';
-				$xml[] = '<class>' . $class. '</class>';
-				$xml[] = '<file>' . $file. '</file>';
-				$xml[] = '<line>' . $line. '</line>';
-
-				if (count($trace) > 0)
-				{
-					$xml[] = '<trace>';
-				    foreach ($trace as $line)
-				    {
-						$xml[] = '<line>' . $line . '</line>';
-				    }
-					$xml[] = '</trace>';
-				}
-				$xml[] = '</exception>';
-				header("Content-type: text/xml");
-				echo join("\r\n", $xml);
-
-			break;
-			case 'plain':
-			default:
-
-		}
-
+		f_util_ProcessUtils::printBackTrace($format == 'html');
 	}
 
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Set the name of this exception.
-	 *
-	 * @param string An exception name.
-	 *
-	 * @author Sean Kerr (skerr@mojavi.org)
-	 * @since  0.9.0
+	 * @deprecated
 	 */
 	protected function setName ($name)
 	{
-
 		parent::setName($name);
 		$this->id = $name;
-
 	}
-
 }

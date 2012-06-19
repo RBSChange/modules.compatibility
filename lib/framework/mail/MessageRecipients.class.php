@@ -1,6 +1,6 @@
 <?php
 /**
- * @package framework.mail
+ * @deprecated
  */
 class mail_MessageRecipients
 {
@@ -20,10 +20,7 @@ class mail_MessageRecipients
 	private $bcc = null;
 
 	/**
-	 * @param mixed $to Coma-separated list of email addresses or array of email addresses.
-	 * @param mixed $cc Coma-separated list of email addresses or array of email addresses.
-	 * @param mixed $bcc Coma-separated list of email addresses or array of email addresses.
-	 * @throws IllegalArgumentException
+	 * @deprecated
 	 */
 	public function __construct($to = null, $cc = null, $bcc = null)
 	{
@@ -40,10 +37,9 @@ class mail_MessageRecipients
 			$this->setBCC($bcc);
 		}
 	}
-	
+
 	/**
-	 * @param mixed $to Coma-separated list of email addresses or array of email addresses.
-	 * @throws IllegalArgumentException
+	 * @deprecated
 	 */
 	public function setTo($to)
 	{
@@ -52,8 +48,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @param mixed $cc Coma-separated list of email addresses or array of email addresses.
-	 * @throws IllegalArgumentException
+	 * @deprecated
 	 */
 	public function setCC($cc)
 	{
@@ -62,8 +57,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @param mixed $bcc Coma-separated list of email addresses or array of email addresses.
-	 * @throws IllegalArgumentException
+	 * @deprecated
 	 */
 	public function setBCC($bcc)
 	{
@@ -72,7 +66,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return Array<String>
+	 * @deprecated
 	 */
 	public function getTo()
 	{
@@ -80,7 +74,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return Array<String>
+	 * @deprecated
 	 */
 	public function getCC()
 	{
@@ -88,7 +82,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return Array<String>
+	 * @deprecated
 	 */
 	public function getBCC()
 	{
@@ -96,7 +90,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return boolean
+	 * @deprecated
 	 */
 	public function hasTo()
 	{
@@ -104,7 +98,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return boolean
+	 * @deprecated
 	 */
 	public function hasCC()
 	{
@@ -112,7 +106,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return boolean
+	 * @deprecated
 	 */
 	public function hasBCC()
 	{
@@ -120,10 +114,7 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * Fixes $value so that it is an array of string.
-	 *
-	 * @param mixed $value String or array.
-	 * @throws IllegalArgumentException
+	 * @deprecated
 	 */
 	private function fixValue($value)
 	{
@@ -168,13 +159,16 @@ class mail_MessageRecipients
 	}
 
 	/**
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public final function isEmpty()
 	{
 		return !$this->hasTo() && !$this->hasCC() && !$this->hasBCC();
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getAsRecipientsArray()
 	{
 		$toArray = array();

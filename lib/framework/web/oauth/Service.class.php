@@ -1,32 +1,12 @@
 <?php
 /**
  * @deprecated In favor of Zend Framework class
+ * @method f_web_oauth_Service getInstance()
  */
 class f_web_oauth_Service extends change_BaseService 
-{
+{	
 	/**
-	 * @var f_web_oauth_Service
-	 */
-	private static $instance;
-
-	/**
-	 * @return f_web_oauth_Service
-	 */
-	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-	
-	/**
-	 * This method returns a new Unauthorized token that will be used for the first leg of
-	 * the oauth authentification scheme.
-	 *
-	 * @param f_web_oauth_Consumer $consumer
-	 * @return f_web_oauth_Token
+	 * @deprecated
 	 */
 	public function getNewToken($consumer)
 	{
@@ -34,12 +14,7 @@ class f_web_oauth_Service extends change_BaseService
 	}
 	
 	/**
-	 * This method authorizes a token obtained by calling getNewToken.
-	 *
-	 * @param f_web_oauth_Token $token (with verification code set in case of success)
-	 * @param f_web_oauth_Consumer $consumer
-	 * 
-	 * @return Boolean
+	 * @deprecated
 	 */
 	public function authorizeToken($token)
 	{
@@ -47,10 +22,7 @@ class f_web_oauth_Service extends change_BaseService
 	}
 	
 	/**
-	 * @param f_web_oauth_Token $token
-	 * @param f_web_oauth_Consumer $consumer
-	 * 
-	 * @return f_web_oauth_Token or null
+	 * @deprecated
 	 */
 	public function getAccessToken($token, $consumer)
 	{
@@ -58,10 +30,7 @@ class f_web_oauth_Service extends change_BaseService
 	}
 	
 	/**
-	 * @param Integer $timestamp
-	 * @param f_web_oauth_Token $token
-	 * @param f_web_oauth_Consumer $consumer
-	 * @return unknown
+	 * @deprecated
 	 */
 	public function validateTimestamp($timestamp, $token = null, $consumer = null)
 	{
@@ -69,8 +38,7 @@ class f_web_oauth_Service extends change_BaseService
 	}
 	
 	/**
-	 * @param f_web_oauth_Consumer $consumer
-	 * @return String
+	 * @deprecated
 	 */
 	public function getConsumerSecret($consumer)
 	{
@@ -78,15 +46,12 @@ class f_web_oauth_Service extends change_BaseService
 		return $consumer->getSecret();
 	}
 	
-	
 	/**
-	 * @param f_web_oauth_Consumer $consumer
-	 * @return String
+	 * @deprecated
 	 */
 	public function getTokenSecret($tken)
 	{
 		$tken->setSecret('');
 		return $tken->getSecret();
 	}
-	
 }

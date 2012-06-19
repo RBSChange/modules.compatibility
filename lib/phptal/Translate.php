@@ -1,17 +1,15 @@
 <?php
 /**
- * <p change:translate="modules_test.toto.tiltle"
- * <p change:translate="modules_test.toto.tiltle2;remp1 'toto';remp2 item/label"
- * <p change:translate="modules_test.toto.tiltle; ui true"
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_Translate extends PHPTAL_Php_Attribute
 {
 	
 	private $ui = false;
-	
+
 	/**
-     * Called before element printing.
-     */
+	 * @deprecated
+	 */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
     	Framework::error('Deprecated change:translate TAL Attribute ' . TemplateObject::$lastTemplateFileName);
@@ -81,12 +79,15 @@ class PHPTAL_Php_Attribute_CHANGE_Translate extends PHPTAL_Php_Attribute
     }
 
 	/**
-     * Called after element printing.
-     */
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
+	/**
+	 * @deprecated
+	 */
     public static function _translate($string, $remplacements)
     {	
 	   foreach ($remplacements as $key => $value)
@@ -95,7 +96,10 @@ class PHPTAL_Php_Attribute_CHANGE_Translate extends PHPTAL_Php_Attribute
 	   }
 	   return $string;
     }
-    
+
+	/**
+	 * @deprecated
+	 */
     public static function _translateUI($key, $remplacements)
     {
        $string = f_Locale::translateUI($key);

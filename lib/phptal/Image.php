@@ -4,8 +4,9 @@
  */
 class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 {
+
 	/**
-	 * Called before element printing.
+	 * @deprecated
 	 */
 	public function before(PHPTAL_Php_CodeWriter $codewriter)
 	{
@@ -125,8 +126,8 @@ class PHPTAL_Php_Attribute_CHANGE_Image extends PHPTAL_Php_Attribute
 	}
 
 	/**
-     * Called after element printing.
-     */
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
 	}

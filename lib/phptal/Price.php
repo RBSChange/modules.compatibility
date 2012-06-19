@@ -1,16 +1,12 @@
 <?php
-// change:price
-//
-// <span change:price="value 10.23586; currency '€'; currencyPosition 'left'" />
-// <span change:price="value value; currency currency; currencyPosition currencyPosition" />
-
 /**
- * @package phptal.php.attribute
- * @author intportg
- * 2007-11-30
+ * @deprecated
  */
 class PHPTAL_Php_Attribute_CHANGE_Price extends PHPTAL_Php_Attribute
 {
+	/**
+	 * @deprecated
+	 */
     public function start()
     {
     	$format = "names";
@@ -47,6 +43,9 @@ class PHPTAL_Php_Attribute_CHANGE_Price extends PHPTAL_Php_Attribute
 		return $code;
     }
 
+	/**
+	 * @deprecated
+	 */
     public static function _getPrice($priceValue, $currency, $currencyPosition)
     {
 		// TODO : Manage different formats based on locale...
@@ -74,6 +73,9 @@ class PHPTAL_Php_Attribute_CHANGE_Price extends PHPTAL_Php_Attribute
 	    return $price;
     }
 
+	/**
+	 * @deprecated
+	 */
     public function end()
     {
     }

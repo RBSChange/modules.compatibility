@@ -1,47 +1,38 @@
 <?php
+/**
+ * @deprecated
+ */
 class Logger
 {
-
-	// +-----------------------------------------------------------------------+
-	// | CONSTANTS                                                             |
-	// +-----------------------------------------------------------------------+
-
 	/**
-	 * Debug level.
-	 *
-	 * @since 0.9.0
+	 * @deprecated
 	 */
 	const DEBUG = 1000;
 
 	/**
-	 * Error level.
-	 *
-	 * @since 0.9.0
+	 * @deprecated
 	 */
 	const ERROR = 4000;
 
 	/**
-	 * Information level.
-	 *
-	 * @since 0.9.0
+	 * @deprecated
 	 */
 	const INFO = 2000;
 
 	/**
-	 * Warning level.
-	 *
-	 * @since 0.9.0
+	 * @deprecated
 	 */
 	const WARN = 3000;
 
 	/**
-	 * Fatal level.
-	 *
-	 * @since 0.9.0
+	 * @deprecated
 	 */
 	const FATAL = 5000;
 }
-	
+
+/**
+ * @deprecated
+ */
 class LoggingService
 {
 	protected $stdLogFilePath;
@@ -63,7 +54,7 @@ class LoggingService
 	private static $instance = null;
 	
 	/**
-	 * @return LoggingService
+	 * @deprecated
 	 */
 	public static function getInstance()
 	{
@@ -74,12 +65,17 @@ class LoggingService
 		return self::$instance;
 	}
 	
-	
+	/**
+	 * @deprecated
+	 */
 	public function log($stringLine, $loggerGroup)
 	{
 		error_log("\n". gmdate('Y-m-d H:i:s')."\t".$stringLine, 3, $this->stdLogFilePath);
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function errorLog($stringLine, $loggerGroup)
 	{
 		error_log("\n". gmdate('Y-m-d H:i:s')."\t".$stringLine, 3, $this->errLogFilePath);

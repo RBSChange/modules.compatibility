@@ -4,7 +4,15 @@
  */
 class ComponentTypeObject
 {
+
+	/**
+	 * @deprecated
+	 */
 	const MODULE    = "modules";
+
+	/**
+	 * @deprecated
+	 */
 	const FRAMEWORK = "framework";
 	
 	/**

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @method UrlPDFService getInstance()
+ * @deprecated
+ */
 class UrlPDFService extends change_BaseService 
 {
 	/**
@@ -102,37 +106,13 @@ class UrlPDFService extends change_BaseService
 	 */
 	private $force_html = false;
 
-
-	/**
-	 * The singleton instance 
-	 * @var UrlPDFService
-	 */
-	private static $instance = null;
-
-
 	/**
 	 * @var Boolean clearPageCache to delete cache of url before generate pdf version
 	 */
 	private $clear_page_cache = false;
-
-	/**
-	 * @return UrlPDFService
-	 */
-	public static function getInstance()
-	{
-		if (is_null(self::$instance))
-		{
-			$className = get_class();
-			self::$instance = new $className();
-		}
-		return self::$instance;
-	}
 	
 	/**
-	 * Define a password for connection to pdf server
-	 *
-	 * @param String $password
-	 * @return UrlPDFService
+	 * @deprecated
 	 */
 	public function setPasswordConnection($password)
 	{
@@ -145,10 +125,7 @@ class UrlPDFService extends change_BaseService
 	}
 	
 	/**
-	 * Define a user for connection to pdf server
-	 *
-	 * @param String $user
-	 * @return UrlPDFService
+	 * @deprecated
 	 */
 	public function setUserConnection($user)
 	{
@@ -161,10 +138,7 @@ class UrlPDFService extends change_BaseService
 	}
 	
 	/**
-	 * Define a customer for connection to pdf server
-	 *
-	 * @param String $cust
-	 * @return UrlPDFService
+	 * @deprecated
 	 */
 	public function setCustomerConnection($cust)
 	{
@@ -177,20 +151,15 @@ class UrlPDFService extends change_BaseService
 	}
 	
 	/**
-	 * Constructor, define parameters used by xml2pdfd
+	 * @deprecated
 	 */
 	public function __construct()
 	{
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] ----- Bench ----- Starttime : ".date('Y-m-d H:i:s '));
-		}
-		
 		$this->default_cache_path = $this->cache_path;
 	}
-
+	
 	/**
-	 * Set clear cache of asked url
+	 * @deprecated
 	 */
 	public function setClearPageCache()
 	{
@@ -210,14 +179,9 @@ class UrlPDFService extends change_BaseService
 			@unlink($oneFile);
 		}
 	}
-
-
+	
 	/**
-	 * @TODO : ne récupérer que si la signature du fichier est différente de la version locale ?
-	 * @TODO : vérifier la signature entre le fichié distant et celui transféré ?
-	 * @param String $pageURL url to transform in pdf
-	 * @return String the local pdf filename, without cache path if defined
-	 * @throws Exception if remote pdf not created or local cache not created
+	 * @deprecated
 	 */
 	public function getPDF($pageURL)
 	{
@@ -304,17 +268,9 @@ class UrlPDFService extends change_BaseService
 	 */
 	private function isCacheAvailable($pageID)
 	{
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Start search cached pdf for pageid : ".$pageID);
-		}
 		$cacheOk = false;
 		if(file_exists($this->cache_path.$pageID.$this->ext))
 		{
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] PDF cache file exists for pageid : ".$pageID);
-			}
 			// search all cached file for the page
 			$filesOfPage = glob($this->cache_path.$pageID.$this->ext."*");
 			foreach ($filesOfPage as $filename)
@@ -327,36 +283,19 @@ class UrlPDFService extends change_BaseService
 					if($currentTime > $expireTime)
 					{
 						// cache expired, try to delete unuseful cache
-						if(Framework::isDebugEnabled())
-						{
-							Framework::debug("[PDF] Found old cache (".$expireTime.") for pageid : ".$pageID);
-						}
 						@unlink($this->cache_path.$filename);
 					}
 					else
 					{
 						// cache file has not expired, so assume pdf cache file is ok
-						if(Framework::isDebugEnabled())
-						{
-							Framework::debug("[PDF] Found valid cache (".$expireTime.") for pageid : ".$pageID);
-						}
 						$cacheOk = true;
 					}
 				}
 			}
 			if(!$cacheOk)
 			{
-				// if cache is not ok, it can be removed
-				if(Framework::isDebugEnabled())
-				{
-					Framework::debug("[PDF] Found cached pdf but no valid cache for pageid : ".$pageID);
-				}
 				@unlink($this->cache_path.$pageID.$this->ext);
 			}
-		}
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] End of search cached pdf for pageid : ".$pageID);
 		}
 		return $cacheOk;
 	}
@@ -370,14 +309,14 @@ class UrlPDFService extends change_BaseService
 	 */
 	private function createPdfFile($pageURL)
 	{
-
-		if(Framework::isDebugEnabled())
+		if (class_exists('Net_Socket'))
 		{
-			Framework::debug("[PDF] ----- Bench Create PDF ----- Starttime : ".date('Y-m-d H:i:s '));
-			Framework::debug("[PDF] Start to create PDF file for url : ".$pageURL);
+			$socket = new Net_Socket();
 		}
-
-		$socket = new Net_Socket();
+		else
+		{
+			throw new Exception("Class Net_Socket not found");
+		}
 
 		if(!$socket->connect($this->server_ip,$this->server_port,true,$this->timeout))
 		{
@@ -394,11 +333,6 @@ class UrlPDFService extends change_BaseService
 		$socket->readLine();
 		$socket->readLine();
 
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Connected to remote server.");
-		}
-
 		$socket->writeLine("cred ".$this->user.":".$this->pwd);
 		$response = $socket->readLine();
 
@@ -413,11 +347,6 @@ class UrlPDFService extends change_BaseService
 			throw new Exception($msg);
 		}
 
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Authenticated to remote server.");
-		}
-
 		$socket->writeLine("cust ".$this->cust);
 		$response = $socket->readLine();
 		if(trim($response)!='OK')
@@ -430,12 +359,6 @@ class UrlPDFService extends change_BaseService
 			$socket->disconnect();
 			throw new Exception($msg);
 		}
-
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Customer set to remote server.");
-		}
-
 		// pdf options start
 		if(!empty($this->pdf_pwd))
 		{
@@ -448,11 +371,6 @@ class UrlPDFService extends change_BaseService
 				{
 					Framework::error("[PDF] Can't set pdf pwd : [pdf_pwd:".$this->pdf_pwd."]");
 				}
-			}
-
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Password set to lock pdf.");
 			}
 		}
 
@@ -467,10 +385,6 @@ class UrlPDFService extends change_BaseService
 					Framework::error("[PDF] Can't disable pdf print");
 				}
 			}
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Print option is disabled.");
-			}
 		}
 
 		if($this->opt_copy == false)
@@ -483,10 +397,6 @@ class UrlPDFService extends change_BaseService
 				{
 					Framework::error("[PDF] Can't disable pdf copy");
 				}
-			}
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Copy option is disabled.");
 			}
 		}
 
@@ -501,10 +411,6 @@ class UrlPDFService extends change_BaseService
 					Framework::error("[PDF] Can't disable pdf annotation");
 				}
 			}
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Annotation option is disabled.");
-			}
 		}
 
 		if($this->opt_modif == false)
@@ -518,10 +424,6 @@ class UrlPDFService extends change_BaseService
 					Framework::error("[PDF] Can't disable pdf modification");
 				}
 			}
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Modification option is disabled.");
-			}
 		}
 
 		$socket->writeLine("comp ".$this->opt_zip);
@@ -532,10 +434,6 @@ class UrlPDFService extends change_BaseService
 			{
 				Framework::error("[PDF] Can't set comporession : [COMPRESSION:".$this->opt_zip."]");
 			}
-		}
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Compression set to ".$this->opt_zip);
 		}
 		// pdf options end
 
@@ -588,20 +486,9 @@ class UrlPDFService extends change_BaseService
 			$socket->disconnect();
 			throw new Exception($msg);
 		}
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF url on remote server received (".$remotepdfpath.")");
-		}
 
 		$socket->writeLine("quit");
 		$socket->disconnect();
-
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Disconnected for remote server.");
-			Framework::debug("[PDF] ----- Bench Create PDF ----- Endtime : ".date('Y-m-d H:i:s '));
-		}
-
 		return $remotepdfpath;
 	}
 
@@ -615,19 +502,10 @@ class UrlPDFService extends change_BaseService
 	 */
 	private function putInCache($pageID, $remotePdfFile)
 	{
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] ----- Bench Put PDF in cache ----- Starttime : ".date('Y-m-d H:i:s '));
-			Framework::debug("[PDF] Start to put remote pdf (".$remotePdfFile.") in local cache");
-		}
 		// remove all cache for the page
 		$cachedFiles = glob($this->cache_path.$pageID.$this->ext."*");
 		foreach ($cachedFiles as $fileToDelete)
 		{
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] Remove old cache file for pageid : ".$pageID);
-			}
 			@unlink($fileToDelete);
 		}
 
@@ -664,11 +542,6 @@ class UrlPDFService extends change_BaseService
 			throw new Exception($msg);
 		}
 
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Remote file and local cache file opened for pageid : ".$pageID);
-		}
-
 		// write to local file
 		while (!feof($sourceFileHandler))
 		{
@@ -681,11 +554,6 @@ class UrlPDFService extends change_BaseService
 				}
 				throw new Exception($msg);
 			}
-		}
-
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Local cache file written for pageid : ".$pageID);
 		}
 
 		fclose($sourceFileHandler);
@@ -702,17 +570,9 @@ class UrlPDFService extends change_BaseService
 			}
 			throw new Exception($msg);
 		}
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] File for cache time life created for pageid : ".$pageID);
-		}
 
 		if(file_exists($this->cache_path.$pageID.$this->ext))
 		{
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] ----- Bench Put PDF in cache ----- Endtime : ".date('Y-m-d H:i:s '));
-			}
 			return $pageID.$this->ext;
 		}
 		else
@@ -727,14 +587,10 @@ class UrlPDFService extends change_BaseService
 	}
 
 	/**
-	 * Clear all files in cache directory
+	 * @deprecated
 	 */
 	public function clearAllCache()
 	{
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Clear all pdf cache");
-		}
 		$allFiles = glob($this->cache_path.'*');
 		foreach ($allFiles as $oneFile)
 		{
@@ -743,71 +599,47 @@ class UrlPDFService extends change_BaseService
 	}
 
 	/**
-	 * Define a password for the pdf
-	 *
-	 * @param String $password password to lock pdf
+	 * @deprecated
 	 */
 	public function setPassword($password)
 	{
 		$this->pdf_pwd	= $password;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF will be locked with pwd : ".$this->pdf_pwd);
-		}
 	}
-	
+
 	/**
-	 * Disable print otpion in pdf
+	 * @deprecated
 	 */
 	public function disablePrint()
 	{
 		$this->opt_print = false;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF print is disabled");
-		}
 	}
 
 	/**
-	 * Disable copy otpion in pdf
+	 * @deprecated
 	 */
 	public function disableCopy()
 	{
 		$this->opt_copy = false;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF copy is disabled");
-		}
 	}
 
 	/**
-	 * Disable annotation otpion in pdf
+	 * @deprecated
 	 */
 	public function disableAnnon()
 	{
 		$this->opt_annon = false;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF annotation is disabled");
-		}
 	}
 
 	/**
-	 * Disable modification otpion in pdf
+	 * @deprecated
 	 */
 	public function disableModif()
 	{
 		$this->opt_modif = false;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] PDF modification is disabled");
-		}
 	}
 
 	/**
-	 * Define pdf compression
-	 *
-	 * @param Integer $level 3 by default, must be between 1 and 5
+	 * @deprecated
 	 */
 	public function setCompressionLevel($level = 3)
 	{
@@ -818,43 +650,27 @@ class UrlPDFService extends change_BaseService
 			{
 				$this->opt_zip = 1;
 			}
-			if(Framework::isDebugEnabled())
-			{
-				Framework::debug("[PDF] PDF compression is set to : ".$this->opt_zip);
-			}
 		}
 	}
 
 	/**
-	 * Force prince to take url as html and not xhtml
+	 * @deprecated
 	 */
 	public function forceHTMLFormat()
 	{
 		$this->force_html = true;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Force source to be analysed as HTML and not XHTML");
-		}
 	}
 
 	/**
-	 * Define local path to cache pdf
-	 *
-	 * @param string $cache_path path to save pdf cache
+	 * @deprecated
 	 */
 	public function setCachePath($_path)
 	{
 		$this->cache_path = $_path . DIRECTORY_SEPARATOR;
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Cache path is set to : ".$this->cache_path);
-		}
 	}
 
 	/**
-	 * Define cache life time
-	 *
-	 * @param integer/string $cache_life_time optional (integer in second or string in english)
+	 * @deprecated
 	 */
 	public function setCacheLifeTime($_cache_life_time)
 	{
@@ -866,16 +682,10 @@ class UrlPDFService extends change_BaseService
 		{
 			$this->cache_life_time = strtotime($_cache_life_time,null);
 		}
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Cache life time is set to : ".$this->cache_life_time." seconds.");
-		}
 	}
 
 	/**
-	 * Define ip address for xml2pdfd server
-	 *
-	 * @param string $server_ip ip where xml2pdfd is installed
+	 * @deprecated
 	 */
 	public function setServerIP($_ip)
 	{
@@ -883,17 +693,10 @@ class UrlPDFService extends change_BaseService
 		{
 			$this->server_ip = $_ip;
 		}
-
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Server IP is set to : ".$this->server_ip);
-		}
 	}
 
 	/**
-	 * Define port where xml2pdfd listen
-	 *
-	 * @param integer $server_port port where xml2pdfd listen
+	 * @deprecated
 	 */
 	public function setServerPort($_port)
 	{
@@ -901,19 +704,10 @@ class UrlPDFService extends change_BaseService
 		{
 			$this->server_port = $_port % 65536;
 		}
-		
-		if(Framework::isDebugEnabled())
-		{
-			Framework::debug("[PDF] Server Port is set to : ".$this->server_port);
-		}
 	}
 
 	/**
-	 * Return an url to call the pdf convertion.
-	 * Call action ConvertPdf on generic module
-	 *
-	 * @param $specificUrl url to convert instead of current url
-	 * @return string
+	 * @deprecated
 	 */
 	public function getLink($specificUrl = null)
 	{

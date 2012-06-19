@@ -4,10 +4,7 @@
  */
 function xmlObjectHandleXslt($errno, $errstr, $errfile, $errline)
 {
-	if (Framework::isDebugEnabled())
-	{
-		Framework::debug('XmlObject : ' . $errno . ' : '.$errstr);
-	}
+
 }
 
 /**
@@ -297,13 +294,13 @@ class f_object_XmlObject
 		//get errors from XML file
 		$errors = libxml_get_errors();
 		foreach($errors as $e) {
-			$mess.="Ligne ".$e->line." => ".$e->message.$eol;
+			$mess.="Ligne ".$e->line." => ".$e->message.PHP_EOL;
 		};
 		//build notification message and throw exception
 		$e = new BaseException('xml-file-error');
-		$e->setAttribute("eol",$eol);
+		$e->setAttribute("eol",PHP_EOL);
 		$e->setAttribute("mess",$mess);
-		$e->setAttribute("file",$xmlFile);
+		$e->setAttribute("file",'');
 		throw $e;
 	}
 }

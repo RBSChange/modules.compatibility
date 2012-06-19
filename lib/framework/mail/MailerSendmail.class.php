@@ -1,12 +1,13 @@
 <?php
 /**
- * Auto-generated doc comment
- * @package framework.mail
+ * @deprecated
  */
-
 class MailerSendmail extends Mailer
 {
 	
+	/**
+	 * @deprecated
+	 */
 	public function __construct($params)
 	{
 		// Set mail driver
@@ -21,25 +22,29 @@ class MailerSendmail extends Mailer
 		}		
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getFactoryParams()
 	{
 		return $this->factoryParams;
 	}
 		
-	
 	/**
-	 * Send a mail with smtp driver
-	 * @return mixed boolean or PearError
+	 * @deprecated
 	 */
 	public function sendMail()
 	{
-		Framework::info(__METHOD__." to : ".$this->getReceiver());
-
 		$body = $this->getMimeObject()->get();
 		$hdrs = $this->getMimeObject()->headers($this->getHeaders());
-
-		$mailObject =& Mail::factory('sendmail', $this->getFactoryParams());
-
+		if (class_exists('Mail'))
+		{
+			$mailObject = Mail::factory('sendmail', $this->getFactoryParams());
+		}
+		else
+		{
+			throw new Exception("Class Mail not found");
+		}
 		return $mailObject->send($this->getAllRecipientEmail(), $hdrs, $body);
 	}	
 }

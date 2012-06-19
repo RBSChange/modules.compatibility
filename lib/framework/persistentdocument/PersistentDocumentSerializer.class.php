@@ -4,7 +4,13 @@
  */
 class SerialisationContext
 {
+	/**
+	 * @deprecated
+	 */
 	const DIRECTION_IN = 'IN';
+	/**
+	 * @deprecated
+	 */
 	const DIRECTION_OUT = 'OUT';
 
 	/**
@@ -122,7 +128,7 @@ class f_persistentdocument_PersistentDocumentSerializer
 			}
 		}			
 		
-		return $doc->saveXML();
+		return $this->document->saveXML();
 	}
 	
 	/**

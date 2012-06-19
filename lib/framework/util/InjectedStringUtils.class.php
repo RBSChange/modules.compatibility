@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated
+ */
 abstract class compatibility_InjectedStringUtils extends f_util_StringUtils
 {
 	/**

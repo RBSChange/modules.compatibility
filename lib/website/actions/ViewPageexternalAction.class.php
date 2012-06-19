@@ -4,9 +4,10 @@
  */
 class website_ViewPageexternalAction extends change_Action
 {
+
 	/**
- * @deprecated
- */
+	 * @deprecated
+	 */
 	public function _execute($context, $request)
 	{
 		try 
@@ -40,5 +41,4 @@ class website_ViewPageexternalAction extends change_Action
 	{
 		return false;
 	}
-
 }

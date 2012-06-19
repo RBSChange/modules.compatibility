@@ -1,9 +1,19 @@
 <?php
-
+/**
+ * @deprecated
+ */
 class f_mvc_HTTPRequest implements f_mvc_Request 
 {
+	/**
+	 * @deprecated
+	 */
 	const GET = 'GET';
+
+	/**
+	 * @deprecated
+	 */
 	const POST = 'POST';
+	
 	/**
 	 * @var array<String,array<String>>
 	 */
@@ -45,7 +55,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @return f_mvc_HTTPRequest
+	 * @deprecated
 	 */
 	static function getInstance()
 	{
@@ -57,9 +67,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @param String $defaultValue
-	 * @return String the value of the parameter or $defaultValue
+	 * @deprecated
 	 */
 	function getParameter($name, $defaultValue = null)
 	{
@@ -67,7 +75,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @return array<String, array<String>>
+	 * @deprecated
 	 */
 	function getParameters()
 	{
@@ -75,8 +83,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @param mixed $value
+	 * @deprecated
 	 */
 	function setAttribute($name, $value)
 	{
@@ -84,9 +91,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @param mixed $defaultValue
-	 * @return mixed
+	 * @deprecated
 	 */
 	function getAttribute($name, $defaultValue = null)
 	{
@@ -98,7 +103,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @return array<String, mixed>
+	 * @deprecated
 	 */
 	function getAttributes()
 	{
@@ -111,7 +116,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @return f_mvc_HTTPSession
+	 * @deprecated
 	 */
 	function getSession()
 	{
@@ -123,8 +128,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @return Boolean 
+	 * @deprecated
 	 */
 	function hasParameter($name)
 	{
@@ -132,8 +136,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @return Boolean
+	 * @deprecated
 	 */
 	function hasNonEmptyParameter($name)
 	{
@@ -141,8 +144,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $name
-	 * @return Boolean
+	 * @deprecated
 	 */
 	function hasAttribute($name)
 	{
@@ -150,8 +152,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * @param String $moduleName
-	 * @return array
+	 * @deprecated
 	 */
 	public function getModuleParameters($moduleName)
 	{
@@ -159,10 +160,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * Set a cookie.
-	 * @param string $key
-	 * @param string $value
-	 * @param integer $days
+	 * @deprecated
 	 */
 	public function setCookie($key, $value, $days = 30)
 	{
@@ -171,9 +169,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * Test a cookie availability.
-	 * @param string $key
-	 * @return boolean
+	 * @deprecated
 	 */
 	public function hasCookie($key)
 	{
@@ -181,10 +177,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * Get a cookie value.
-	 * @param string $key
-	 * @param string $defaultValue
-	 * @return string
+	 * @deprecated
 	 */
 	public function getCookie($key, $defaultValue = null)
 	{
@@ -196,8 +189,7 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 	
 	/**
-	 * Remove a cookie.
-	 * @param string $key
+	 * @deprecated
 	 */
 	public function removeCookie($key)
 	{
@@ -205,6 +197,9 @@ class f_mvc_HTTPRequest implements f_mvc_Request
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_mvc_FakeHttpRequest extends f_mvc_HTTPRequest 
 {
 	private $parameters;
@@ -214,6 +209,9 @@ class f_mvc_FakeHttpRequest extends f_mvc_HTTPRequest
 	 */
 	private $httpRequest;
 	
+	/**
+	 * @deprecated
+	 */
 	function __construct($parametersArray = array())
 	{
 		if (!is_array($parametersArray))
@@ -225,11 +223,7 @@ class f_mvc_FakeHttpRequest extends f_mvc_HTTPRequest
 	}
 		
 	/**
-	 * 
-	 * @param String $name 
-	 * @param String $defaultValue 
-	 * @return String the value of the parameter or $defaultValue 
-	 * @see f_mvc_Request::getParameter()
+	 * @deprecated
 	 */
 	function getParameter($name, $defaultValue = null)
 	{
@@ -241,9 +235,7 @@ class f_mvc_FakeHttpRequest extends f_mvc_HTTPRequest
 	}
 	
 	/**
-	 * 
-	 * @return array<String, array<String>> 
-	 * @see f_mvc_Request::getParameters()
+	 * @deprecated
 	 */
 	function getParameters()
 	{
@@ -252,9 +244,7 @@ class f_mvc_FakeHttpRequest extends f_mvc_HTTPRequest
 	}
 
 	/**
-	 * @param String $name 
-	 * @return Boolean 
-	 * @see f_mvc_Request::hasParameter()
+	 * @deprecated
 	 */
 	function hasParameter($name)
 	{

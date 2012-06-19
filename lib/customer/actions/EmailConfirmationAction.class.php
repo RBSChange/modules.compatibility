@@ -1,11 +1,11 @@
 <?php
 /**
- * @deprecated (will be removed in 4.0)
+ * @deprecated
  */
 class customer_EmailConfirmationAction extends change_Action
 {
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	public function _execute($context, $request)
 	{
@@ -22,7 +22,7 @@ class customer_EmailConfirmationAction extends change_Action
 	}
 	
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	public function getRequestMethods()
 	{
@@ -30,7 +30,7 @@ class customer_EmailConfirmationAction extends change_Action
 	}
 	
 	/**
-	 * @deprecated (will be removed in 4.0)
+	 * @deprecated
 	 */
 	public function isSecure()
 	{

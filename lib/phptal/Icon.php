@@ -4,8 +4,9 @@
  */
 class PHPTAL_Php_Attribute_CHANGE_Icon extends PHPTAL_Php_Attribute
 {
+
 	/**
-	 * Called before element printing.
+	 * @deprecated
 	 */
 	public function before(PHPTAL_Php_CodeWriter $codewriter)
 	{
@@ -79,10 +80,10 @@ class PHPTAL_Php_Attribute_CHANGE_Icon extends PHPTAL_Php_Attribute
 		$attr = $this->phpelement->getOrCreateAttributeNode($attribute);
 		$attr->setValue(MediaHelper::getIcon($icon, $size, null, $layout));
 	}
-	
+
 	/**
-     * Called after element printing.
-     */
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
 	}

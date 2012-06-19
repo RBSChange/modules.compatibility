@@ -4,11 +4,18 @@
  */
 class f_web_oauth_Util
 {
+
+	/**
+	 * @deprecated
+	 */
 	static function encode($input)
 	{
 		return str_replace('%7E', '~', rawurlencode($input));
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	static function getSignatureClassNameFromSignatureName($signName)
 	{
 		$signatureClassName = 'f_web_oauth_Signature';
@@ -18,7 +25,10 @@ class f_web_oauth_Util
 		}
 		return $signatureClassName;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	static function parseOauthAutorizationHeader()
 	{
 		if (!isset($_SERVER['HTTP_AUTHORIZATION']))
@@ -47,10 +57,9 @@ class f_web_oauth_Util
 		}
 		return $headers;
 	}
-	
+
 	/**
-	 * @param f_web_oauth_Request $request
-	 * @param Array $parameters
+	 * @deprecated
 	 */
 	static function setParametersFromArray($request, $parameters)
 	{
@@ -61,18 +70,38 @@ class f_web_oauth_Util
 	}
 }
 
+/**
+ * @deprecated
+ */
 class f_web_oauth_Request
 {
-	
+
+
+	/**
+	 * @deprecated
+	 */
 	const METHOD_POST = "POST";
+
+	/**
+	 * @deprecated
+	 */
 	const METHOD_GET = "GET";
+
+	/**
+	 * @deprecated
+	 */
 	const HMAC_SHA1 = "HMAC-SHA1";
+
+	/**
+	 * @deprecated
+	 */
 	const RSA_SHA1 = "rsa";
 	
 	private $mGetParameters = array();
 	private $mPostParameters = array();
 	private $mOauthParameters = array();
 	private $mIncomingHeaders = array();
+	
 	/**
 	 * @var unknown_type
 	 */
@@ -99,9 +128,9 @@ class f_web_oauth_Request
 	private $mBaseSignature = "";
 	
 	private $mSignature;
+
 	/**
-	 * @param String $url
-	 * @param f_web_oauth_Consumer $consumer
+	 * @deprecated
 	 */
 	public function __construct($url, f_web_oauth_Consumer $consumer, $method = self::METHOD_GET, $signatureClassName = 'f_web_oauth_SignatureHmacSha1')
 	{
@@ -147,46 +176,50 @@ class f_web_oauth_Request
 		}
 		$this->mSignatureRequestUrl = f_web_HttpLink::http_build_url($parts);
 	}
+
 	/**
-	 * @return String
+	 * @deprecated
 	 */
 	public function getBaseSignature()
 	{
 		return $this->mBaseSignature;
 	}
-	
+
 	/**
-	 * @return f_web_oauth_Consumer
+	 * @deprecated
 	 */
 	public function getConsumer()
 	{
 		return $this->mConsumer;
 	}
-	
+
 	/**
-	 * @param f_web_oauth_Consumer $mConsumer
+	 * @deprecated
 	 */
 	public function setConsumer($mConsumer)
 	{
 		$this->mConsumer = $mConsumer;
 	}
-	
+
 	/**
-	 * @return f_web_oauth_Token
+	 * @deprecated
 	 */
 	public function getToken()
 	{
 		return $this->mToken;
 	}
-	
+
 	/**
-	 * @param f_web_oauth_Token $mToken
+	 * @deprecated
 	 */
 	public function setToken($mToken)
 	{
 		$this->mToken = $mToken;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function setParameter($name, $value)
 	{
 		if (self::METHOD_POST == $this->mMethod)
@@ -214,15 +247,20 @@ class f_web_oauth_Request
 		}
 		
 	}
-	
 
+	/**
+	 * @deprecated
+	 */
 	public function sign()
 	{
 		$this->buildOauthParameters();
 		$signature = $this->getSignature();
 		$this->mOauthParameters['oauth_signature'] = $signature;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getSignature()
 	{
 		$mergedRequest = array();	
@@ -291,7 +329,10 @@ class f_web_oauth_Request
 		}
 		return implode('&', $subvalues);
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getUrl($includeOauthParamsInGet = false)
 	{
 		$parts = $this->mUrlParts;
@@ -306,7 +347,10 @@ class f_web_oauth_Request
 		$parts["query"] = str_replace('+', '%20', http_build_query($getParameters, '', '&'));
 		return f_web_HttpLink::http_build_url($parts);
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getAuthorizationHeader()
 	{
 		$params = $this->mOauthParameters;
@@ -320,12 +364,18 @@ class f_web_oauth_Request
 		$parts[] = 'oauth_version="' . f_web_oauth_Util::encode($params['oauth_version']) . '"';
 		return 'Authorization: OAuth ' . implode(',', $parts);
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getMethod()
 	{
 		return $this->mMethod;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getPostParameters()
 	{
 		return $this->mPostParameters;

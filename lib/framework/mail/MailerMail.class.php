@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated
+ */
 class MailerMail extends Mailer
 {
 
@@ -14,25 +17,30 @@ class MailerMail extends Mailer
 	}
 	
 	/**
-	 * @see Mailer::__construct()
+	 * @deprecated
 	 */
 	public function __construct($params)
 	{
 		$this->params = $params;
 		
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	public function sendMail($body = null, $hdrs = null)
 	{
-		if (Framework::isDebugEnabled())
-		{
-			Framework::debug("Mailer to : ".$this->getParam('receiver'));
-		}
-
 		$body = $this->getMimeObject()->get();
         $hdrs = $this->getMimeObject()->headers($this->getHeaders());
-        
-		$mailObject = Mail::factory($this->mailDriver);
+        if (class_exists('Mail'))
+        {
+        	$mailObject = Mail::factory($this->mailDriver);
+        }
+        else
+        {
+        	throw new Exception("Class Mail not found");
+        }
+		
 		if (empty($hdrs))
 		{
 			return $mailObject->send($this->getParam('receiver'), $this->getHeaders(), $body);

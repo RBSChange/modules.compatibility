@@ -4,9 +4,10 @@
  */
 class PHPTAL_Php_Attribute_CHANGE_Webappimage extends PHPTAL_Php_Attribute
 {
-    /**
-     * Called before element printing.
-     */
+
+	/**
+	 * @deprecated
+	 */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
     	Framework::error('Deprecated change:webappimage TAL Attribute ' . TemplateObject::$lastTemplateFileName);
@@ -34,12 +35,15 @@ class PHPTAL_Php_Attribute_CHANGE_Webappimage extends PHPTAL_Php_Attribute
 	}
 
 	/**
-     * Called after element printing.
-     */
+	 * @deprecated
+	 */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function render($name, $folder)
 	{
 		$imgname = str_replace("{lang}", RequestContext::getInstance()->getLang() , $name);

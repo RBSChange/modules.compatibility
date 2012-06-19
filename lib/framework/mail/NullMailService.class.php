@@ -1,23 +1,28 @@
 <?php
 /**
- * Auto-generated doc comment
- * @package framework.mail
+ * @deprecated
  */
 class MailerNull extends Mailer
 {
+
+	/**
+	 * @deprecated
+	 */
 	public function __construct($params)
 	{
 		
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function getFactoryParams()
 	{
 		return array();
 	}
 
 	/**
-	 * Send a mail with smtp driver
-	 * @return mixed boolean or PearError
+	 * @deprecated
 	 */
 	public function sendMail()
 	{
@@ -26,12 +31,14 @@ class MailerNull extends Mailer
 
 }
 
+/**
+ * @deprecated
+ */
 class NullMailService extends MailService
 {
-    
+
 	/**
-	 * @param MailMessage $mailMessage
-	 * @return Mailer
+	 * @deprecated
 	 */
 	protected function buildMailer($mailMessage)
 	{

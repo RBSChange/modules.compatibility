@@ -1,9 +1,6 @@
 <?php
 /**
- * @deprecated in favor of change_HttpClientService
- */
-/**
- * @package framework.service
+ * @deprecated
  */
 class HTTPClientService extends change_BaseService
 {
@@ -30,6 +27,7 @@ class HTTPClientService extends change_BaseService
 		return new HTTPClient($acceptCookies);
 	}
 }
+
 /**
  * @deprecated
  */
@@ -59,6 +57,9 @@ class HTTPClient
 	private $acceptCookies;
 	private $cookieName;
 
+	/**
+	 * @deprecated
+	 */
 	public function __construct($acceptCookies = true)
 	{
 		$this->curlResource = curl_init();
@@ -83,6 +84,9 @@ class HTTPClient
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function __destruct()
 	{
 		if ($this->curlResource !== null)
