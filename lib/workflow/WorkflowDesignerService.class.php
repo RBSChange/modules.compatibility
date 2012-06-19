@@ -2,7 +2,7 @@
 /**
  * @deprecated
  */
-class workflow_WorkflowDesignerService extends BaseService
+class workflow_WorkflowDesignerService extends change_BaseService
 {
 	/**
 	 * @deprecated

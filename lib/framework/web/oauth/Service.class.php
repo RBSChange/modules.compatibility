@@ -2,7 +2,7 @@
 /**
  * @deprecated In favor of Zend Framework class
  */
-class f_web_oauth_Service extends BaseService 
+class f_web_oauth_Service extends change_BaseService 
 {
 	/**
 	 * @var f_web_oauth_Service

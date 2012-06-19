@@ -5,7 +5,7 @@
 /**
  * @package framework.service
  */
-class HTTPClientService extends BaseService
+class HTTPClientService extends change_BaseService
 {
 
 	private static $instance;

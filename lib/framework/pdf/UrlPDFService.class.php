@@ -1,5 +1,5 @@
 <?php
-class UrlPDFService extends BaseService 
+class UrlPDFService extends change_BaseService 
 {
 	/**
 	 * @var Integer or String cache life time, in seconds, or in english (will be transformed with strtotime() function)

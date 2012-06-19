@@ -2,7 +2,7 @@
 /**
  * @package framework.mail
  */
-class MailService extends BaseService
+class MailService extends change_BaseService
 {
 
 	const CHANGE_SOURCE_ID_HEADER = 'X-Change-Source-Id';

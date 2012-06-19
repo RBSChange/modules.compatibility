@@ -110,7 +110,7 @@ abstract class f_util_TypeValidator
 			{
 				return true;
 			}
-		} catch (AutoloadException $e) { }
+		} catch (Exception $e) { }
 
 		return false;
 	}

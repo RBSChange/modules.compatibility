@@ -2,7 +2,7 @@
 /**
  * @deprecated use website_ShortenUrlService
  */
-class sharethis_ShortenUrlService extends BaseService
+class sharethis_ShortenUrlService extends change_BaseService
 {
 	/**
 	 * @deprecated

@@ -2,7 +2,7 @@
 /**
  * @deprecated use website_BBCodeParser
  */
-class website_BBCodeService extends BaseService
+class website_BBCodeService extends change_BaseService
 {
 	/**
 	 * @deprecated
