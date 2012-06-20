@@ -205,7 +205,9 @@ class compatibility_ClassReplacer
 			'strtoupper' => array('toUpper', 'f_util_StringUtils'),
 			'parse_assoc_string' => array('parseAssocString', 'f_util_StringUtils'),
 			'htmlToText' => array('htmlToText', 'f_util_StringUtils', 'f_util_HtmlUtils'),
-			'parseHtml' => array('renderHtmlFragment', 'f_util_StringUtils', 'f_util_HtmlUtils')
+			'parseHtml' => array('renderHtmlFragment', 'f_util_StringUtils', 'f_util_HtmlUtils'),
+			'buildWebeditPath' => array('buildProjectPath', 'f_util_FileUtils'),
+			'buildCachePath' => array('buildChangeCachePath', 'f_util_FileUtils'),
 		);		
 		$this->logPrefix = 'Fix Function rename: ';
 		$this->renameFunction($fullpath, $renameArray);
@@ -228,6 +230,15 @@ class compatibility_ClassReplacer
 			'users_persistentdocument_websitefrontendgroup' => 'users_persistentdocument_group',
 		
 			'users_FrontendgroupFeederBaseService' => 'users_GroupFeederBaseService',
+			
+			'WEBEDIT_HOME' => 'PROJECT_HOME',
+			'AG_DEVELOPMENT_MODE' => 'DEVELOPMENT_MODE',
+			'AG_LOGGING_LEVEL' => 'LOGGING_LEVEL',
+			'AG_SUPPORTED_LANGUAGES' => 'SUPPORTED_LANGUAGES',
+			'AG_UI_SUPPORTED_LANGUAGES' => 'UI_SUPPORTED_LANGUAGES',
+			'AG_DISABLE_BLOCK_CACHE' => 'DISABLE_BLOCK_CACHE',
+			'AG_DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE',
+			'DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE'
 		));
 		$this->logPrefix = 'Fix Users Classes: ';
 		$this->migrateFile($fullpath, true);
@@ -242,6 +253,12 @@ class compatibility_ClassReplacer
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
+			'buildRepositoryPath' => array('t' => 'err'),
+			'AG_WEBAPP_NAME' => array('t' => 'err'),
+			'MOD_NOTIFICATION_SENDER_HOST' => array('t' => 'err'),
+			'DEFAULT_SENDER_HOST' => array('t' => 'err'),
+			'MOD_NOTIFICATION_SENDER' => array('t' => 'err'),
+			'NOREPLY_DEFAULT_EMAIL' => array('t' => 'err')
 			));
 		$this->checkFile($fullpath);
 	}
