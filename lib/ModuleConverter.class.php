@@ -516,12 +516,13 @@ class compatibility_ModuleConverter
 	private function convertXMLDocument($splFileInfo)
 	{	
 		$modelName = 'modules_' . $this->moduleName . '/' . $splFileInfo->getBasename('.xml');
-		$this->logger->logInfo('Convert xml document: ' . $modelName);
+		$km = md5_file($splFileInfo->getPathname());
 		$doc = $this->loadFormattedXMLDocument($splFileInfo->getPathname());
+		$this->saveFormattedXMLDocument($doc, $splFileInfo->getPathname());
 		
-		if ($this->replaceDocumentProperties($doc, $modelName))
+		if ($km !== md5_file($splFileInfo->getPathname()))
 		{
-			$this->saveFormattedXMLDocument($doc, $splFileInfo->getPathname());
+			$this->logger->logInfo('Convert xml document: ' . $modelName);
 		}
 	}
 	
@@ -738,19 +739,13 @@ class compatibility_ModuleConverter
 		$pathInfos = $this->scanDir($this->srcDirectory . '/templates', '.html');
 		foreach ($pathInfos as $path => $splFileInfo)
 		{
-			if (!$templateReplacer->migrateTemplate($splFileInfo->getPathname()))
-			{
-				$this->logger->logError('Invalid Template: ' . $path);
-			}
+			$templateReplacer->migrateTemplate($splFileInfo->getPathname());
 		}
 		
 		$pathInfos = $this->scanDir($this->srcDirectory . '/lib/bindings', '.xml');
 		foreach ($pathInfos as $path => $splFileInfo)
 		{
-			if (!$templateReplacer->migrateTemplate($splFileInfo->getPathname()))
-			{
-				$this->logger->logError('Invalid Template: ' . $path);
-			}
+			$templateReplacer->migrateTemplate($splFileInfo->getPathname());
 		}
 				
 		$overPath = PROJECT_HOME . '/override/modules/'. $this->moduleName .'/templates';
@@ -758,10 +753,7 @@ class compatibility_ModuleConverter
 		{
 			foreach ($this->scanDir($overPath, '.html') as $path => $splFileInfo)
 			{
-				if (!$templateReplacer->migrateTemplate($splFileInfo->getPathname()))
-				{
-					$this->logger->logError('Invalid Template: ' . $path);
-				}
+				$templateReplacer->migrateTemplate($splFileInfo->getPathname());
 			}
 		}
 		
@@ -770,10 +762,7 @@ class compatibility_ModuleConverter
 		{
 			foreach ($this->scanDir($overPath, '.xml') as $path => $splFileInfo)
 			{
-				if (!$templateReplacer->migrateTemplate($splFileInfo->getPathname()))
-				{
-					$this->logger->logError('Invalid Template: ' . $path);
-				}
+				$templateReplacer->migrateTemplate($splFileInfo->getPathname());
 			}
 		}
 		

@@ -1,10 +1,12 @@
 <?php
 /**
  * @todo 
- * ClassResolver::getInstance()->appendToAutoloadFile($class, realpath($file));
- *  -> AutoloadBuilder::getInstance()->appendFile($file); 
- *  
- * DocumentService::generateUrl
+ * class ClassResolver 
+ * class ClassLoader
+ * class contactcard_ModuleService (sendNotificationToContactCallback, getNotificationParametersCallback, getNotificationParameters) 
+ * function generateUrl
+ * 
+ * 
  */
 class compatibility_ClassReplacer
 {
@@ -101,7 +103,7 @@ class compatibility_ClassReplacer
 		$this->logPrefix = 'Fix Controller: ';
 		$this->migrateFile($fullpath);
 		
-		//Migrate Framework Classes
+		//Migrate Framework Classes And Core Modules
 		$this->setClasses(array(
 			'f_web_CSSDeclaration' => 'website_CSSDeclaration',
 			'f_web_CSSRule' => 'website_CSSRule',
@@ -112,7 +114,8 @@ class compatibility_ClassReplacer
 			'f_persistentdocument_PersistentDocumentImpl' => 'f_persistentdocument_PersistentDocument',
 			'commands_AbstractChangeCommand' => 'c_ChangescriptCommand',
 			'commands_AbstractChangedevCommand' => 'c_ChangescriptCommand',
-			'BaseService' => 'change_BaseService'
+			'BaseService' => 'change_BaseService',
+			'featurepacka_IdsContainer' => 'filter_StaticQuery'
 		));
 		$this->logPrefix = 'Fix Framework Classes: ';
 		$this->migrateFile($fullpath);
@@ -219,6 +222,19 @@ class compatibility_ClassReplacer
 		));
 		$this->logPrefix = 'Fix Users Classes: ';
 		$this->migrateFile($fullpath, true);
+		
+		
+		//Code an class checking
+		$this->setClasses(array(
+			'ClassResolver' => array('t' => 'err'),
+			'ClassLoader' => array('t' => 'err'),
+			'contactcard_ModuleService' => array('t' => 'warn'),
+			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
+			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
+			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
+			'generateUrl' => array('t' => 'warn'),		
+			));
+		$this->checkFile($fullpath);
 	}
 	
 	public function convertXMLFile($fullpath)
@@ -242,6 +258,48 @@ class compatibility_ClassReplacer
 		$this->logPrefix = 'Fix Users models: ';
 		$this->replaceFile($fullpath);
 		
+	}
+	
+	public function checkFile($fullpath)
+	{
+		$tokens = token_get_all(file_get_contents($fullpath));
+		$deprecated = false;
+		foreach ($tokens as $tn => $tv)
+		{
+			if (is_array($tv))
+			{
+				if ($tv[0] === T_STRING)
+				{
+					$kw = $tv[0];
+					if (!isset($this->classes[$kw])) {continue;}
+					$this->classes[$kw]['tk'] = $tn;
+					
+					$d = $this->classes[$kw];
+					if (isset($d['b']))
+					{
+						if (!isset($this->classes[$d['b']]['tk'])) {continue;}
+					}
+					
+					
+					if ($d['t'] === 'err')
+					{
+						$this->verbose->logError('Invalid usage of ' . $kw. ' in ' . $fullpath);
+					}
+					elseif ($d['t'] === 'warn')
+					{
+						$this->verbose->logWarn('Usage of ' . $kw. ' in ' . $fullpath);
+					}
+				}
+				elseif (!$deprecated && ($tv[0] === T_COMMENT || $tv[0] === T_DOC_COMMENT))
+				{
+					if (strpos(strtolower($tv[1]), 'deprecated') !== false)
+					{
+						$deprecated = true;
+						$this->verbose->logWarn('Deprecated keyword in : '. $fullpath);
+					}
+				}
+			}
+		}
 	}
 
 	public function migrateFile($fullpath, $inString = false)
