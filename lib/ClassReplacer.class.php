@@ -72,6 +72,15 @@ class compatibility_ClassReplacer
 //		return self::$instance;
 //	}'));
 		$this->replaceFile($fullpath);
+		
+		
+		$classes = array(
+			'addTreeAttributes' => array('t' => 'warn'),
+			'generateUrl' => array('t' => 'err'),
+		);
+		
+		$this->setClasses($classes);
+		$this->checkFile($fullpath);
 	}
 	
 	public function convertPHPFile($fullpath)
@@ -233,8 +242,6 @@ class compatibility_ClassReplacer
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
-			'generateUrl' => array('t' => 'warn'),
-			'addTreeAttributes' => array('t' => 'warn'),
 			));
 		$this->checkFile($fullpath);
 	}
@@ -272,7 +279,7 @@ class compatibility_ClassReplacer
 			{
 				if ($tv[0] === T_STRING)
 				{
-					$kw = $tv[0];
+					$kw = $tv[1];
 					if (!isset($this->classes[$kw])) {continue;}
 					$this->classes[$kw]['tk'] = $tn;
 					

@@ -74,6 +74,8 @@ class compatibility_ModuleConverter
 		// convert: persistentdocument
 		$this->convertPersistentDocument();
 		
+		
+		
 		// convert: setup
 		
 		// convert: style
@@ -486,7 +488,6 @@ class compatibility_ModuleConverter
 		}
 	}
 	
-	
 	protected function convertXML()
 	{
 		$phpFiles = $this->scanDir($this->srcDirectory, '.xml');
@@ -507,6 +508,22 @@ class compatibility_ModuleConverter
 			/* @var $splFileInfo SplFileInfo */
 			if (count(explode(DIRECTORY_SEPARATOR, $path)) > 2) {continue;}
 			$this->convertXMLDocument($splFileInfo);
+		}
+		
+		$phpFiles = $this->scanDir($directory, '.php');	
+		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+		$classes = array(
+			'getIndexedDocument' => array('t' => 'err'),
+			'indexer_IndexableDocument' => array('t' => 'warn'),
+			'indexer_BackofficeIndexedDocument' => array('t' => 'warn'),
+			'addTreeAttributes' => array('t' => 'err'),
+			'addFormProperties' => array('t' => 'err'),
+		);
+		foreach ($phpFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$classReplacer->setClasses($classes);
+			$classReplacer->checkFile($splFileInfo->getPathname());
 		}
 	}
 	
@@ -780,7 +797,7 @@ class compatibility_ModuleConverter
 		{
 			/* @var $splFileInfo SplFileInfo */
 			$classReplacer->convertPHPService($splFileInfo->getPathname());
-		}
+		}		
 	}
 	
 	
