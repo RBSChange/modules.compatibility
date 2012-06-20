@@ -228,6 +228,7 @@ class compatibility_ClassReplacer
 		$this->setClasses(array(
 			'ClassResolver' => array('t' => 'err'),
 			'ClassLoader' => array('t' => 'err'),
+			'website_WebsiteModuleService' => array('t' => 'err'),
 			'contactcard_ModuleService' => array('t' => 'warn'),
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
