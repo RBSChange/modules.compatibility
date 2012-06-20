@@ -233,7 +233,8 @@ class compatibility_ClassReplacer
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
-			'generateUrl' => array('t' => 'warn'),		
+			'generateUrl' => array('t' => 'warn'),
+			'addTreeAttributes' => array('t' => 'warn'),
 			));
 		$this->checkFile($fullpath);
 	}
