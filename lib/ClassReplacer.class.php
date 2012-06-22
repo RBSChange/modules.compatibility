@@ -149,7 +149,16 @@ class compatibility_ClassReplacer
 		//String replacements in PHP classes
 		$this->setClasses(array(
 			'website_WebsiteModuleService::getInstance()->getCurrentWebsite()' => 'website_WebsiteService::getInstance()->getCurrentWebsite()',
-			'f_mvc_HTTPRequest::getInstance()' => 'change_Controller::getInstance()->getRequest()'
+			'f_mvc_HTTPRequest::getInstance()' => 'change_Controller::getInstance()->getRequest()',
+			
+			'WEBEDIT_HOME' => 'PROJECT_HOME',
+			'AG_DEVELOPMENT_MODE' => 'DEVELOPMENT_MODE',
+			'AG_LOGGING_LEVEL' => 'LOGGING_LEVEL',
+			'AG_SUPPORTED_LANGUAGES' => 'SUPPORTED_LANGUAGES',
+			'AG_UI_SUPPORTED_LANGUAGES' => 'UI_SUPPORTED_LANGUAGES',
+			'AG_DISABLE_BLOCK_CACHE' => 'DISABLE_BLOCK_CACHE',
+			'AG_DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE',
+			'DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE'
 		));
 		$this->logPrefix = 'Fix Classes: ';
 		$this->replaceFile($fullpath);
@@ -254,16 +263,7 @@ class compatibility_ClassReplacer
 			'users_persistentdocument_frontendgroup' => 'users_persistentdocument_group',
 			'users_persistentdocument_websitefrontendgroup' => 'users_persistentdocument_group',
 		
-			'users_FrontendgroupFeederBaseService' => 'users_GroupFeederBaseService',
-			
-			'WEBEDIT_HOME' => 'PROJECT_HOME',
-			'AG_DEVELOPMENT_MODE' => 'DEVELOPMENT_MODE',
-			'AG_LOGGING_LEVEL' => 'LOGGING_LEVEL',
-			'AG_SUPPORTED_LANGUAGES' => 'SUPPORTED_LANGUAGES',
-			'AG_UI_SUPPORTED_LANGUAGES' => 'UI_SUPPORTED_LANGUAGES',
-			'AG_DISABLE_BLOCK_CACHE' => 'DISABLE_BLOCK_CACHE',
-			'AG_DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE',
-			'DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE'
+			'users_FrontendgroupFeederBaseService' => 'users_GroupFeederBaseService'
 		));
 		$this->logPrefix = 'Fix Users Classes: ';
 		$this->migrateFile($fullpath, true);		
