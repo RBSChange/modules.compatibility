@@ -317,9 +317,20 @@ class compatibility_ClassReplacer
 			"    " => "\t",));	
 		
 		$this->logPrefix = 'Fix Users models: ';
-		$this->replaceFile($fullpath);
+		$content = file_get_contents($fullpath);
+		$content = str_replace(array_keys($this->classes), array_values($this->classes), $content);
+		$content = preg_replace_callback('/\$\{trans:[^,}]+/', array($this, 'normalizeI18nKey'), $content);
 		
-		
+		file_put_contents($fullpath, $content);	
+	}
+	
+	/**
+	 * @param string[] $matches
+	 * @return string
+	 */
+	public function normalizeI18nKey($matches)
+	{
+		return strtolower($matches[0]);
 	}
 	
 	public function checkFile($fullpath)
