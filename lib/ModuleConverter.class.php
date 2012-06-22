@@ -71,6 +71,7 @@ class compatibility_ModuleConverter
 		$this->convertForms();
 		
 		// convert: i18n
+		$this->convertI18n();
 				
 		// convert: persistentdocument
 		$this->convertPersistentDocument();
@@ -422,7 +423,15 @@ class compatibility_ModuleConverter
 			/* @var $element DOMElement */
 			if ($element->hasAttribute('name'))
 			{
-				if ($element->hasAttribute('label'))
+				if ($element->hasAttribute('labeli18n'))
+				{
+					$element->setAttribute('labeli18n', strtolower($element->getAttribute('labeli18n')));
+					if ($element->hasAttribute('label'))
+					{
+						$element->removeAttribute('label');
+					}
+				}
+				elseif ($element->hasAttribute('label'))
 				{
 					$string = $element->getAttribute('label');
 					$key = $this->convertKeyIgnoreFormat($string);
@@ -539,12 +548,66 @@ class compatibility_ModuleConverter
 	
 	protected function convertXML()
 	{
-		$phpFiles = $this->scanDir($this->srcDirectory, '.xml');
+		$xmlFiles = $this->scanDir($this->srcDirectory, '.xml');
 		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
-		foreach ($phpFiles as $path => $splFileInfo)
+		foreach ($xmlFiles as $path => $splFileInfo)
 		{
 			/* @var $splFileInfo SplFileInfo */
 			$classReplacer->convertXMLFile($splFileInfo->getPathname());
+		}
+	}
+	
+	protected function convertI18n()
+	{
+		$baseDir = $this->srcDirectory . '/i18n';
+		if (!is_dir($baseDir))
+		{
+			return;
+		}
+		$xmlFiles = $this->scanDir($baseDir, '.xml');
+		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+		foreach ($xmlFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$doc = $this->loadFormattedXMLDocument($splFileInfo->getPathname());
+			$parts = explode('/', $path);
+			list($lcId, ) = explode('.', array_pop($parts));
+			$subKeyParts = implode('.', $parts);
+			if ($subKeyParts != strtolower($subKeyParts))
+			{
+				$this->logger->logError('Invalid i18n file path : ' . $subKeyParts);
+			}
+			
+			/* @var $de DOMElement */
+			$de = $doc->documentElement;
+			$de->setAttribute('baseKey', 'm.' . $this->moduleName . $subKeyParts);
+			$de->setAttribute('lcid', $lcId);
+			$ids = array();
+			$toDelete = array();
+			foreach ($doc->getElementsByTagName('key') as $element)
+			{
+				/* @var $element DOMElement */
+				$id = strtolower($element->getAttribute('id'));
+				$element->setAttribute('id', $id);
+				if ($element->hasAttribute('updated'))
+				{
+					$element->removeAttribute('updated');
+				}
+				if (isset($ids[$id]))
+				{
+					$this->logger->logError('Duplicate id: ' . $id . ' in ' . $path);
+					$toDelete[] = $ids[$id];
+				}	
+				$ids[$id] = $element;
+			}
+			
+			foreach ($toDelete as $element)
+			{
+				/* @var $element DOMElement */
+				$element->parentNode->replaceChild($doc->createComment($doc->saveXML($element)), $element);
+			}
+			
+			$this->saveFormattedXMLDocument($doc, $splFileInfo->getPathname());
 		}
 	}
 	
