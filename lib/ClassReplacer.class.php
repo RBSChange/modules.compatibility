@@ -531,7 +531,7 @@ class compatibility_ClassReplacer
 						break;
 						
 					case T_COMMENT :
-						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $str);
+						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $tv[1]);
 						if ($str !== $tv[1])
 						{
 							$updated = true;
