@@ -83,6 +83,28 @@ class compatibility_ClassReplacer
 		$this->checkFile($fullpath);
 	}
 	
+	public function convertPHPBlock($fullpath)
+	{
+		$this->logPrefix = 'Fix Block: ';
+		$this->setClasses(array(
+			'$this->getPage()' => '$this->getContext()'));
+		$this->replaceFile($fullpath);
+	}
+	
+	public function convertPHPCommand($fullpath)
+	{
+		$this->logPrefix = 'Fix Command: ';
+
+		$classes = array(
+			'getParent' => array('t' => 'warn', 'msg' => 'use $this directly'),
+			'forward' => array('t' => 'warn', 'msg' => 'use executeCommand'),
+			'changecmd' => array('t' => 'warn', 'msg' => 'use executeCommand'),
+			'systemExec' => array('t' => 'err'),
+		);	
+		$this->setClasses($classes);
+		$this->checkFile($fullpath);
+	}
+	
 	public function convertPHPFile($fullpath)
 	{
 		//Migrate Controller
@@ -107,27 +129,30 @@ class compatibility_ClassReplacer
 				'ChangeRequest' => 'change_Request',
 				'View' => 'change_View',
 				'f_view_BaseView' => 'change_View',
-				'WebRequest' => 'change_Request'					
+				'WebRequest' => 'change_Request',
+
+				'f_web_CSSDeclaration' => 'website_CSSDeclaration',
+				'f_web_CSSRule' => 'website_CSSRule',
+				'f_web_CSSStylesheet' => 'website_CSSStylesheet',
+				'f_web_CSSVariables' => 'website_CSSVariables',
+				'f_permission_RoleService' => 'change_RoleService',
+				'f_permission_PermissionService' => 'change_PermissionService',
+				'f_persistentdocument_PersistentDocumentImpl' => 'f_persistentdocument_PersistentDocument',
+				'commands_AbstractChangeCommand' => 'c_ChangescriptCommand',
+				'commands_AbstractChangedevCommand' => 'c_ChangescriptCommand',
+				'BaseService' => 'change_BaseService',
+				'featurepacka_IdsContainer' => 'filter_StaticQuery'
 		));	
-		$this->logPrefix = 'Fix Controller: ';
+		$this->logPrefix = 'Rename generic classes: ';
 		$this->migrateFile($fullpath);
 		
-		//Migrate Framework Classes And Core Modules
+		//String replacements in PHP classes
 		$this->setClasses(array(
-			'f_web_CSSDeclaration' => 'website_CSSDeclaration',
-			'f_web_CSSRule' => 'website_CSSRule',
-			'f_web_CSSStylesheet' => 'website_CSSStylesheet',
-			'f_web_CSSVariables' => 'website_CSSVariables',
-			'f_permission_RoleService' => 'change_RoleService',
-			'f_permission_PermissionService' => 'change_PermissionService',
-			'f_persistentdocument_PersistentDocumentImpl' => 'f_persistentdocument_PersistentDocument',
-			'commands_AbstractChangeCommand' => 'c_ChangescriptCommand',
-			'commands_AbstractChangedevCommand' => 'c_ChangescriptCommand',
-			'BaseService' => 'change_BaseService',
-			'featurepacka_IdsContainer' => 'filter_StaticQuery'
+			'website_WebsiteModuleService::getInstance()->getCurrentWebsite()' => 'website_WebsiteService::getInstance()->getCurrentWebsite()',
+			'f_mvc_HTTPRequest::getInstance()' => 'change_Controller::getInstance()->getRequest()'
 		));
-		$this->logPrefix = 'Fix Framework Classes: ';
-		$this->migrateFile($fullpath);
+		$this->logPrefix = 'Fix Classes: ';
+		$this->replaceFile($fullpath);
 		
 		//Remove K Constant	
 		$this->setClasses(array(
@@ -241,18 +266,25 @@ class compatibility_ClassReplacer
 			'DISABLE_SIMPLECACHE' => 'DISABLE_DATACACHE'
 		));
 		$this->logPrefix = 'Fix Users Classes: ';
-		$this->migrateFile($fullpath, true);
-		
+		$this->migrateFile($fullpath, true);		
 		
 		//Code an class checking
 		$this->setClasses(array(
-			'ClassResolver' => array('t' => 'err'),
-			'ClassLoader' => array('t' => 'err'),
-			'website_WebsiteModuleService' => array('t' => 'err'),
+			'f_Locale' => array('t' => 'err', 'msg' => 'use LocaleService::getInstance()->trans()'),
+			'f_mvc_HTTPRequest' => array('t' => 'warn'),
+			'f_mvc_FakeHttpRequest' => array('t' => 'warn'),
+			'f_mvc_Session' => array('t' => 'warn'),
+			'f_mvc_HTTPSession' => array('t' => 'warn'),
+			'date_DateFormat' => array('t' => 'err', 'msg' => 'use date_Formatter'),
+			'ClassResolver' => array('t' => 'err', 'msg' => 'use change_AutoloadBuilder'),
+			'ClassLoader' => array('t' => 'err', 'msg' => 'use change_AutoloadBuilder'),
+			'website_WebsiteModuleService' => array('t' => 'err', 'msg' => 'use website_WebsiteService or website_PageService'),
 			'contactcard_ModuleService' => array('t' => 'warn'),
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParametersCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
+			'getOriginalModuleName' => array('t' => 'err', 'msg' => 'replaced by getModuleName in persistent models'),
+			'getOriginalModelName' => array('t' => 'err', 'msg' => 'replaced by getName in persistent models'),
 			'buildRepositoryPath' => array('t' => 'err'),
 			'AG_WEBAPP_NAME' => array('t' => 'err'),
 			'MOD_NOTIFICATION_SENDER_HOST' => array('t' => 'err'),
@@ -279,10 +311,14 @@ class compatibility_ClassReplacer
 			'modules_users_websitefrontendgroup' => 'modules_users_group',
 			'modules_users_backenduser' => 'modules_users_user',
 			'modules_users_frontenduser' => 'modules_users_user',
-			'modules_users_websitefrontenduser' => 'modules_users_user',));	
+			'modules_users_websitefrontenduser' => 'modules_users_user',	
+			'${transui:' => '${trans:',
+			"\r\n" => PHP_EOL,	
+			"    " => "\t",));	
 		
 		$this->logPrefix = 'Fix Users models: ';
 		$this->replaceFile($fullpath);
+		
 		
 	}
 	
@@ -309,11 +345,19 @@ class compatibility_ClassReplacer
 					
 					if ($d['t'] === 'err')
 					{
-						$this->verbose->logError('Invalid usage of ' . $kw. ' in ' . $fullpath);
+						$this->verbose->logError($kw. ' -> Invalid usage in ' . $fullpath);
+						if (isset($d['msg']))
+						{
+							$this->verbose->logInfo('	' . $d['msg']);
+						}
 					}
 					elseif ($d['t'] === 'warn')
 					{
-						$this->verbose->logWarn('Usage of ' . $kw. ' in ' . $fullpath);
+						$this->verbose->logWarn($kw. ' -> Suscpicious usage in ' . $fullpath);
+						if (isset($d['msg']))
+						{
+							$this->verbose->logInfo('	' . $d['msg']);
+						}
 					}
 				}
 				elseif (!$deprecated && ($tv[0] === T_COMMENT || $tv[0] === T_DOC_COMMENT))
@@ -478,6 +522,15 @@ class compatibility_ClassReplacer
 						
 					case T_DOC_COMMENT :
 						$str = str_replace($commentCheck, $commentReplace, $tv[1]);
+						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $str);
+						if ($str !== $tv[1])
+						{
+							$updated = true;
+						}
+						$content[] = $str;
+						break;
+						
+					case T_COMMENT :
 						$str = str_replace(array("\r\n", "    "), array(PHP_EOL, "\t"), $str);
 						if ($str !== $tv[1])
 						{

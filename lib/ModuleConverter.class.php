@@ -49,6 +49,9 @@ class compatibility_ModuleConverter
 		// convert: config
 		$this->convertConfig();
 		
+		// convert: patch
+		$this->convertPatch();
+		
 		// convert global : php files
 		$this->convertPHP();
 		
@@ -68,17 +71,14 @@ class compatibility_ModuleConverter
 		$this->convertForms();
 		
 		// convert: i18n
-		
-		// convert: patch
-		
+				
 		// convert: persistentdocument
 		$this->convertPersistentDocument();
-		
-		
 		
 		// convert: setup
 		
 		// convert: style
+		$this->convertStyle();
 		
 		// convert: templates
 		$this->convertTemplates();
@@ -92,6 +92,7 @@ class compatibility_ModuleConverter
 		// convert: lib/bindings
 		
 		// convert: lib/blocks
+		$this->convertBlocks();
 		
 		// convert: lib/services
 		$this->convertServices();
@@ -237,6 +238,43 @@ class compatibility_ModuleConverter
 					$this->logger->logInfo('remove unused /config/' . $name . ' file');
 				}
 			}
+		}
+	}
+	
+	protected function convertPatch()
+	{
+		$baseDir = $this->srcDirectory . '/patch';
+		if (!is_dir($baseDir))
+		{
+			return;
+		}
+		
+		$deleteBaseDir = true;
+		$panelPaths = $this->scanDir($baseDir, '.php');
+		foreach ($panelPaths as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			if ($splFileInfo->getFilename() !== 'install.php')
+			{
+				continue;
+			}
+			
+			$parentInfo = $splFileInfo->getPathInfo();
+			if (substr($parentInfo->getFilename(), 0, 2) !== '04')
+			{
+				$this->rmdir($parentInfo->getPathName());
+				$this->logger->logInfo('Delete patch ' . $parentInfo->getFilename());
+			}
+			else
+			{
+				$deleteBaseDir = false;
+			}
+		}
+		
+		if ($deleteBaseDir)
+		{
+			$this->rmdir($baseDir);
+			$this->logger->logInfo('Delete empty patch folder');
 		}
 	}
 	
@@ -435,6 +473,17 @@ class compatibility_ModuleConverter
 			$this->logger->logInfo('Rename: ' . $directory . ' to ' . $newBaseName . '/dev');
 			rename($directory, $newBaseName . '/dev');
 		}
+		
+		if (is_dir($newBaseName))
+		{
+			$phpFiles = $this->scanDir($newBaseName, '.php');
+			$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+			foreach ($phpFiles as $path => $splFileInfo)
+			{
+				/* @var $splFileInfo SplFileInfo */
+				$classReplacer->convertPHPCommand($splFileInfo->getPathname());
+			}
+		}
 	}
 	
 	protected function convertForms()
@@ -535,6 +584,7 @@ class compatibility_ModuleConverter
 		$modelName = 'modules_' . $this->moduleName . '/' . $splFileInfo->getBasename('.xml');
 		$km = md5_file($splFileInfo->getPathname());
 		$doc = $this->loadFormattedXMLDocument($splFileInfo->getPathname());
+		$this->replaceDocumentProperties($doc, $modelName);
 		$this->saveFormattedXMLDocument($doc, $splFileInfo->getPathname());
 		
 		if ($km !== md5_file($splFileInfo->getPathname()))
@@ -682,6 +732,7 @@ class compatibility_ModuleConverter
 			{
 				case "email" :
 					$params = array();
+					break;
 				case "min" :
 				case "max" :
 					$params = array($name => $parameter);
@@ -724,6 +775,23 @@ class compatibility_ModuleConverter
 		}
 	}
 	
+	protected function convertStyle()
+	{
+		$bocss = $this->srcDirectory . '/style/backoffice.css';
+		if (file_exists($bocss))
+		{
+			$css = website_CSSStylesheet::getInstanceFromFile($bocss);
+			foreach ($css->getCSSRules() as $rule)
+			{
+				/* @var $rule website_CSSRule */
+				$matches = array();
+				if (preg_match('/treechildren::-moz-tree-image\(modules_[a-zA-Z0-9_]+\)/', $rule->getSelectorText(), $matches))
+				{
+					$this->logger->logWarn('Style declaration for document icon detected in: ' . $bocss);
+				}
+			}
+		}
+	}
 	
 	protected function convertTemplates()
 	{
@@ -800,6 +868,17 @@ class compatibility_ModuleConverter
 		}		
 	}
 	
+	protected function convertBlocks()
+	{
+		$directory = $this->srcDirectory . '/lib/blocks';
+		$phpFiles = $this->scanDir($directory, '.php');
+		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+		foreach ($phpFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$classReplacer->convertPHPBlock($splFileInfo->getPathname());
+		}		
+	}
 	
 	/**
 	 * @param string[] $matches

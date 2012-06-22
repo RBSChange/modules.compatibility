@@ -118,7 +118,7 @@ class compatibility_TemplateReplacer
 			$result = $line;
 		}
 		
-		if (preg_match_all('/="(get[a-z0-9A-Z\/]+)AsHtml"/', $line, $matches, PREG_SET_ORDER))
+		if (preg_match_all('/="([a-z0-9A-Z\/]+get[a-z0-9A-Z]+)AsHtml"/', $line, $matches, PREG_SET_ORDER))
 		{
 			foreach ($matches as $match)
 			{
@@ -127,7 +127,7 @@ class compatibility_TemplateReplacer
 			$result = $line;
 		}
 		
-		if (preg_match_all('/\$\{(get[a-z0-9A-Z\/]+)AsHtml\}/', $line, $matches, PREG_SET_ORDER))
+		if (preg_match_all('/\$\{([a-z0-9A-Z\/]+get[a-z0-9A-Z]+)AsHtml\}/', $line, $matches, PREG_SET_ORDER))
 		{
 			foreach ($matches as $match)
 			{
@@ -222,6 +222,17 @@ class compatibility_TemplateReplacer
 			{
 				$line = str_replace($match[0], $this->convertI18nAttributes($match), $line);
 			}
+			$result = $line;
+		}
+		
+		$tmpResult = str_replace(
+			array('<tal:block change:loadhandler="form_FormLoadHandler" />', "\r\n", "    "),
+			array('<script change:javascript="head \'modules.form.lib.js.form\'"></script>', PHP_EOL, "\t"),
+			$line
+		);
+		if ($tmpResult !== $line)
+		{
+			$line = $tmpResult;
 			$result = $line;
 		}
 		
