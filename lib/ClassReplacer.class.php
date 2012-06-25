@@ -285,6 +285,8 @@ class compatibility_ClassReplacer
 			'getNotificationParameters' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
 			'getOriginalModuleName' => array('t' => 'err', 'msg' => 'replaced by getModuleName in persistent models'),
 			'getOriginalModelName' => array('t' => 'err', 'msg' => 'replaced by getName in persistent models'),
+			'publishOnDayChange' => array('t' => 'err', 'msg' => 'replaced by usePublicationDates in persistent models'),
+			'isLinkedToRootFolder' => array('t' => 'err', 'msg' => 'does not exist any more in persistent models'),
 			'buildRepositoryPath' => array('t' => 'err'),
 			'AG_WEBAPP_NAME' => array('t' => 'err'),
 			'MOD_NOTIFICATION_SENDER_HOST' => array('t' => 'err'),

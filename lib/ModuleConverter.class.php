@@ -669,12 +669,28 @@ class compatibility_ModuleConverter
 				return;
 			}
 
-			$schema = "http://www.rbs.fr/schema/change-document/1.0 http://www.rbschange.fr/static/schema/change-document/4.0.xsd";
+			$schema = "http://www.rbs.fr/schema/change-document/1.0 http://www.rbschange.fr/schema/persistentdocument-4.0.xsd";
 			$doc->documentElement->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', $schema);
 
 			if ($doc->documentElement->hasAttribute('inject'))
 			{
 				$modelName = $doc->documentElement->getAttribute('inject');
+			}
+			if ($doc->documentElement->hasAttribute('linked-to-root-module'))
+			{
+				if ($doc->documentElement->getAttribute('linked-to-root-module') == 'false')
+				{
+					$doc->documentElement->removeAttribute('linked-to-root-module');
+				}
+				else
+				{
+					$this->logger->logError('Old "linked-to-root-module" attribute found on model ' . $modelName . '. It is not handeled any more, update your code to do it manually. Example in form_RecipientGroupService::postInsert().');
+				}
+			}
+			if ($doc->documentElement->hasAttribute('publish-on-day-change'))
+			{
+				$doc->documentElement->setAttribute('use-publication-dates', $doc->documentElement->getAttribute('publish-on-day-change'));
+				$doc->documentElement->removeAttribute('publish-on-day-change');
 			}
 			
 			$forms = $doc->getElementsByTagName('form');
