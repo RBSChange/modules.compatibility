@@ -879,11 +879,22 @@ class compatibility_ModuleConverter
 		
 		if (!PHPTAL_Dom_Defs::getInstance()->isHandledNamespace(PHPTAL_Namespace_CHANGE::NAMESPACE_URI))
 		{
-			PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_CHANGE());
+			$changeNS = new PHPTAL_Namespace_CHANGE();
+			PHPTAL_Dom_Defs::getInstance()->registerNamespace($changeNS);
 			$registry = PHPTAL_TalesRegistry::getInstance();
 			foreach (Framework::getConfigurationValue('tal/prefix') as $prefix => $class)
 			{
 				$registry->registerPrefix($prefix, array($class, $prefix));
+			}
+			$talpath  = $this->srcDirectory . '/lib/phptal';
+			if (is_dir($talpath))
+			{
+				foreach ($this->scanDir($this->srcDirectory . '/lib/phptal', '.php') as $splFileInfo)
+				{
+					/* @var $splFileInfo SplFileInfo */
+					require_once $splFileInfo->getPathname();
+				}
+				call_user_func(array($this->moduleName . '_PHPTAL_CHANGE', 'addAttributes'), $changeNS);
 			}
 		}
 		
