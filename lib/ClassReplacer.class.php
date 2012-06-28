@@ -91,6 +91,24 @@ class compatibility_ClassReplacer
 		$this->replaceFile($fullpath);
 	}
 	
+	public function convertPHPView($fullpath)
+	{
+		$this->logPrefix = 'Fix view: ';
+		$this->setClasses(array(
+			'$this->getJsService()' => 'website_JsService::getInstance()',
+			'$this->getStyleService()' => 'website_StyleService::getInstance()'
+		));
+		$this->replaceFile($fullpath);
+		
+		
+		$classes = array(
+			'getJsService' => array('t' => 'err'),
+			'getStyleService' => array('t' => 'err'),
+		);
+		$this->setClasses($classes);
+		$this->checkFile($fullpath);
+	}
+	
 	public function convertPHPCommand($fullpath)
 	{
 		$this->logPrefix = 'Fix Command: ';
@@ -150,6 +168,8 @@ class compatibility_ClassReplacer
 		$this->setClasses(array(
 			'website_WebsiteModuleService::getInstance()->getCurrentWebsite()' => 'website_WebsiteService::getInstance()->getCurrentWebsite()',
 			'f_mvc_HTTPRequest::getInstance()' => 'change_Controller::getInstance()->getRequest()',
+			'generic_persistentdocument_Documentmodel' => 'generic_persistentdocument_documentmodel',
+			'modules_generic/Document' => 'modules_generic/document',
 			
 			'WEBEDIT_HOME' => 'PROJECT_HOME',
 			'AG_DEVELOPMENT_MODE' => 'DEVELOPMENT_MODE',
@@ -242,6 +262,7 @@ class compatibility_ClassReplacer
 			'parseHtml' => array('renderHtmlFragment', 'f_util_StringUtils', 'f_util_HtmlUtils'),
 			'buildWebeditPath' => array('buildProjectPath', 'f_util_FileUtils'),
 			'buildCachePath' => array('buildChangeCachePath', 'f_util_FileUtils'),
+			'getPublicationstatusLocaleKey' => array('getStatusLocaleKey', 'DocumentHelper')
 		);		
 		$this->logPrefix = 'Fix Function rename: ';
 		$this->renameFunction($fullpath, $renameArray);
@@ -292,9 +313,18 @@ class compatibility_ClassReplacer
 			'MOD_NOTIFICATION_SENDER_HOST' => array('t' => 'err'),
 			'DEFAULT_SENDER_HOST' => array('t' => 'err'),
 			'MOD_NOTIFICATION_SENDER' => array('t' => 'err'),
-			'NOREPLY_DEFAULT_EMAIL' => array('t' => 'err')
+			'NOREPLY_DEFAULT_EMAIL' => array('t' => 'err'),
+			'ModuleService' => array(),
+			'getModules' => array('b' => 'ModuleService', 't' => 'err', 'msg' => 'use getPackageNames'),
+			'getLinkedModules' => array('b' => 'ModuleService', 't' => 'err'),
 			));
 		$this->checkFile($fullpath);
+		
+		$content = file_get_contents($fullpath);
+		if (strpos($content, '&modules.') || strpos($content, '&framework.'))
+		{
+			$this->verbose->logError('Old locale key found in: ' . $fullpath);
+		}
 	}
 	
 	public function convertXMLFile($fullpath)
@@ -307,13 +337,15 @@ class compatibility_ClassReplacer
 			'modules_users/backenduser' => 'modules_users/user',
 			'modules_users/frontenduser' => 'modules_users/user',
 			'modules_users/websitefrontenduser' => 'modules_users/user',
+			'modules_generic/Document' => 'modules_generic/document',
 		
 			'modules_users_frontendgroup' => 'modules_users_group',
 			'modules_users_dynamicfrontendgroup' => 'modules_users_dynamicgroup',
 			'modules_users_websitefrontendgroup' => 'modules_users_group',
 			'modules_users_backenduser' => 'modules_users_user',
 			'modules_users_frontenduser' => 'modules_users_user',
-			'modules_users_websitefrontenduser' => 'modules_users_user',	
+			'modules_users_websitefrontenduser' => 'modules_users_user',
+			'generic_persistentdocument_Documentmodel' => 'generic_persistentdocument_documentmodel',
 			'${transui:' => '${trans:',
 			"\r\n" => PHP_EOL,	
 			"    " => "\t",));	
@@ -350,6 +382,8 @@ class compatibility_ClassReplacer
 					$this->classes[$kw]['tk'] = $tn;
 					
 					$d = $this->classes[$kw];
+					if (!isset($d['t'])) {continue;}
+					
 					if (isset($d['b']))
 					{
 						if (!isset($this->classes[$d['b']]['tk'])) {continue;}

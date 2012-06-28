@@ -85,6 +85,7 @@ class compatibility_ModuleConverter
 		$this->convertTemplates();
 		
 		// convert: views
+		$this->convertViews();
 		
 		// convert: webapp
 		
@@ -701,10 +702,10 @@ class compatibility_ModuleConverter
 			}
 				
 			$properties = $doc->getElementsByTagName('properties');
-			$this->replacePropertiList($properties, $modelName);
+			$this->replacePropertyList($properties, $modelName);
 	
 			$properties = $doc->getElementsByTagName('serializedproperties');
-			$this->replacePropertiList($properties, $modelName);
+			$this->replacePropertyList($properties, $modelName);
 				
 			return true;
 		}
@@ -719,18 +720,15 @@ class compatibility_ModuleConverter
 	 * @param DOMNodeList $properties
 	 * @param string $modelName
 	 */
-	private function replacePropertiList($properties, $modelName)
+	private function replacePropertyList($properties, $modelName)
 	{
 		if ($properties->length == 0)
 		{
 			return false;
 		}
-		$list = $properties->item(0)->getElementsByTagName('add');
-		if ($list->length == 0)
-		{
-			return false;
-		}
-	
+		$container = $properties->item(0);
+		
+		$list = $container->getElementsByTagName('add');
 		while ($list->length > 0)
 		{
 			$element = $list->item(0);
@@ -743,12 +741,41 @@ class compatibility_ModuleConverter
 			{
 				$property->setAttribute($attr->nodeName, $attr->nodeValue);
 			}
+						
 			$constraints = $element->getElementsByTagName('constraints');
 			if ($constraints->length === 1)
 			{
 				$this->convertConstraints($constraints->item(0)->nodeValue, $property, $modelName);
 			}
 			$element->parentNode->replaceChild($property, $element);
+		}
+		
+		$list = $container->getElementsByTagName('property');
+		foreach ($list as $property)
+		{
+			/* @var $property DOMElement */
+			if ($property->hasAttribute('type'))
+			{
+				$documentType = $property->getAttribute('type');
+				if (strpos($documentType, 'modules_') === 0)
+				{
+					$property->setAttribute('document-type', $documentType);
+					$maxOccurs = $property->hasAttribute('max-occurs') ? intval($property->getAttribute('max-occurs')) : 1;
+					if ($maxOccurs == 1)
+					{
+						$property->setAttribute('type', 'Document');
+						$property->removeAttribute('max-occurs');
+					}
+					else
+					{
+						$property->setAttribute('type', 'DocumentArray');
+						if ($maxOccurs == -1)
+						{
+							$property->removeAttribute('max-occurs');
+						}
+					}
+				}
+			}
 		}
 		return true;
 	}
@@ -957,6 +984,19 @@ class compatibility_ModuleConverter
 			$classReplacer->convertPHPService($splFileInfo->getPathname());
 		}		
 	}
+	
+	protected function convertViews()
+	{
+		$directory = $this->srcDirectory . '/views';
+		$phpFiles = $this->scanDir($directory, '.php');
+		$classReplacer = new compatibility_ClassReplacer(array(), $this->logger);
+		foreach ($phpFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$classReplacer->convertPHPView($splFileInfo->getPathname());
+		}		
+	}
+	
 	
 	protected function convertBlocks()
 	{
