@@ -287,7 +287,10 @@ class compatibility_ClassReplacer
 			'users_FrontendgroupFeederBaseService' => 'users_GroupFeederBaseService'
 		));
 		$this->logPrefix = 'Fix Users Classes: ';
-		$this->migrateFile($fullpath, true);		
+		$this->migrateFile($fullpath, true);	
+
+		$this->logPrefix = 'Fix I18n convertion: ';
+		$this->migratePHPI18n($fullpath);
 		
 		//Code an class checking
 		$this->setClasses(array(
@@ -506,6 +509,126 @@ class compatibility_ClassReplacer
 		}
 	}
 	
+	function migratePHPI18n($fullpath)
+	{
+		$content = file_get_contents($fullpath);
+		$tokens = token_get_all($content);
+		$this->migratePHPI18nToken($tokens);
+		$newphpContent = $this->tokenToString($tokens);
+		if ($content !== $newphpContent)
+		{
+			if ($this->verbose)
+			{
+				$this->verbose->logInfo($this->logPrefix . $fullpath);
+			}
+			file_put_contents($fullpath, $newphpContent);
+		}
+	}
+	
+	private function migratePHPI18nToken(&$tokens)
+	{
+		$fl_tsi = 0;
+		$fl_tei = 0;
+		$fl_pc = 0;
+		$fl_ucf = false;
+		foreach ($tokens as $i => $token)
+		{
+			if (is_array($token))
+			{
+				switch ($token[0])
+				{
+					case T_STRING :
+						if ($token[1] === 'f_Locale')
+						{
+							if ($fl_tsi === 0)
+							{
+								$fl_tsi = $i;
+								$fl_ucf = false;
+								$fl_tei = $i;
+								$fl_pc = -1;
+							}
+						}
+						elseif ($token[1] === 'translate' || $token[1] === 'translateUI')
+						{
+							if ($fl_tsi !== 0 && $fl_pc === -1)
+							{
+								$fl_pc = 0;
+								for ($ti = $fl_tsi; $ti < $i; $ti++)
+								{
+									$tokens[$ti] = '';
+								}
+								$tokens[$i] = 'LocaleService::getInstance()->trans';
+							}
+						}
+						elseif ($fl_tsi !== 0 && $token[1] === 'ucfirst')
+						{
+							$fl_ucf = true;
+						}
+						break;
+					case T_CONSTANT_ENCAPSED_STRING : // "&modules.catalog.bo.dashboard.Shelves-count;"
+						if ($fl_tsi !== 0 && $fl_pc == 1)
+						{
+							$s = $token[1];
+							$tab = explode('.', $s);
+							if (count($tab) > 1)
+							{
+								$last = end($tab);
+								$fl_ucf = (strtolower($last[0]) !== $last[0]);
+							}
+							
+							if ($s[1] === '&')
+							{
+								$s = strtolower(str_replace(array('&modules.', '&framework.'), array('m.', 'f.'), $s));
+							}
+							$sl = strlen($s);
+							
+							if ($s[$sl - 2] === ';')
+							{
+								$s = strtolower(substr($s, 0, $sl - 2)) . $s[$sl - 1];
+							}
+							$tokens[$i][1] = $s;
+						}
+						elseif (preg_match('/^["\']\&(modules|framework|themes)\.([a-zA-Z0-9-_.]+);["\']$/', $token[1], $match))
+						{
+							$tokens[$i] = '\'' . $match[1][0] . '.' . strtolower($match[2]) . '\' /* @TODO CHECK */';
+						}
+						break;
+				}
+			}
+			elseif ($fl_tsi !== 0)
+			{
+				if ($token === '(')
+				{
+					$fl_pc++;
+				}
+				elseif ($token === ')')
+				{
+					$fl_pc--;
+					if ($fl_pc === 0)
+					{
+						$tokens[$i] = ' /* @TODO CHECK */' . ($fl_ucf ? ', array(\'ucf\'))' : ')');
+						$plop = array();
+						for ($ti = $fl_tsi; $ti <= $i; $ti++)
+						{
+							$plop[] = $tokens[$ti];
+						}
+						$fl_tsi = 0;
+					}
+				}
+				elseif ($token === ',' && $fl_pc === 1)
+				{
+					$tokens[$i] = ' /* @TODO CHECK */' . ($fl_ucf ? ', array(\'ucf\'),' : ', array(),');
+					$plop = array();
+					for ($ti = $fl_tsi; $ti <= $i; $ti++)
+					{
+						$plop[] = $tokens[$ti];
+					}
+					$fl_tsi = 0;
+				}
+			}
+		}
+	}
+					
 	/**
 	 * @example
 	 * @param unknown_type $tokens
