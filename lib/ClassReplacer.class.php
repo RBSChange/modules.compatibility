@@ -317,8 +317,19 @@ class compatibility_ClassReplacer
 			'ModuleService' => array(),
 			'getModules' => array('b' => 'ModuleService', 't' => 'err', 'msg' => 'use getPackageNames'),
 			'getLinkedModules' => array('b' => 'ModuleService', 't' => 'err'),
+			'customer_ModuleService' => array(),
+			'getUIDateFormat' => array('b' => 'customer_ModuleService', 't' => 'err', 'msg' => 'use default date formats in date_Formatter'),
+			'getUIDateTimeFormat' => array('b' => 'customer_ModuleService', 't' => 'err', 'msg' => 'use default date formats in date_Formatter'),
+			'customer_CustomerService' => array(),
+			'EMAIL_CONFIRMATION_OK' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'EMAIL_CONFIRMATION_NO_CUSTOMER' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'EMAIL_CONFIRMATION_BAD_STATE' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'EMAIL_CONFIRMATION_BAD_EMAIL' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'sendEmailConfirmationEmail' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'validateEmailConfirmation' => array('b' => 'customer_CustomerService', 't' => 'err'),
+			'getEmailConfirmationRedirectionUrl' => array('b' => 'customer_CustomerService', 't' => 'err'),
 			));
-		$this->checkFile($fullpath);
+		$this->checkFile($fullpath, false);
 		
 		$content = file_get_contents($fullpath);
 		if (strpos($content, '&modules.') || strpos($content, '&framework.'))
@@ -367,10 +378,9 @@ class compatibility_ClassReplacer
 		return strtolower($matches[0]);
 	}
 	
-	public function checkFile($fullpath)
+	public function checkFile($fullpath, $deprecated = true)
 	{
 		$tokens = token_get_all(file_get_contents($fullpath));
-		$deprecated = false;
 		foreach ($tokens as $tn => $tv)
 		{
 			if (is_array($tv))
