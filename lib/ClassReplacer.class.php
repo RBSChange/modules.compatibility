@@ -311,6 +311,8 @@ class compatibility_ClassReplacer
 			'getOriginalModelName' => array('t' => 'err', 'msg' => 'replaced by getName in persistent models'),
 			'publishOnDayChange' => array('t' => 'err', 'msg' => 'replaced by usePublicationDates in persistent models'),
 			'isLinkedToRootFolder' => array('t' => 'err', 'msg' => 'does not exist any more in persistent models'),
+			'getNearestContainerId' => array('t' => 'err', 'msg' => 'does not exist in website_Page'),
+			'cleanOldKey' => array('t' => 'err', 'msg' => 'old key format support removed'),
 			'buildRepositoryPath' => array('t' => 'err'),
 			'AG_WEBAPP_NAME' => array('t' => 'err'),
 			'MOD_NOTIFICATION_SENDER_HOST' => array('t' => 'err'),
