@@ -563,6 +563,7 @@ class compatibility_ClassReplacer
 						elseif ($fl_tsi !== 0 && $token[1] === 'ucfirst')
 						{
 							$fl_ucf = true;
+							$tokens[$i][1] = 'strtolower';
 						}
 						break;
 					case T_CONSTANT_ENCAPSED_STRING : // "&modules.catalog.bo.dashboard.Shelves-count;"
