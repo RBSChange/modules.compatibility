@@ -531,7 +531,7 @@ class compatibility_ModuleConverter
 			}
 			$content = $this->formattedXMLString($doc->saveXML());
 			
-			$content = preg_replace_callback('/&(modules|framework|themes|m|f|t)(\.[a-zA-Z0-9]+)+;/', array($this, 'panelsMatchesKey'), $content);
+			$content = preg_replace_callback('/&(modules|framework|themes|m|f|t)(\.[a-zA-Z0-9_-]+)+;/', array($this, 'panelsMatchesKey'), $content);
 			$content = str_replace('${transui:', '${trans:', $content);
 			
 			file_put_contents($splFileInfo->getPathname(), $content);

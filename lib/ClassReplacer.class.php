@@ -371,6 +371,8 @@ class compatibility_ClassReplacer
 		$content = str_replace(array_keys($this->classes), array_values($this->classes), $content);
 		$content = preg_replace_callback('/\$\{trans:[^,}]+/', array($this, 'normalizeI18nKey'), $content);
 		
+		$content = preg_replace_callback('/["\']&((?:modules|themes|framework)\.[a-zA-Z0-9-_.]+);["\']/', array($this, 'normalizeI18nCDataKey'), $content);
+
 		file_put_contents($fullpath, $content);	
 	}
 	
@@ -382,6 +384,20 @@ class compatibility_ClassReplacer
 	{
 		return strtolower($matches[0]);
 	}
+	
+	/**
+	 * @param string[] $matches
+	 * @return string
+	 */
+	public function normalizeI18nCDataKey($matches)
+	{
+		$oldKey = $matches[1];
+		$p = explode('.', $oldKey);
+		$p[0] = $p[0][0];
+		$l = end($p);		
+		return '"${trans:'. strtolower(implode('.', $p)) . ((strtolower($l[0]) != $l[0]) ? ',ucf,js}"' : ',js}"');
+	}
+	
 	
 	public function checkFile($fullpath, $deprecated = true)
 	{
