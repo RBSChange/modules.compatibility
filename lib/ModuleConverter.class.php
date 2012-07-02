@@ -377,6 +377,8 @@ class compatibility_ModuleConverter
 		$this->migrateBlockConstraints($doc);
 		foreach ($doc->getElementsByTagName('block') as $block)
 		{
+			$this->migrateBlockParameters($block);
+			
 			/* @var $block DOMElement */
 			if (!$block->hasAttribute('type'))
 			{
@@ -781,8 +783,52 @@ class compatibility_ModuleConverter
 	}
 	
 	/**
+	 * @param DOMElement $block
+	 */
+	private function migrateBlockParameters($block)
+	{
+		foreach ($block->getElementsByTagName('parameter') as $parameter)
+		{
+			/* @var $parameter DOMElement */
+			if ($parameter->hasAttribute('type'))
+			{
+				$oldType = $parameter->getAttribute('type');
+				if (strpos($oldType, 'modules_') === 0)
+				{
+					$parameter->setAttribute('document-type', $oldType);
+					if (!$parameter->hasAttribute('max-occurs') || intval($parameter->getAttribute('max-occurs')) == 1)
+					{
+						$parameter->setAttribute('type', 'Document');
+						$parameter->removeAttribute('max-occurs');
+					}
+					else
+					{
+						$parameter->setAttribute('type', 'DocumentArray');
+						if (intval($parameter->getAttribute('max-occurs')) == -1)
+						{
+							$parameter->removeAttribute('max-occurs');
+						}
+					}
+				}
+			}
+			else
+			{
+				$parameter->setAttribute('type', 'String');
+			}
+			
+			if ($parameter->hasAttribute('list-id'))
+			{
+				if (!$parameter->hasAttribute('from-list'))
+				{
+					$parameter->setAttribute('from-list', $parameter->getAttribute('list-id'));
+				}
+				$parameter->removeAttribute('list-id');
+			}
+		}
+	}
+	
+	/**
 	 * @param DOMDocument $doc
-	 * @return boolean;
 	 */
 	private function migrateBlockConstraints($doc)
 	{
@@ -809,13 +855,11 @@ class compatibility_ModuleConverter
 					$constraints->parentNode->removeChild($constraints);
 				}
 			}
-			return true;
 		}
 		catch (Exception $e)
 		{
 			$this->logger->logError($e->getMessage());
 		}
-		return false;
 	}
 	
 	/**
