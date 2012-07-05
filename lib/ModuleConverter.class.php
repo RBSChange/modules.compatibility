@@ -1,4 +1,8 @@
 <?php
+/**
+ * @todo
+ * Virer les tags contextuels en "_page-detail"
+ */
 interface compatibility_Logger
 {
 	public function logInfo($message);
@@ -77,6 +81,7 @@ class compatibility_ModuleConverter
 		$this->convertPersistentDocument();
 		
 		// convert: setup
+		$this->convertSetup();
 		
 		// convert: style
 		$this->convertStyle();
@@ -151,6 +156,36 @@ class compatibility_ModuleConverter
 			unlink($this->srcDirectory . '/change.xml');
 			$this->logger->logInfo('Replace /change.xml by /install.xml');
 		}
+	}
+	
+	protected function convertSetup()
+	{
+		$baseDir = $this->srcDirectory . '/setup';
+		if (!is_dir($baseDir))
+		{
+			return;
+		}
+		
+		$xmlFiles = $this->scanDir($baseDir, '.xml');
+		foreach ($xmlFiles as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$doc = $this->loadFormattedXMLDocument($splFileInfo->getPathname());
+			$content = $this->formattedXMLString($doc->saveXML());
+			
+			$content = preg_replace_callback('/&amp;((modules|framework|themes|m|f|t)(\.[a-zA-Z0-9_-]+)+;)/', array($this, 'xmlMatchesKey'), $content);
+			
+			file_put_contents($splFileInfo->getPathname(), $content);
+		}
+	}
+	
+	/**
+	 * @param string[] $matches
+	 * @return string
+	 */
+	private function xmlMatchesKey($matches)
+	{
+		return $this->convertKeyIgnoreFormat('&' . $matches[1]);
 	}
 	
 	protected function convertConfig()
