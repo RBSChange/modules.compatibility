@@ -945,6 +945,30 @@ class compatibility_ModuleConverter
 	
 	protected function convertTemplates()
 	{
+		$filePaths = array_merge(
+			$this->scanDir($this->srcDirectory . '/templates'),
+			$this->scanDir(PROJECT_HOME . '/override/modules/'. $this->moduleName .'/templates'));
+		
+		foreach ($filePaths as $path => $splFileInfo)
+		{
+			/* @var $splFileInfo SplFileInfo */
+			$name = $splFileInfo->getBasename();
+			$p = explode('.', $name);
+			$i = count($p);
+			if ($i >= 4 && $p[$i-2] === 'all')
+			{
+				if ($p[$i-3] === 'all')
+				{
+					$newName = str_replace('.all.all.', '.', $splFileInfo->getPathname());
+					rename($splFileInfo->getPathname(), $newName);
+				}
+				else
+				{
+					$this->logger->logWarn('This template need compatibility strategy: ' . $splFileInfo->getPathname());
+				}
+			}
+		}	
+		
 		$PHPTALClassPath = PROJECT_HOME . '/libs/phptal/PHPTAL.php';
 		require_once($PHPTALClassPath);
 		
@@ -982,34 +1006,16 @@ class compatibility_ModuleConverter
 
 		$templateReplacer = new compatibility_TemplateReplacer($tempTalPath, $this->logger);
 		
-		$pathInfos = $this->scanDir($this->srcDirectory . '/templates', '.html');
+		$pathInfos = array_merge(
+			$this->scanDir($this->srcDirectory . '/templates', '.html'),
+			$this->scanDir($this->srcDirectory . '/lib/bindings', '.xml'),
+			$this->scanDir(PROJECT_HOME . '/override/modules/'. $this->moduleName .'/templates', '.html'),
+			$this->scanDir(PROJECT_HOME . '/override/modules/'. $this->moduleName .'/lib/bindings', '.xml'));
+			
+			
 		foreach ($pathInfos as $path => $splFileInfo)
 		{
 			$templateReplacer->migrateTemplate($splFileInfo->getPathname());
-		}
-		
-		$pathInfos = $this->scanDir($this->srcDirectory . '/lib/bindings', '.xml');
-		foreach ($pathInfos as $path => $splFileInfo)
-		{
-			$templateReplacer->migrateTemplate($splFileInfo->getPathname());
-		}
-				
-		$overPath = PROJECT_HOME . '/override/modules/'. $this->moduleName .'/templates';
-		if (is_dir($overPath))
-		{
-			foreach ($this->scanDir($overPath, '.html') as $path => $splFileInfo)
-			{
-				$templateReplacer->migrateTemplate($splFileInfo->getPathname());
-			}
-		}
-		
-		$overPath = PROJECT_HOME . '/override/modules/'. $this->moduleName .'/lib/bindings';
-		if (is_dir($overPath))
-		{
-			foreach ($this->scanDir($overPath, '.xml') as $path => $splFileInfo)
-			{
-				$templateReplacer->migrateTemplate($splFileInfo->getPathname());
-			}
 		}
 		
 		/**
