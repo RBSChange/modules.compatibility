@@ -32,9 +32,9 @@ class compatibility_ModuleConverter
 	
 	/**
 	 *
-	 * @param string $moduleName        	
-	 * @param string $srcDirectory        	
-	 * @param compatibility_Logger $logger        	
+	 * @param string $moduleName
+	 * @param string $srcDirectory
+	 * @param compatibility_Logger $logger
 	 */
 	public function __construct($moduleName, $srcDirectory, $logger)
 	{
@@ -42,7 +42,6 @@ class compatibility_ModuleConverter
 		$this->srcDirectory = $srcDirectory;
 		$this->logger = $logger;
 	}
-	
 	
 	public function convert()
 	{
@@ -60,7 +59,7 @@ class compatibility_ModuleConverter
 		$this->convertPHP();
 		
 		// convert global : xml files
-		$this->convertXML();		
+		$this->convertXML();
 		
 		// convert: apache
 		
