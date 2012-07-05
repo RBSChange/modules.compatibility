@@ -812,6 +812,31 @@ class compatibility_ModuleConverter
 					}
 				}
 			}
+			
+			if ($property->hasAttribute('min-occurs'))
+			{
+				$value = intval($property->getAttribute('min-occurs'));
+				if ($value > 0 && $property->getAttribute('type') != 'Boolean')
+				{
+					$property->setAttribute('required', 'true');
+				}
+				
+				if ($value < 2)
+				{
+					$property->removeAttribute('min-occurs');
+				}
+				elseif ($property->hasAttribute('type') && $property->getAttribute('type') != 'DocumentArray')
+				{
+					$property->removeAttribute('min-occurs');
+				}
+			}
+			if ($property->hasAttribute('max-occurs'))
+			{
+				if ($property->hasAttribute('type') && $property->getAttribute('type') != 'DocumentArray')
+				{
+					$property->removeAttribute('max-occurs');
+				}
+			}
 		}
 		return true;
 	}
