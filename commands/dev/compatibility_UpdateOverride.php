@@ -3,7 +3,7 @@
  * commands_compatibility_UpdateOverride
  * @package modules.compatibility
  */
-class commands_compatibility_UpdateOverride extends commands_AbstractChangeCommand
+class commands_compatibility_UpdateOverride extends c_ChangescriptCommand
 {
 	/**
 	 * @return String

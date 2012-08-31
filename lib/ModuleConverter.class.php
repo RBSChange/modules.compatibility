@@ -13,25 +13,21 @@ interface compatibility_Logger
 class compatibility_ModuleConverter
 {
 	/**
-	 *
 	 * @var string
 	 */
-	private $moduleName;
+	protected $moduleName;
 	
 	/**
-	 *
 	 * @var string
 	 */
-	private $srcDirectory;
+	protected $srcDirectory;
 	
 	/**
-	 *
 	 * @var compatibility_Logger
 	 */
-	private $logger;
+	protected $logger;
 	
 	/**
-	 *
 	 * @param string $moduleName
 	 * @param string $srcDirectory
 	 * @param compatibility_Logger $logger
@@ -111,7 +107,6 @@ class compatibility_ModuleConverter
 		
 		$this->logger->logInfo('Module ' . $this->moduleName . ' Converted');
 	}
-	
 	
 	protected function convertRoot()
 	{
@@ -1304,5 +1299,28 @@ class compatibility_ModuleConverter
 			}
 			rmdir($directory);
 		}
+	}
+}
+
+class compatibility_FrameworkConverter extends compatibility_ModuleConverter
+{
+	public function convert()
+	{
+		$this->logger->logInfo('Converting ' . $this->moduleName . '...');
+			
+		// convert global : php files
+		$this->convertPHP();
+	
+		// convert global : xml files
+		$this->convertXML();
+		
+		// convert: change-commands
+		// convert: changedev-commands
+		$this->convertChangeCommands();
+	
+		// convert: i18n
+		$this->convertI18n();
+	
+		$this->logger->logInfo($this->moduleName . ' Converted');
 	}
 }

@@ -263,7 +263,10 @@ class compatibility_ClassReplacer
 			'parseHtml' => array('renderHtmlFragment', 'f_util_StringUtils', 'f_util_HtmlUtils'),
 			'buildWebeditPath' => array('buildProjectPath', 'f_util_FileUtils'),
 			'buildCachePath' => array('buildChangeCachePath', 'f_util_FileUtils'),
-			'getPublicationstatusLocaleKey' => array('getStatusLocaleKey', 'DocumentHelper')
+			'getPublicationstatusLocaleKey' => array('getStatusLocaleKey', 'DocumentHelper'),
+			'sessionStarted' => array('getInstance()->registerSessionId', 'Framework', 'change_LoggingService'),
+			'getLogLevelName' => array('getInstance()->getLogLevelName', 'Framework', 'change_LoggingService'),
+			'getLogPriority' => array('getInstance()->getLogPriority', 'Framework', 'change_LoggingService')
 		);		
 		$this->logPrefix = 'Fix Function rename: ';
 		$this->renameFunction($fullpath, $renameArray);
@@ -311,6 +314,7 @@ class compatibility_ClassReplacer
 			'date_DateFormat' => array('t' => 'err', 'msg' => 'use date_Formatter'),
 			'ClassResolver' => array('t' => 'err', 'msg' => 'use change_AutoloadBuilder'),
 			'ClassLoader' => array('t' => 'err', 'msg' => 'use change_AutoloadBuilder'),
+			'config_ProjectParser' => array('t' => 'err', 'msg' => 'use change_ConfigurationService'),
 			'website_WebsiteModuleService' => array('t' => 'err', 'msg' => 'use website_WebsiteService or website_PageService'),
 			'contactcard_ModuleService' => array('t' => 'warn'),
 			'sendNotificationToContactCallback' => array('b' => 'contactcard_ModuleService', 't' => 'err'),
@@ -377,7 +381,7 @@ class compatibility_ClassReplacer
 			'generic_persistentdocument_Documentmodel' => 'generic_persistentdocument_documentmodel',
 			'${transui:' => '${trans:',
 			"\r\n" => PHP_EOL,	
-			"    " => "\t",));	
+			"    " => "\t",));
 		
 		$this->logPrefix = 'Fix Users models: ';
 		$content = file_get_contents($fullpath);
