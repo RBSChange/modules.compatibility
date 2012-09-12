@@ -166,6 +166,11 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 			$v = $defineElem->textContent;
 			switch ($n)
 			{
+				case 'PROJECT_ID' :
+					$this->log(' -> PROJECT_ID: ' . $v);
+					$this->updateProjectProperties($n, $v, $projectProperties);
+					$toDelete[] = $defineElem;
+					break;
 				case 'DOCUMENT_ROOT' :
 					$this->log(' -> DOCUMENT_ROOT: ' . $v);
 					$this->updateProjectProperties($n, $v, $projectProperties);
@@ -296,6 +301,8 @@ class commands_compatibility_MigrateConfig extends c_ChangescriptCommand
 				$injectElement->appendChild($classElement);
 			}
 		}
+		
+		// TODO move general/server-fqdn to DEFAULT_HOST
 	}
 	
 	private function updateProjectProperties($name, $value, &$projectProperties)
