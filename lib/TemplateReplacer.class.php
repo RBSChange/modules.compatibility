@@ -67,7 +67,8 @@ class compatibility_TemplateReplacer
 		{
 			$phptal = new PHPTAL($this->currentPath);
 			$phptal->setPhpCodeDestination($this->tempTalPath);
-			$ext = end(explode('.', $this->currentPath));
+			$array = explode('.', $this->currentPath);
+			$ext = end($array);
 			if ($ext === 'xml')
 			{
 				$phptal->set('HOST', Framework::getUIBaseUrl());
