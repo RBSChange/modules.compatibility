@@ -203,7 +203,7 @@ class mail_MessageRecipients
 	
 	private function extractData($string)
 	{
-		$emailValidator = new Zend_Validate_EmailAddress();
+		$emailValidator = new \Zend\Validator\EmailAddress();
 		if ($emailValidator->isValid($string))
 		{
 			return array($string);
