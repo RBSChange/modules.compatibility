@@ -126,7 +126,10 @@ class commands_compatibility_MigrateModule extends c_ChangescriptCommand
 		{
 			return $this->quitError('Command executed with ' . $this->getErrorCount() . ' error(s)');
 		}
-		return $this->quitOk("Command successfully executed");
+		return $this->quitOk("Command successfully executed. You now need to peform some manual operation:
+ - clean getInstance method and add @method comment in services
+ - migrate batches in tasks
+ - [generic modules] clean samples");
 	}
 	
 	public function logInfo($message)
