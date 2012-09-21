@@ -129,6 +129,7 @@ class commands_compatibility_MigrateModule extends c_ChangescriptCommand
 		return $this->quitOk("Command successfully executed. You now need to peform some manual operation:
  - clean getInstance method and add @method comment in services
  - migrate batches in tasks
+ - look for \"/* @TODO CHECK */\" comments to validate conversions 
  - [generic modules] clean samples");
 	}
 	
